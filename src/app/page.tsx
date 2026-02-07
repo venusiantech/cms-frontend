@@ -25,8 +25,16 @@ export default async function PublicSitePage() {
 
   console.log('🌐 Rendering site for domain:', domain);
 
-  // Skip rendering for localhost dashboard routes
-  if (domain === 'localhost' || domain.startsWith('127.0.0.1')) {
+  // Platform domain (main dashboard URL)
+  const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
+
+  // Skip rendering for localhost and platform dashboard routes
+  if (
+    domain === 'localhost' || 
+    domain.startsWith('127.0.0.1') ||
+    domain === platformDomain ||
+    domain === 'cms.local'
+  ) {
     // Redirect to dashboard
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
