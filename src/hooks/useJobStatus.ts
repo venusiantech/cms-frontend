@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { websitesAPI } from '@/lib/api';
 
 interface JobStatus {
@@ -10,6 +10,9 @@ interface JobStatus {
   failedReason?: string;
 }
 
+const POLL_INTERVAL = 5000; // 5 seconds (increased from 3)
+const MAX_POLL_ATTEMPTS = 120; // 10 minutes max (120 * 5s)
+
 export function useJobStatus(
   jobId: string | null,
   onComplete?: (result: any) => void,
@@ -17,9 +20,34 @@ export function useJobStatus(
 ) {
   const [status, setStatus] = useState<JobStatus | null>(null);
   const [isPolling, setIsPolling] = useState(false);
+  const pollCountRef = useRef(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const hasCompletedRef = useRef(false);
+
+  const stopPolling = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setIsPolling(false);
+  }, []);
 
   const checkStatus = useCallback(async () => {
-    if (!jobId) return;
+    if (!jobId || hasCompletedRef.current) return;
+
+    // Check max attempts
+    if (pollCountRef.current >= MAX_POLL_ATTEMPTS) {
+      console.error('⏱️ Job polling timeout - max attempts reached');
+      stopPolling();
+      hasCompletedRef.current = true;
+      if (onError) {
+        onError('Job timeout - Please refresh the page to check status');
+      }
+      return;
+    }
+
+    pollCountRef.current += 1;
+    console.log(`📊 Polling job ${jobId} (attempt ${pollCountRef.current}/${MAX_POLL_ATTEMPTS})`);
 
     try {
       const response = await websitesAPI.checkJobStatus(jobId);
@@ -27,52 +55,77 @@ export function useJobStatus(
       
       setStatus(jobStatus);
 
+      // Terminal states - stop polling
       if (jobStatus.status === 'completed') {
-        setIsPolling(false);
+        console.log('✅ Job completed successfully');
+        stopPolling();
+        hasCompletedRef.current = true;
         if (onComplete) {
           onComplete(jobStatus.result);
         }
       } else if (jobStatus.status === 'failed') {
-        setIsPolling(false);
+        console.log('❌ Job failed');
+        stopPolling();
+        hasCompletedRef.current = true;
         if (onError) {
           onError(jobStatus.failedReason || 'Job failed');
         }
+      } else if (jobStatus.status === 'not_found') {
+        console.log('⚠️ Job not found');
+        stopPolling();
+        hasCompletedRef.current = true;
+        if (onError) {
+          onError('Job not found');
+        }
+      } else {
+        console.log(`⏳ Job ${jobStatus.status} - ${jobStatus.progress}%`);
       }
     } catch (err: any) {
-      console.error('Error checking job status:', err);
-      setIsPolling(false);
-      if (onError) {
-        onError(err.response?.data?.message || 'Failed to check status');
+      console.error('❌ Error checking job status:', err);
+      
+      // Don't stop polling on network errors (might be temporary)
+      // But count towards max attempts
+      if (pollCountRef.current >= MAX_POLL_ATTEMPTS) {
+        stopPolling();
+        hasCompletedRef.current = true;
+        if (onError) {
+          onError(err.response?.data?.message || 'Failed to check status');
+        }
       }
     }
-  }, [jobId, onComplete, onError]);
+  }, [jobId, onComplete, onError, stopPolling]);
 
   useEffect(() => {
+    // Reset state when jobId changes
     if (!jobId) {
+      stopPolling();
       setStatus(null);
-      setIsPolling(false);
+      pollCountRef.current = 0;
+      hasCompletedRef.current = false;
       return;
     }
 
-    // Don't poll if already completed or failed
-    if (status?.status === 'completed' || status?.status === 'failed') {
-      setIsPolling(false);
+    // Don't start polling if already completed
+    if (hasCompletedRef.current) {
       return;
     }
 
+    console.log(`🚀 Starting polling for job ${jobId}`);
     setIsPolling(true);
+    pollCountRef.current = 0;
     
-    // Initial check
+    // Initial check immediately
     checkStatus();
 
-    // Poll every 3 seconds
-    const pollInterval = setInterval(checkStatus, 3000);
+    // Then poll at intervals
+    intervalRef.current = setInterval(checkStatus, POLL_INTERVAL);
 
+    // Cleanup on unmount or jobId change
     return () => {
-      clearInterval(pollInterval);
-      setIsPolling(false);
+      console.log(`🛑 Stopping polling for job ${jobId}`);
+      stopPolling();
     };
-  }, [jobId, checkStatus, status?.status]);
+  }, [jobId]); // Only depend on jobId, not checkStatus or status
 
   return {
     status,

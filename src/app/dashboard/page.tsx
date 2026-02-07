@@ -9,6 +9,17 @@ import Link from 'next/link';
 import { useJobStatus } from '@/hooks/useJobStatus';
 import CustomLoader from '@/components/CustomLoader';
 
+// Helper to get the correct site URL based on environment
+function getSiteUrl(subdomain: string): string {
+  const isProduction = process.env.NODE_ENV === 'production' || 
+                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  
+  if (isProduction) {
+    return `https://${subdomain}.jaal.com`;
+  }
+  return `http://${subdomain}.local:3000`;
+}
+
 export default function DashboardPage() {
   const queryClient = useQueryClient();
   const [showAddDomain, setShowAddDomain] = useState(false);
@@ -202,9 +213,9 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
           <div>
             <h3 className="font-medium text-lg text-gray-900 mb-1">{domain.domainName}</h3>
             {isGenerating ? (
-              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700">
-                <div className="w-3 h-3 border-2 border-blue-300 border-t-blue-700 rounded-full animate-spin"></div>
-                Generating {progress}%
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                <div className="w-2 h-2 bg-gray-700 rounded-full animate-pulse"></div>
+                Generating website
               </span>
             ) : (
               <span
@@ -261,7 +272,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
               <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-200" />
             </Link>
             <a
-              href={`http://${domain.website.subdomain}.local:3000`}
+              href={getSiteUrl(domain.website.subdomain)}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center border border-gray-200 hover:border-gray-300"
@@ -272,26 +283,11 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
           </div>
         </div>
       ) : isGenerating ? (
-        // Show progress bar when generating
-        <div className="space-y-3">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-blue-900">
-                {status?.status === 'waiting' ? 'Queued for generation...' : 'Generating website...'}
-              </span>
-              <span className="text-sm font-semibold text-blue-700">{progress}%</span>
-            </div>
-            <div className="w-full bg-blue-100 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-blue-600 h-full transition-all duration-300 ease-out"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <p className="text-xs text-blue-700 mt-2">
-              This usually takes 2-3 minutes. Feel free to continue using the dashboard!
-            </p>
-          </div>
-        </div>
+        // Show animated loader with rotating messages
+        <GeneratingWebsiteAnimation 
+          progress={progress} 
+          isCompleted={isCompleted}
+        />
       ) : (
         <button
           onClick={() => onGenerateWebsite(setGenerationJobId)}
@@ -685,6 +681,77 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
               </>
             )}
           </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress: number; isCompleted: boolean }) {
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  const generatingMessages = [
+    "Analyzing your domain context...",
+    "Generating blog titles with AI...",
+    "Creating compelling content...",
+    "Designing professional images...",
+    "Optimizing for search engines...",
+    "Building your home page...",
+    "Adding responsive styling...",
+    "Perfecting the layout...",
+  ];
+
+  const finalMessage = "Tidying up and hosting the site...";
+
+  useEffect(() => {
+    if (isCompleted) {
+      setCurrentMessageIndex(-1); // Special index for final message
+      return;
+    }
+
+    const messageInterval = setInterval(() => {
+      setIsFlipping(true);
+      
+      setTimeout(() => {
+        setCurrentMessageIndex((prev) => (prev + 1) % generatingMessages.length);
+        setIsFlipping(false);
+      }, 300); // Half of the flip duration
+    }, 3000); // Change message every 3 seconds
+
+    return () => clearInterval(messageInterval);
+  }, [isCompleted, generatingMessages.length]);
+
+  const currentMessage = currentMessageIndex === -1 
+    ? finalMessage 
+    : generatingMessages[currentMessageIndex];
+
+  return (
+    <div className="bg-white border-2 border-gray-200 rounded-xl p-6">
+      <div className="flex items-center gap-6">
+        {/* Left side - Animated Loader */}
+        <div className="flex-shrink-0">
+          <CustomLoader />
+        </div>
+
+        {/* Right side - Animated Messages */}
+        <div className="flex-1 min-h-[56px] flex items-center overflow-hidden">
+          <div
+            className={`w-full transition-all duration-500 ${
+              isFlipping 
+                ? 'opacity-0 -translate-y-4' 
+                : 'opacity-100 translate-y-0'
+            }`}
+          >
+            <p className="text-base font-medium text-gray-900 leading-relaxed">
+              {currentMessage}
+            </p>
+            {!isCompleted && (
+              <p className="text-xs text-gray-500 mt-1">
+                {progress}% complete
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

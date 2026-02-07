@@ -9,6 +9,28 @@ import toast from 'react-hot-toast';
 import { useJobStatus } from '@/hooks/useJobStatus';
 import CustomLoader from '@/components/CustomLoader';
 
+// Helper to get the correct site URL based on environment
+function getSiteUrl(subdomain: string): string {
+  const isProduction = process.env.NODE_ENV === 'production' || 
+                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  
+  if (isProduction) {
+    return `https://${subdomain}.jaal.com`;
+  }
+  return `http://${subdomain}.local:3000`;
+}
+
+// Helper to get display subdomain (without protocol/port)
+function getDisplaySubdomain(subdomain: string): string {
+  const isProduction = process.env.NODE_ENV === 'production' || 
+                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  
+  if (isProduction) {
+    return `${subdomain}.jaal.com`;
+  }
+  return `${subdomain}.local`;
+}
+
 export default function EditorPage() {
   const params = useParams();
   const router = useRouter();
@@ -308,7 +330,7 @@ export default function EditorPage() {
             </div>
           </div>
           <a
-            href={`http://${domain.website.subdomain}.local:3000`}
+            href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium"
@@ -335,7 +357,7 @@ export default function EditorPage() {
               {/* Center: URL bar */}
               <div className="flex-1 flex justify-center">
                 <div className="bg-gray-700 rounded px-3 py-1 text-xs text-gray-300 font-mono">
-                  {domain.website.subdomain}.local
+                  {getDisplaySubdomain(domain.website.subdomain)}
                 </div>
               </div>
               
@@ -353,7 +375,7 @@ export default function EditorPage() {
                 
                 {/* Open Site button */}
                 <a
-                  href={`http://${domain.website.subdomain}.local:3000`}
+                  href={getSiteUrl(domain.website.subdomain)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 border border-gray-200 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
@@ -365,7 +387,7 @@ export default function EditorPage() {
               </div>
             </div>
             <iframe
-              src={`http://${domain.website.subdomain}.local:3000`}
+              src={getSiteUrl(domain.website.subdomain)}
               className="w-full h-[calc(100vh-200px)] bg-white"
               title="Website Preview"
             />
@@ -774,9 +796,9 @@ function DeploymentTab({ domain }: any) {
       <div className="space-y-4">
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <p className="text-xs font-semibold text-gray-500 mb-2">SUBDOMAIN</p>
-          <p className="font-mono text-sm text-gray-900 mb-3">{domain.website.subdomain}.cms.local</p>
+          <p className="font-mono text-sm text-gray-900 mb-3">{getDisplaySubdomain(domain.website.subdomain)}</p>
           <a
-            href={`http://${domain.website.subdomain}.local:3000`}
+            href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-gray-900 hover:underline flex items-center gap-1"
