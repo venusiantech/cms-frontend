@@ -33,7 +33,8 @@ export default async function PublicSitePage() {
     domain === 'localhost' || 
     domain.startsWith('127.0.0.1') ||
     domain === platformDomain ||
-    domain === 'cms.local'
+    domain === 'cms.local' ||
+    domain === 'jaal'
   ) {
     // Redirect to dashboard
     return (
