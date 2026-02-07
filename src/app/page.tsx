@@ -25,17 +25,18 @@ export default async function PublicSitePage() {
 
   console.log('🌐 Rendering site for domain:', domain);
 
-  // Platform domain (main dashboard URL)
-  const platformDomain = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
+  // Platform domains (main dashboard URLs) - supports comma-separated list
+  const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
+  const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
 
   // Skip rendering for localhost and platform dashboard routes
-  if (
+  const isPlatformDomain = 
     domain === 'localhost' || 
     domain.startsWith('127.0.0.1') ||
-    domain === platformDomain ||
-    domain === 'cms.local' ||
-    domain === 'jaal'
-  ) {
+    platformDomains.includes(domain) ||
+    domain === 'cms.local';
+
+  if (isPlatformDomain) {
     // Redirect to dashboard
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -57,7 +58,89 @@ export default async function PublicSitePage() {
     siteData = response.data;
   } catch (error) {
     console.error('Failed to fetch site data:', error);
-    notFound();
+    
+    // Show professional "Host Your Site" page instead of 404
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-12 text-center">
+            {/* Icon */}
+            <div className="mx-auto w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+              <svg 
+                className="w-10 h-10 text-slate-600" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" 
+                />
+              </svg>
+            </div>
+
+            {/* Heading */}
+            <h1 className="text-4xl font-bold text-slate-900 mb-4">
+              This Domain Is Available
+            </h1>
+            
+            {/* Description */}
+            <p className="text-lg text-slate-600 mb-8">
+              Turn your unused domain into a professional website in minutes.
+              No coding required.
+            </p>
+
+            {/* Domain Badge */}
+            <div className="bg-slate-50 rounded-lg px-6 py-3 mb-8 inline-block">
+              <code className="text-slate-700 font-mono text-sm">{domain}</code>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/register"
+                className="px-8 py-3 bg-slate-900 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-lg"
+              >
+                Get Started
+              </a>
+              <a
+                href="/login"
+                className="px-8 py-3 bg-white text-slate-900 font-semibold rounded-lg border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-all duration-200"
+              >
+                Sign In
+              </a>
+            </div>
+
+            {/* Features */}
+            <div className="mt-12 pt-8 border-t border-slate-200">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+                <div>
+                  <div className="font-semibold text-slate-900 mb-1">AI-Powered</div>
+                  <div className="text-sm text-slate-600">Content generated automatically</div>
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 mb-1">Instant Setup</div>
+                  <div className="text-sm text-slate-600">Live in under 5 minutes</div>
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 mb-1">Easy Management</div>
+                  <div className="text-sm text-slate-600">Update content anytime</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-6">
+            <p className="text-slate-500 text-sm">
+              Powered by <span className="font-semibold">JAAL</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Render template with data
