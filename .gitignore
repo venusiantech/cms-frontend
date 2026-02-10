@@ -4,4 +4,4 @@ out/
 .env.local
 *.log
 .vercel
-
+.env

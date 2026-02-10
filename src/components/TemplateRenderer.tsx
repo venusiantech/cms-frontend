@@ -1,6 +1,7 @@
 'use client';
 
 import ModernNews from '@/templates/ModernNews';
+import TemplateA from '@/templates/TemplateA';
 
 interface SiteData {
   domain: {
@@ -61,7 +62,12 @@ export default function TemplateRenderer({ siteData }: TemplateRendererProps) {
     );
   }
 
-  // Single modern news template for all sites
-  return <ModernNews page={homePage} website={website} domain={siteData.domain} />;
+  const templateProps = { page: homePage, website, domain: siteData.domain };
+
+  if (website.templateKey === 'modernNews') {
+    return <ModernNews {...templateProps} />;
+  }
+
+  return <TemplateA {...templateProps} />;
 }
 

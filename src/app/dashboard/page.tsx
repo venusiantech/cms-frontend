@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI, websitesAPI } from '@/lib/api';
-import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight } from 'lucide-react';
+import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useJobStatus } from '@/hooks/useJobStatus';
@@ -586,11 +586,18 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
   );
 }
 
+const TEMPLATE_OPTIONS = [
+  { key: 'modernNews' as const, label: 'Modern News', image: '/templateA/assets/images/modernNews.png' },
+  { key: 'templateA' as const, label: 'Template A', image: '/templateA/assets/images/TemplateA.png' },
+];
+
 function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoading }: any) {
   const [contactFormEnabled, setContactFormEnabled] = useState(true);
+  const [selectedTemplateKey, setSelectedTemplateKey] = useState<'modernNews' | 'templateA'>('modernNews');
+  const [enlargedTemplateKey, setEnlargedTemplateKey] = useState<'modernNews' | 'templateA' | null>(null);
 
   const mutation = useMutation({
-    mutationFn: () => websitesAPI.generate(domainId, 'modernNews', contactFormEnabled),
+    mutationFn: () => websitesAPI.generate(domainId, selectedTemplateKey, contactFormEnabled),
     onSuccess: (response) => {
       const newJobId = response.data.jobId;
       console.log('✅ Job started with ID:', newJobId);
@@ -606,15 +613,124 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-      <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-200 relative z-[61]">
-        <div className="mb-6">
+      <div className="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 relative z-[61] max-h-[90vh] overflow-y-auto">
+        <div className="mb-5">
           <h2 className="text-2xl font-medium text-gray-900 mb-2">Generate Website</h2>
-          <p className="text-gray-600 text-sm">
-            Create a professional news-style website with AI-powered content
-          </p>
+          {/* <p className="text-gray-600 text-sm">
+            Choose a template and create a website with AI-powered content
+          </p> */}
         </div>
 
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-5">
+        {/* Template selection */}
+        <div className="mb-5">
+          <p className="text-sm font-semibold text-gray-900 mb-4">Choose template</p>
+          {/* <p className="text-xs text-gray-500 mb-3">Click a card to select. Use the expand icon to preview full size.</p> */}
+          <div className="grid grid-cols-2 gap-4">
+            {TEMPLATE_OPTIONS.map((opt) => (
+              <div
+                key={opt.key}
+                className={`relative rounded-xl border-2 overflow-hidden transition-all duration-200 flex flex-col ${
+                  selectedTemplateKey === opt.key
+                    ? 'border-gray-900 ring-2 ring-gray-900 ring-offset-2'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedTemplateKey(opt.key)}
+                  disabled={mutation.isPending}
+                  className="text-left disabled:opacity-60 disabled:cursor-not-allowed flex flex-col flex-1 min-w-0"
+                >
+                  <div className="w-full h-44 bg-gray-100 flex-shrink-0 relative">
+                    <img
+                      src={opt.image}
+                      alt={opt.label}
+                      className="w-full h-full object-cover object-top"
+                    />
+                    {selectedTemplateKey === opt.key && (
+                      <div className="absolute top-2 right-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                        <CheckCircle size={14} className="text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 bg-white border-t border-gray-100 flex-shrink-0 flex items-center justify-between gap-2">
+                    <span className="text-sm font-medium text-gray-900">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setEnlargedTemplateKey(opt.key);
+                  }}
+                  disabled={mutation.isPending}
+                  className="absolute bottom-12 right-2 w-8 h-8 rounded-lg bg-white/90 hover:bg-white border border-gray-200 flex items-center justify-center shadow-sm transition-colors disabled:opacity-50"
+                  title="Preview full size"
+                >
+                  <Maximize2 size={16} className="text-gray-700" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Enlarged preview lightbox */}
+        {enlargedTemplateKey && (() => {
+          const opt = TEMPLATE_OPTIONS.find((o) => o.key === enlargedTemplateKey);
+          if (!opt) return null;
+          return (
+            <div
+              className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/70"
+              onClick={() => setEnlargedTemplateKey(null)}
+            >
+              <div
+                className="relative bg-white rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[90vh] flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+                  <span className="font-medium text-gray-900">{opt.label}</span>
+                  <button
+                    type="button"
+                    onClick={() => setEnlargedTemplateKey(null)}
+                    className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                    aria-label="Close preview"
+                  >
+                    <X size={20} className="text-gray-600" />
+                  </button>
+                </div>
+                <div className="p-4 overflow-auto flex-1 min-h-0 bg-gray-100">
+                  <img
+                    src={opt.image}
+                    alt={opt.label}
+                    className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg"
+                  />
+                </div>
+                <div className="flex gap-3 px-4 py-3 border-t border-gray-200 bg-white">
+                  <button
+                    type="button"
+                    onClick={() => setEnlargedTemplateKey(null)}
+                    className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedTemplateKey(opt.key);
+                      setEnlargedTemplateKey(null);
+                    }}
+                    className="flex-1 px-4 py-2.5 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800"
+                  >
+                    Use this template
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-5">
           <p className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <Sparkles size={16} className="text-gray-700" />
             What will be generated
@@ -637,18 +753,36 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
               <span>Fully responsive design</span>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* Contact Form Toggle */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
           <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={contactFormEnabled}
-              onChange={(e) => setContactFormEnabled(e.target.checked)}
-              disabled={mutation.isPending}
-              className="w-4 h-4 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900 disabled:opacity-50"
-            />
+            {/* Toggle Switch */}
+            <span className="relative inline-block w-11 h-6 align-middle select-none transition duration-200 ease-in">
+              <input
+                type="checkbox"
+                checked={contactFormEnabled}
+                onChange={(e) => setContactFormEnabled(e.target.checked)}
+                disabled={mutation.isPending}
+                className="absolute w-0 h-0 opacity-0 peer"
+              />
+              <span
+                className={`
+                  block rounded-full bg-gray-200 peer-checked:bg-gray-900 h-6 transition-colors duration-200
+                `}
+              ></span>
+              <span
+                className={`
+                  absolute left-0 top-0 h-6 w-6 bg-white border border-gray-200 rounded-full shadow-sm
+                  transition-transform duration-200 ease-in-out
+                  peer-checked:translate-x-5
+                `}
+                style={{
+                  boxShadow: "0 1px 2px rgba(16,21,43,0.04)"
+                }}
+              ></span>
+            </span>
             <div>
               <p className="font-medium text-gray-900 text-sm mb-1">Enable Contact Form</p>
               <p className="text-xs text-gray-600">Allow visitors to contact you through your website</p>
