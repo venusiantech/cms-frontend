@@ -49,12 +49,12 @@ function renderMarkdownContent(content: string, articleTitle: string) {
       return <div key={idx} className="h-3" />;
     }
     if (line.startsWith('- ') || line.startsWith('* ')) {
-      return <li key={idx} className="ml-4 mb-2" style={{ listStyle: 'disc' }}>{line.substring(2)}</li>;
+      return <li key={idx} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{line.substring(2)}</li>;
     }
     if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
-      return <li key={idx} className="ml-4 mb-2 list-decimal">{line.replace(/^\d+\.\s/, '')}</li>;
+      return <li key={idx} className="ml-4 mb-2 list-decimal text-justify">{line.replace(/^\d+\.\s/, '')}</li>;
     }
-    return <p key={idx} className="mb-4">{line}</p>;
+    return <p key={idx} className="mb-4 text-justify">{line}</p>;
   }).filter(Boolean);
 }
 
@@ -131,10 +131,10 @@ export default function Section1({ article, relatedArticles, onBack, onArticleCl
           </div>
           {article.excerpt && (
             <div className="excerpt mb-4">
-              <p>{article.excerpt}</p>
+              <p className="text-justify">{article.excerpt}</p>
             </div>
           )}
-          <div className="entry-main-content dropcap">
+          <div className="entry-main-content dropcap text-justify">
             {bodyContent}
           </div>
           <div className="entry-bottom">

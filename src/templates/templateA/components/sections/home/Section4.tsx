@@ -41,7 +41,7 @@ export default function Section4({ mostRecent, onArticleClick }: Section4Props) 
                         <a href="#" onClick={(e) => handleClick(e, article.id)}>{article.title}</a>
                       </h3>
                       <div className="entry-excerpt">
-                        <p>{article.excerpt}</p>
+                        <p className="text-justify">{article.excerpt}</p>
                       </div>
                       <div className="entry-meta align-items-center">
                         <span>{article.author}</span> in <span>{article.category}</span>

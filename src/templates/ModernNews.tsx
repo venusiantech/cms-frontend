@@ -430,11 +430,11 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
       <div 
         className="bg-gray-900 text-white overflow-hidden transition-all duration-500 ease-in-out"
         style={{
-          maxHeight: isScrolled ? '0px' : '48px',
+          maxHeight: isScrolled ? '0px' : '40px',
           opacity: isScrolled ? 0 : 1,
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-4">
               <span>{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -443,7 +443,7 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
               {onContactClick && (
                 <button
                   onClick={onContactClick}
-                  className="text-white hover:text-gray-300 transition-colors text-xs font-semibold"
+                  className="text-white hover:text-red-500 transition-colors text-xs font-semibold"
                 >
                   CONTACT US
                 </button>
@@ -457,8 +457,8 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
       <div 
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-500 ease-in-out"
         style={{
-          paddingTop: isScrolled ? '0.5rem' : '1.5rem',
-          paddingBottom: isScrolled ? '0.5rem' : '1.5rem',
+          paddingTop: isScrolled ? '0.5rem' : '1rem',
+          paddingBottom: isScrolled ? '0.5rem' : '1rem',
         }}
       >
         <div className="flex justify-center">
@@ -469,7 +469,7 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
             <h1 
               className="font-serif font-bold text-gray-900 group-hover:text-blue-600 transition-all duration-500 ease-in-out"
               style={{
-                fontSize: isScrolled ? '1.5rem' : '3rem',
+                fontSize: isScrolled ? '1.5rem' : '2.5rem',
                 lineHeight: isScrolled ? '2rem' : '1',
               }}
             >
@@ -478,8 +478,8 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
             <div 
               className="bg-gradient-to-r from-blue-600 to-red-600 group-hover:from-blue-700 group-hover:to-red-700 transition-all duration-500 ease-in-out"
               style={{
-                height: isScrolled ? '2px' : '4px',
-                marginTop: isScrolled ? '0.25rem' : '0.5rem',
+                height: isScrolled ? '2px' : '3px',
+                marginTop: isScrolled ? '0.25rem' : '0.375rem',
               }}
             ></div>
           </a>

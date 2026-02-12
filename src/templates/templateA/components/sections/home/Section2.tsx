@@ -50,7 +50,7 @@ export default function Section2({ featuredSlider, onArticleClick }: Section2Pro
                           <a href="#" onClick={(e) => handleClick(e, article.id)}>{article.title}</a>
                         </h2>
                         <div className="entry-excerpt">
-                          <p>{article.excerpt}</p>
+                          <p className="text-justify">{article.excerpt}</p>
                         </div>
                         <div className="entry-meta align-items-center">
                           <span>{article.author}</span> in <span>{article.category}</span>
@@ -79,7 +79,7 @@ export default function Section2({ featuredSlider, onArticleClick }: Section2Pro
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="divider" />
+          {/* <div className="divider" /> */}
         </div>
       </div>
     </>

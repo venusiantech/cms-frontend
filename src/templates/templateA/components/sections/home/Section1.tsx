@@ -43,7 +43,7 @@ export default function Section1({ featured, trending, onArticleClick }: Section
                       <a href="#" onClick={(e) => handleClick(e, featured.mainArticle.id)}>{featured.mainArticle.title}</a>
                     </h3>
                     <div className="entry-excerpt">
-                      <p>{featured.mainArticle.excerpt}</p>
+                      <p className="text-justify">{featured.mainArticle.excerpt}</p>
                     </div>
                     <div className="entry-meta align-items-center">
                       <span>{featured.mainArticle.author}</span> in <span>{featured.mainArticle.category}</span>

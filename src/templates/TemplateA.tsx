@@ -9,13 +9,7 @@ import HomeSection3 from '@/templates/templateA/components/sections/home/Section
 import HomeSection4 from '@/templates/templateA/components/sections/home/Section4';
 import SingleSection1 from '@/templates/templateA/components/sections/single/Section1';
 
-// TemplateA styles (loaded only when this template is used)
-import '@/templates/templateA/public/assets/css/bootstrap.css';
-import '@/templates/templateA/public/assets/css/widgets.css';
-import '@/templates/templateA/public/assets/css/color-default.css';
-import '@/templates/templateA/public/assets/css/fontello.css';
-import '@/templates/templateA/public/assets/css/style.css';
-import '@/templates/templateA/public/assets/css/responsive.css';
+// TemplateA styles will be loaded dynamically to avoid affecting other templates
 
 interface Section {
   id: string;
@@ -71,7 +65,10 @@ function blogsFromPage(
         previewBlock = previewBlock || textBlocks[2];
       }
     }
-    const title = titleBlock?.content?.text || 'Untitled';
+    let title = titleBlock?.content?.text || 'Untitled';
+    // Remove quotes from title
+    title = title.replace(/^["']|["']$/g, '').trim();
+    
     const content = contentBlock?.content?.text || previewBlock?.content?.text || '';
     const preview = previewBlock?.content?.text || content?.substring(0, 300) + '...' || '';
     const image = imageBlock?.content?.url || PLACEHOLDER_IMAGE;
@@ -155,6 +152,38 @@ export default function TemplateA({ page, website, domain }: TemplateAProps) {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  // Dynamically load TemplateA CSS files
+  useEffect(() => {
+    const cssFiles = [
+      '/templateA/assets/css/bootstrap.css',
+      '/templateA/assets/css/widgets.css',
+      '/templateA/assets/css/color-default.css',
+      '/templateA/assets/css/fontello.css',
+      '/templateA/assets/css/style.css',
+      '/templateA/assets/css/responsive.css',
+    ];
+
+    const linkElements: HTMLLinkElement[] = [];
+
+    cssFiles.forEach((href) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.setAttribute('data-template', 'templateA');
+      document.head.appendChild(link);
+      linkElements.push(link);
+    });
+
+    // Cleanup: Remove CSS files when component unmounts
+    return () => {
+      linkElements.forEach((link) => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+      });
+    };
+  }, []);
+
   useEffect(() => {
     const name = domain.name.split('.')[0];
     document.title = `${name.charAt(0).toUpperCase() + name.slice(1)}`;
@@ -201,12 +230,13 @@ export default function TemplateA({ page, website, domain }: TemplateAProps) {
 
   return (
     <Layout classLisst="home" siteName={siteDisplay} assetsPath={ASSETS}>
-      <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
+      
       <HomeSection1
         featured={blogData.featured}
         trending={blogData.trending}
         onArticleClick={onArticleClick}
       />
+      <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
       {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} />
       <HomeSection4 mostRecent={blogData.mostRecent} onArticleClick={onArticleClick} /> */}
     </Layout>
