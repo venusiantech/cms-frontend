@@ -2,6 +2,52 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { publicAPI } from '@/lib/api';
 import TemplateRenderer from '@/components/TemplateRenderer';
+import type { Metadata } from 'next';
+
+/**
+ * Generate metadata for SEO and social sharing
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = headers();
+  const host = headersList.get('host') || '';
+  const domain = host.split(':')[0];
+
+  try {
+    const response = await publicAPI.getSiteByDomain(domain);
+    const siteData = response.data;
+    
+    const domainName = siteData.domain.name.split('.')[0];
+    const siteName = domainName.charAt(0).toUpperCase() + domainName.slice(1);
+    
+    // Use custom metadata if available, otherwise use defaults
+    const title = siteData.website.metaTitle || `${siteName} - Your Source for Quality Content`;
+    const description = siteData.website.metaDescription || `Discover amazing content on ${siteName}. Your trusted source for news, insights, and updates.`;
+    const image = siteData.website.metaImage || 'https://placehold.co/1200x630/6366f1/white?text=' + encodeURIComponent(siteName);
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        images: [image],
+        type: 'website',
+        siteName,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [image],
+      },
+    };
+  } catch (error) {
+    return {
+      title: 'Website',
+      description: 'Discover amazing content',
+    };
+  }
+}
 
 /**
  * CRITICAL: Domain-based rendering page

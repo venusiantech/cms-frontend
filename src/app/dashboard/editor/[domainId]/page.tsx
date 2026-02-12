@@ -829,6 +829,12 @@ function SettingsTab({ domain, domainId, queryClient }: any) {
   const [isUpdatingTemplate, setIsUpdatingTemplate] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [selectedTemplateDetails, setSelectedTemplateDetails] = useState<any>(null);
+  
+  // Metadata state
+  const [metaTitle, setMetaTitle] = useState(domain.website.metaTitle || '');
+  const [metaDescription, setMetaDescription] = useState(domain.website.metaDescription || '');
+  const [metaImage, setMetaImage] = useState(domain.website.metaImage || '');
+  const [isUpdatingMetadata, setIsUpdatingMetadata] = useState(false);
 
   // Fetch available templates
   const { data: templates, isLoading: isLoadingTemplates } = useQuery({
@@ -861,6 +867,23 @@ function SettingsTab({ domain, domainId, queryClient }: any) {
       toast.error(error.response?.data?.message || 'Failed to update template');
     } finally {
       setIsUpdatingTemplate(false);
+    }
+  };
+
+  const handleMetadataUpdate = async () => {
+    setIsUpdatingMetadata(true);
+    try {
+      await websitesAPI.updateMetadata(domain.website.id, {
+        metaTitle: metaTitle || null,
+        metaDescription: metaDescription || null,
+        metaImage: metaImage || null,
+      });
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      toast.success('Website metadata updated! 🎉');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update metadata');
+    } finally {
+      setIsUpdatingMetadata(false);
     }
   };
 
@@ -1125,6 +1148,82 @@ function SettingsTab({ domain, domainId, queryClient }: any) {
               <p className="text-sm text-gray-600">Show "Contact Us" link in your website</p>
             </div>
           </label>
+        </div>
+
+        {/* Website Metadata for Social Sharing */}
+        <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="mb-4">
+            <p className="font-semibold text-gray-900 mb-1">Social Sharing Preview</p>
+            <p className="text-sm text-gray-600">Customize how your website appears when shared on social media</p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Meta Title */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Website Title
+              </label>
+              <input
+                type="text"
+                value={metaTitle}
+                onChange={(e) => setMetaTitle(e.target.value)}
+                placeholder={`${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)} - Your Source for Quality Content`}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">This appears as the title when your website is shared</p>
+            </div>
+
+            {/* Meta Description */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Website Description
+              </label>
+              <textarea
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Discover amazing content. Your trusted source for news, insights, and updates."
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Brief description shown in social media previews (150-160 characters recommended)</p>
+            </div>
+
+            {/* Meta Image */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Preview Image URL
+              </label>
+              <input
+                type="url"
+                value={metaImage}
+                onChange={(e) => setMetaImage(e.target.value)}
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-gray-900 text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Image shown in social media previews (1200x630px recommended)</p>
+              {metaImage && (
+                <div className="mt-3">
+                  <img
+                    src={metaImage}
+                    alt="Preview"
+                    className="w-full max-w-md h-auto rounded border border-gray-200"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Update Button */}
+            <button
+              onClick={handleMetadataUpdate}
+              disabled={isUpdatingMetadata}
+              className="w-full sm:w-auto px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
+            >
+              {isUpdatingMetadata ? 'Updating...' : 'Update Metadata'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
