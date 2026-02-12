@@ -38,6 +38,7 @@ interface SiteData {
 
 interface TemplateRendererProps {
   siteData: SiteData;
+  articleId?: string; // Optional article ID for individual article pages
 }
 
 /**
@@ -47,8 +48,9 @@ interface TemplateRendererProps {
  * 1. Receives site data
  * 2. Selects appropriate template
  * 3. Passes structured data to template
+ * 4. Optionally shows specific article if articleId provided
  */
-export default function TemplateRenderer({ siteData }: TemplateRendererProps) {
+export default function TemplateRenderer({ siteData, articleId }: TemplateRendererProps) {
   const { website, pages } = siteData;
 
   // Find home page
@@ -62,7 +64,7 @@ export default function TemplateRenderer({ siteData }: TemplateRendererProps) {
     );
   }
 
-  const templateProps = { page: homePage, website, domain: siteData.domain };
+  const templateProps = { page: homePage, website, domain: siteData.domain, articleId };
 
   if (website.templateKey === 'modernNews') {
     return <ModernNews {...templateProps} />;

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Section {
   id: string;
@@ -35,6 +37,7 @@ interface ModernNewsProps {
   domain: {
     name: string;
   };
+  articleId?: string; // For direct article page rendering
 }
 
 interface Blog {
@@ -49,7 +52,8 @@ interface Blog {
  * Modern News Magazine Template
  * Professional news/magazine layout with hero, content grid, and sidebar
  */
-export default function ModernNews({ page, website, domain }: ModernNewsProps) {
+export default function ModernNews({ page, website, domain, articleId }: ModernNewsProps) {
+  const router = useRouter();
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,8 +61,9 @@ export default function ModernNews({ page, website, domain }: ModernNewsProps) {
   // Set document title for browser tab
   useEffect(() => {
     const domainName = domain.name.split('.')[0];
-    document.title = `${domainName.charAt(0).toUpperCase() + domainName.slice(1)} - News & Articles`;
-  }, [domain.name]);
+    const titleSuffix = selectedBlog ? ` - ${selectedBlog.title}` : ' - News & Articles';
+    document.title = `${domainName.charAt(0).toUpperCase() + domainName.slice(1)}${titleSuffix}`;
+  }, [domain.name, selectedBlog]);
 
   // Simulate loading for images
   useEffect(() => {
@@ -120,12 +125,26 @@ export default function ModernNews({ page, website, domain }: ModernNewsProps) {
     };
   });
 
+  // If articleId is provided (from URL), find and set the selected blog
+  useEffect(() => {
+    if (articleId) {
+      const blog = blogs.find((b) => b.sectionId === articleId);
+      if (blog) {
+        setSelectedBlog(blog);
+      }
+    }
+  }, [articleId, blogs]);
+
+  // Handle blog click - Navigate to article page (SEO-friendly)
+  const handleBlogClick = (blog: Blog) => {
+    router.push(`/blog/${blog.sectionId}`);
+  };
+
   if (selectedBlog) {
     return (
       <FullArticleView
         blog={selectedBlog}
         domain={domain}
-        onBack={() => setSelectedBlog(null)}
       />
     );
   }
@@ -153,7 +172,7 @@ export default function ModernNews({ page, website, domain }: ModernNewsProps) {
         {isLoading ? (
           <HeroSectionSkeleton />
         ) : (
-          blogs.length > 0 && <HeroSection section={heroSection} blogs={blogs} onBlogClick={setSelectedBlog} />
+          blogs.length > 0 && <HeroSection section={heroSection} blogs={blogs} onBlogClick={handleBlogClick} />
         )}
 
         {/* All Blogs Grid - Show skeleton while loading */}
@@ -161,7 +180,7 @@ export default function ModernNews({ page, website, domain }: ModernNewsProps) {
           <BlogsGridSkeleton />
         ) : (
           blogs.length > 0 && (
-            <BlogsGrid blogs={blogs} onBlogClick={setSelectedBlog} />
+            <BlogsGrid blogs={blogs} onBlogClick={handleBlogClick} />
           )
         )}
       </main>
@@ -239,7 +258,7 @@ function BlogsGridSkeleton() {
   );
 }
 
-function FullArticleView({ blog, domain, onBack }: { blog: Blog; domain: { name: string }; onBack: () => void }) {
+function FullArticleView({ blog, domain }: { blog: Blog; domain: { name: string } }) {
   // Scroll to top when article opens
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -315,15 +334,15 @@ function FullArticleView({ blog, domain, onBack }: { blog: Blog; domain: { name:
       {/* Article Container - Narrower for better readability */}
       <article className="max-w-3xl mx-auto px-6 py-8">
         {/* Back Button */}
-        <button
-          onClick={onBack}
+        <Link
+          href="/"
           className="flex items-center text-blue-600 hover:text-blue-700 mb-6 text-sm font-semibold"
         >
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to Articles
-        </button>
+        </Link>
 
         {/* Article Header */}
         <header className="mb-6">
@@ -373,15 +392,15 @@ function FullArticleView({ blog, domain, onBack }: { blog: Blog; domain: { name:
 
         {/* Back Button (Bottom) */}
         <div className="mt-10 text-center">
-          <button
-            onClick={onBack}
+          <Link
+            href="/"
             className="inline-flex items-center bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition-colors text-sm"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to All Articles
-          </button>
+          </Link>
         </div>
       </article>
 

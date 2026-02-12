@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import type { TemplateAArticle, TemplateABlogData } from '@/templates/templateA/types';
 import Layout from '@/templates/templateA/components/layout/Layout';
 import HomeSection1 from '@/templates/templateA/components/sections/home/Section1';
@@ -35,6 +36,7 @@ interface TemplateAProps {
     contactFormEnabled: boolean;
   };
   domain: { name: string };
+  articleId?: string; // For direct article page rendering
 }
 
 const PLACEHOLDER_IMAGE = 'https://placehold.co/800x400/e5e5e5/737373?text=Article';
@@ -142,7 +144,8 @@ function mapPageToTemplateAData(page: PageData, domain: { name: string }): Templ
   };
 }
 
-export default function TemplateA({ page, website, domain }: TemplateAProps) {
+export default function TemplateA({ page, website, domain, articleId }: TemplateAProps) {
+  const router = useRouter();
   const blogData = useMemo(() => mapPageToTemplateAData(page, domain), [page, domain]);
   const blogsWithContent = useMemo(() => {
     const domainName = domain.name.split('.')[0];
@@ -150,7 +153,7 @@ export default function TemplateA({ page, website, domain }: TemplateAProps) {
     return raw.map((b, i) => ({ ...toTemplateAArticle(b, i), content: b.content }));
   }, [page, domain.name]);
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
 
   // Dynamically load TemplateA CSS files
   useEffect(() => {
@@ -184,25 +187,24 @@ export default function TemplateA({ page, website, domain }: TemplateAProps) {
     };
   }, []);
 
+  // Update document title based on selected article
   useEffect(() => {
     const name = domain.name.split('.')[0];
-    document.title = `${name.charAt(0).toUpperCase() + name.slice(1)}`;
-  }, [domain.name]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('article');
-    if (id) setSelectedId(id);
-  }, []);
-
-  useEffect(() => {
-    if (selectedId && typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('article', selectedId);
-      window.history.replaceState({}, '', url.toString());
+    const siteName = name.charAt(0).toUpperCase() + name.slice(1);
+    if (selectedId) {
+      const article = blogsWithContent.find((a) => a.id === selectedId);
+      document.title = article ? `${article.title} - ${siteName}` : siteName;
+    } else {
+      document.title = siteName;
     }
-  }, [selectedId]);
+  }, [domain.name, selectedId, blogsWithContent]);
+
+  // Update selected article when articleId prop changes (from URL)
+  useEffect(() => {
+    if (articleId) {
+      setSelectedId(articleId);
+    }
+  }, [articleId]);
 
   const selectedArticle = selectedId
     ? (blogsWithContent.find((a) => a.id === selectedId) || null)
@@ -211,8 +213,15 @@ export default function TemplateA({ page, website, domain }: TemplateAProps) {
   const siteName = domain.name.split('.')[0];
   const siteDisplay = siteName.charAt(0).toUpperCase() + siteName.slice(1);
 
-  const onArticleClick = (id: string) => setSelectedId(id);
-  const onBack = () => setSelectedId(null);
+  // Handle article click - Navigate to article page (SEO-friendly)
+  const onArticleClick = (id: string) => {
+    router.push(`/blog/${id}`);
+  };
+  
+  const onBack = () => {
+    // Navigate back to home page
+    router.push('/');
+  };
 
   if (selectedArticle) {
     return (

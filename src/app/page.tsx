@@ -29,19 +29,25 @@ export default async function PublicSitePage() {
   const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
   const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
 
-  // Skip rendering for localhost and platform dashboard routes
+  // Check if this is the main platform domain (not a subdomain)
+  // Example: jaal.com is platform, but music-byi6.jaal.com is a user site
   const isPlatformDomain = 
     domain === 'localhost' || 
     domain.startsWith('127.0.0.1') ||
-    platformDomains.includes(domain) ||
+    platformDomains.includes(domain) || // Exact match only
     domain === 'cms.local';
 
-  if (isPlatformDomain) {
+  // Special check: if domain is a subdomain of platform domain, it's a user site
+  const isSubdomainOfPlatform = platformDomains.some(pd => 
+    domain !== pd && domain.endsWith('.' + pd)
+  );
+
+  if (isPlatformDomain && !isSubdomainOfPlatform) {
     // Redirect to dashboard
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Domain CMS Platform</h1>
+          <h1 className="text-4xl font-bold mb-4">Jaal CMS</h1>
           <p className="text-gray-600 mb-8">Multi-tenant website management</p>
           <a href="/dashboard" className="btn-primary">
             Go to Dashboard

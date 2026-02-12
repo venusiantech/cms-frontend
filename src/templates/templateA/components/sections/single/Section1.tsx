@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import Comments from './Comments';
@@ -73,13 +74,9 @@ export default function Section1({ article, relatedArticles, onBack, onArticleCl
   return (
     <>
       <div className="container">
-        <button
-          type="button"
-          onClick={onBack}
-          className="btn btn-green mb-4"
-        >
+        <Link href="/" className="btn btn-green mb-4" style={{ display: 'inline-block', textDecoration: 'none' }}>
           ← Back to Home
-        </button>
+        </Link>
         <div className="entry-header">
           <div className="mb-5">
             <h1 className="entry-title m_b_2rem">{article.title}</h1>
