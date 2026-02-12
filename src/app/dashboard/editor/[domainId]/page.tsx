@@ -315,9 +315,9 @@ export default function EditorPage() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-200 px-8 sm:px-16 lg:px-24 xl:px-32 py-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-5">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => router.push('/dashboard')}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -325,7 +325,7 @@ export default function EditorPage() {
               <ArrowLeft size={18} className="text-gray-600" />
             </button>
             <div>
-              <h1 className="text-xl font-medium text-gray-900">{domain.domainName}</h1>
+              <h1 className="text-lg sm:text-xl font-medium text-gray-900 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
               <p className="text-xs text-gray-500 mt-0.5">{blogs.length} blogs • Active</p>
             </div>
           </div>
@@ -333,18 +333,19 @@ export default function EditorPage() {
             href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium"
+            className="px-3 py-2 sm:px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 text-xs sm:text-sm font-medium"
           >
             <ExternalLink size={16} />
-            View Site
+            <span className="hidden sm:inline">View Site</span>
+            <span className="sm:hidden">View</span>
           </a>
         </div>
       </div>
 
       {/* Main Content - Split View */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left: Website Preview */}
-        <div className="w-1/2 border-r border-gray-200 bg-gray-100 p-6 overflow-auto">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        {/* Left: Website Preview - Hidden on mobile */}
+        <div className="hidden lg:block lg:w-1/2 border-r border-gray-200 bg-gray-100 p-6 overflow-auto">
           <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             <div className="bg-gray-800 px-4 py-3 flex items-center justify-between gap-3">
               {/* Left: MacBook buttons */}
@@ -395,10 +396,10 @@ export default function EditorPage() {
         </div>
 
         {/* Right: Tabs & Content */}
-        <div className="w-1/2 flex flex-col bg-white">
+        <div className="w-full lg:w-1/2 flex flex-col bg-white min-h-0">
           {/* Tabs */}
-          <div className="border-b border-gray-200 px-8 pt-6">
-            <div className="flex gap-6">
+          <div className="flex-shrink-0 border-b border-gray-200 px-4 sm:px-8 pt-4 sm:pt-6 overflow-x-auto">
+            <div className="flex gap-4 sm:gap-6 min-w-max">
               <TabButton
                 active={activeTab === 'blogs'}
                 onClick={() => setActiveTab('blogs')}
@@ -431,7 +432,7 @@ export default function EditorPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-auto p-8">
+          <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
             {activeTab === 'blogs' && (
               <BlogsTab
                 blogs={blogs}
@@ -456,73 +457,73 @@ export default function EditorPage() {
 
       {/* Edit Blog Modal */}
       {editingBlog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in duration-200">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in duration-200 flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900">Edit Blog</h3>
-                <p className="text-sm text-gray-500 mt-0.5">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex-shrink-0">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 truncate">Edit Blog</h3>
+                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
                   {editingBlog.isHero ? 'Hero Blog' : `Blog #${blogs.indexOf(editingBlog) + 1}`}
                 </p>
               </div>
               <button
                 onClick={() => setEditingBlog(null)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0 ml-2"
               >
-                <X size={20} className="text-gray-500" />
+                <X size={18} className="text-gray-500 sm:w-5 sm:h-5" />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-              <div className="space-y-6">
+            <div className="p-3 sm:p-4 lg:p-6 overflow-y-auto flex-1">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Edit Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-1.5 sm:mb-2">
                     Blog Title
                   </label>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter blog title..."
                   />
                 </div>
 
                 {/* Edit Content */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-1.5 sm:mb-2">
                     Blog Content
                   </label>
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
-                    rows={12}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 font-mono text-sm"
+                    rows={8}
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
                     placeholder="Enter blog content (supports Markdown)..."
                   />
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 mt-1.5 sm:mt-2">
                     💡 Tip: You can use Markdown formatting (e.g., # for headings, ** for bold)
                   </p>
                 </div>
 
                 {/* Regenerate Options */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-4">
+                <div className="border-t border-gray-200 pt-4 sm:pt-6">
+                  <h4 className="text-xs sm:text-sm font-semibold text-gray-900 mb-3 sm:mb-4">
                     Or Regenerate with AI
                   </h4>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                     <button
                       onClick={() => {
                         regenerateTitleMutation.mutate(editingBlog.id);
                         setEditingBlog(null);
                       }}
                       disabled={regenerateTitleMutation.isPending}
-                      className="px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      <Type size={16} />
+                      <Type size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Title</span>
                     </button>
 
@@ -532,9 +533,9 @@ export default function EditorPage() {
                         setEditingBlog(null);
                       }}
                       disabled={regenerateContentMutation.isPending}
-                      className="px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      <FileText size={16} />
+                      <FileText size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Content</span>
                     </button>
 
@@ -544,9 +545,9 @@ export default function EditorPage() {
                         setEditingBlog(null);
                       }}
                       disabled={regenerateImageMutation.isPending}
-                      className="px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      <ImageIcon size={16} />
+                      <ImageIcon size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Image</span>
                     </button>
                   </div>
@@ -556,7 +557,7 @@ export default function EditorPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
               {/* Delete Button (left side) */}
               {!editingBlog.isHero ? (
                 <button
@@ -567,22 +568,22 @@ export default function EditorPage() {
                     }
                   }}
                   disabled={deleteSectionMutation.isPending}
-                  className="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={14} className="sm:w-4 sm:h-4" />
                   <span>Delete Blog</span>
                 </button>
               ) : (
-                <div />
+                <div className="hidden sm:block" />
               )}
 
               {/* Save Button (right side) */}
               <button
                 onClick={handleSaveEdit}
                 disabled={updateContentMutation.isPending}
-                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 font-medium disabled:opacity-50 flex items-center gap-2"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                <Save size={18} />
+                <Save size={16} className="sm:w-[18px] sm:h-[18px]" />
                 {updateContentMutation.isPending ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
@@ -613,7 +614,7 @@ function BlogsTab({ blogs, domain, generateMoreBlogsMutation, onEditBlog }: any)
   return (
     <div className="space-y-6">
       {/* Generate More Button */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex items-center justify-between">
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-semibold text-gray-900 mb-1">Generate More Content</h3>
           <p className="text-sm text-gray-600">Add 3 more AI-generated blog posts to your site</p>
@@ -621,7 +622,7 @@ function BlogsTab({ blogs, domain, generateMoreBlogsMutation, onEditBlog }: any)
         <button
           onClick={() => generateMoreBlogsMutation.mutate(domain.website.id)}
           disabled={generateMoreBlogsMutation.isPending}
-          className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium disabled:opacity-50"
+          className="w-full sm:w-auto px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium disabled:opacity-50"
         >
           {generateMoreBlogsMutation.isPending ? (
             <>
@@ -644,14 +645,14 @@ function BlogsTab({ blogs, domain, generateMoreBlogsMutation, onEditBlog }: any)
           {blogs.map((blog: any, index: number) => (
             <div
               key={blog.id}
-              className={`border rounded-xl p-5 transition-all duration-200 ${
+              className={`border rounded-xl p-4 sm:p-5 transition-all duration-200 ${
                 blog.isHero
                   ? 'border-yellow-200 bg-yellow-50'
                   : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3 sm:gap-4">
+                <div className="flex-1 min-w-0 w-full">
                   <div className="flex items-center gap-2 mb-2">
                     {blog.isHero && (
                       <span className="px-2 py-0.5 bg-yellow-500 text-white text-xs font-semibold rounded">
@@ -673,7 +674,7 @@ function BlogsTab({ blogs, domain, generateMoreBlogsMutation, onEditBlog }: any)
                 {/* Edit Button */}
                 <button
                   onClick={() => onEditBlog(blog)}
-                  className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
                 >
                   <Edit3 size={16} />
                   Edit
@@ -714,7 +715,7 @@ function LeadsTab({ domain }: any) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-1">Contact Form Leads</h3>
           <p className="text-sm text-gray-600">Messages from visitors to your website</p>
@@ -722,7 +723,7 @@ function LeadsTab({ domain }: any) {
         <button
           onClick={handleRefresh}
           disabled={isLoading}
-          className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+          className="w-full sm:w-auto px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           Refresh
@@ -739,16 +740,16 @@ function LeadsTab({ domain }: any) {
       ) : leads && leads.length > 0 ? (
         <div className="space-y-3">
           {leads.map((lead: any) => (
-            <div key={lead.id} className="bg-white border border-gray-200 rounded-xl p-5">
-              <div className="flex items-start justify-between mb-3">
-                <div>
+            <div key={lead.id} className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-3 mb-3">
+                <div className="w-full sm:w-auto">
                   <h4 className="font-medium text-gray-900">{lead.name}</h4>
-                  <p className="text-sm text-gray-600">{lead.email}</p>
+                  <p className="text-sm text-gray-600 break-all">{lead.email}</p>
                   {lead.company && (
                     <p className="text-xs text-gray-500 mt-1">{lead.company}</p>
                   )}
                 </div>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 whitespace-nowrap">
                   {new Date(lead.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -759,7 +760,7 @@ function LeadsTab({ domain }: any) {
                 </span>
               </div>
               <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{lead.message}</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{lead.message}</p>
               </div>
             </div>
           ))}
@@ -783,7 +784,7 @@ function DeploymentTab({ domain }: any) {
         <p className="text-sm text-gray-600">Your website is live and accessible</p>
       </div>
 
-      <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+      <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6">
         <div className="flex items-start gap-3 mb-4">
           <CheckCircle2 size={24} className="text-green-600 flex-shrink-0 mt-0.5" />
           <div>
@@ -794,9 +795,9 @@ function DeploymentTab({ domain }: any) {
       </div>
 
       <div className="space-y-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
           <p className="text-xs font-semibold text-gray-500 mb-2">SUBDOMAIN</p>
-          <p className="font-mono text-sm text-gray-900 mb-3">{getDisplaySubdomain(domain.website.subdomain)}</p>
+          <p className="font-mono text-xs sm:text-sm text-gray-900 mb-3 break-all">{getDisplaySubdomain(domain.website.subdomain)}</p>
           <a
             href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
@@ -807,13 +808,13 @@ function DeploymentTab({ domain }: any) {
           </a>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
           <p className="text-xs font-semibold text-gray-500 mb-2">CUSTOM DOMAIN</p>
-          <p className="font-mono text-sm text-gray-900 mb-3">{domain.domainName}</p>
+          <p className="font-mono text-xs sm:text-sm text-gray-900 mb-3 break-all">{domain.domainName}</p>
           <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
             <p className="text-xs font-semibold text-gray-700 mb-2">DNS Configuration</p>
             <p className="text-xs text-gray-600 mb-2">Add this CNAME record to your DNS provider:</p>
-            <div className="font-mono text-xs bg-white rounded p-2 border border-gray-200">
+            <div className="font-mono text-xs bg-white rounded p-2 border border-gray-200 break-all">
               {domain.domainName} → {domain.website.subdomain}
             </div>
           </div>
@@ -824,14 +825,243 @@ function DeploymentTab({ domain }: any) {
 }
 
 function SettingsTab({ domain, domainId, queryClient }: any) {
+  const [selectedTemplate, setSelectedTemplate] = useState(domain.website.templateKey);
+  const [isUpdatingTemplate, setIsUpdatingTemplate] = useState(false);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [selectedTemplateDetails, setSelectedTemplateDetails] = useState<any>(null);
+
+  // Fetch available templates
+  const { data: templates, isLoading: isLoadingTemplates } = useQuery({
+    queryKey: ['templates'],
+    queryFn: async () => {
+      const response = await websitesAPI.getTemplates();
+      return response.data;
+    },
+  });
+
+  const handleTemplateClick = (template: any) => {
+    setSelectedTemplateDetails(template);
+    setShowTemplateModal(true);
+  };
+
+  const handleTemplateSelect = async () => {
+    if (!selectedTemplateDetails || selectedTemplateDetails.key === selectedTemplate) {
+      setShowTemplateModal(false);
+      return;
+    }
+
+    setIsUpdatingTemplate(true);
+    try {
+      await websitesAPI.updateTemplate(domain.website.id, { templateKey: selectedTemplateDetails.key });
+      setSelectedTemplate(selectedTemplateDetails.key);
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      toast.success('Template updated successfully! 🎨');
+      setShowTemplateModal(false);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update template');
+    } finally {
+      setIsUpdatingTemplate(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
+      {/* <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-1">Website Settings</h3>
         <p className="text-sm text-gray-600">Configure your website preferences</p>
-      </div>
+      </div> */}
 
-      <div className="space-y-4">
+      <div className="">
+        {/* Template Selection */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
+          <div className="mb-4">
+            <p className="font-semibold text-gray-900 mb-1">Website Template</p>
+            {/* <p className="text-sm text-gray-600">Choose how your website looks</p> */}
+          </div>
+
+          {isLoadingTemplates ? (
+            <div className="flex items-center justify-center py-8">
+              <CustomLoader />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {templates?.map((template: any) => (
+                <button
+                  key={template.key}
+                  onClick={() => handleTemplateClick(template)}
+                  className={`group relative border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                    selectedTemplate === template.key
+                      ? 'border-gray-900 ring-2 ring-gray-900'
+                      : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  {/* Preview Image */}
+                  <div className="aspect-video bg-gray-100 relative">
+                    <img
+                      src={template.previewImage}
+                      alt={template.name}
+                      className="w-full h-full object-fill"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://placehold.co/600x400/6366f1/white?text=' + encodeURIComponent(template.name);
+                      }}
+                    />
+                    {selectedTemplate === template.key && (
+                      <div className="absolute top-2 right-2 px-2 py-1 bg-gray-900 text-white text-xs font-medium rounded">
+                        Active
+                      </div>
+                    )}
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-200 flex items-center justify-center">
+                      <span className="text-white opacity-0 group-hover:opacity-100 text-sm font-medium">
+                        View Details
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Template Name */}
+                  <div className="p-3 bg-white">
+                    <h4 className="font-medium text-gray-900 text-sm text-center">{template.name}</h4>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Template Details Modal */}
+        {showTemplateModal && selectedTemplateDetails && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-xl max-w-7xl w-full shadow-2xl animate-in zoom-in duration-200 overflow-hidden max-h-[90vh] flex flex-col">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-white border-b border-gray-100">
+                <div>
+                  <h3 className="text-lg sm:text-2xl font-semibold text-gray-900">{selectedTemplateDetails.name}</h3>
+                  {selectedTemplate === selectedTemplateDetails.key && (
+                    <span className="inline-flex items-center gap-1.5 text-xs text-green-600 mt-1 font-medium">
+                      <CheckCircle2 size={14} />
+                      Currently Active
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={() => setShowTemplateModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X size={22} className="text-gray-400" />
+                </button>
+              </div>
+
+              {/* Modal Content - Side by Side Layout on desktop, stacked on mobile */}
+              <div className="flex flex-col lg:flex-row overflow-auto" style={{ minHeight: '400px', maxHeight: '650px' }}>
+                {/* Left: Preview Image + Other Templates */}
+                <div className="flex-1 bg-gray-50 p-4 sm:p-6 flex flex-col gap-3">
+                  {/* Main Preview - Takes most space */}
+                  <div className="rounded-lg overflow-hidden bg-white shadow-sm" style={{ minHeight: '300px', height: 'calc(100% - 100px)' }}>
+                    <img
+                      src={selectedTemplateDetails.previewImage}
+                      alt={selectedTemplateDetails.name}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://placehold.co/800x600/6366f1/white?text=' + encodeURIComponent(selectedTemplateDetails.name);
+                      }}
+                    />
+                  </div>
+
+                  {/* Other Templates Thumbnails - Small strip at bottom */}
+                  {templates && templates.length > 1 && (
+                    <div className="flex gap-2 overflow-x-auto pb-2" style={{ minHeight: '85px' }}>
+                      {templates
+                        ?.filter((t: any) => t.key !== selectedTemplateDetails.key)
+                        .map((template: any) => (
+                          <button
+                            key={template.key}
+                            onClick={() => setSelectedTemplateDetails(template)}
+                            className="rounded-md overflow-hidden border-2 border-gray-200 hover:border-gray-900 transition-all duration-200 bg-white hover:shadow-md flex-shrink-0"
+                            style={{ width: '120px' }}
+                          >
+                            <div style={{ height: '60px' }}>
+                              <img
+                                src={template.previewImage}
+                                alt={template.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = 'https://placehold.co/400x300/6366f1/white?text=' + encodeURIComponent(template.name);
+                                }}
+                              />
+                            </div>
+                            <div className="px-2 py-1 bg-white">
+                              <p className="text-xs font-medium text-gray-900 text-center truncate">{template.name}</p>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Right: Template Details */}
+                <div className="w-full lg:w-96 flex flex-col bg-white">
+                  <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+                    {/* Description */}
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900 mb-3">About This Template</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">{selectedTemplateDetails.description}</p>
+                    </div>
+
+                    {/* Features */}
+                    <div>
+                      <h4 className="text-base font-semibold text-gray-900 mb-4">Features</h4>
+                      <div className="space-y-3">
+                        {selectedTemplateDetails.features.map((feature: string, i: number) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <div className="mt-0.5">
+                              <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
+                            </div>
+                            <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Info Note */}
+                    {/* <div className="p-4 bg-blue-50/80 border border-blue-100 rounded-lg">
+                      <p className="text-xs text-blue-900 leading-relaxed">
+                        <span className="font-semibold">💡 Note:</span> Changing the template will update your website's appearance but won't delete your content.
+                      </p>
+                    </div> */}
+                  </div>
+
+                  {/* Footer Buttons */}
+                  <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50">
+                    <button
+                      onClick={handleTemplateSelect}
+                      disabled={isUpdatingTemplate || selectedTemplate === selectedTemplateDetails.key}
+                      className={`w-full px-6 py-3 rounded-lg transition-all duration-200 font-medium shadow-sm ${
+                        selectedTemplate === selectedTemplateDetails.key
+                          ? 'bg-green-500 text-white cursor-not-allowed'
+                          : 'bg-gray-900 hover:bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed'
+                      }`}
+                    >
+                      {isUpdatingTemplate ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          Applying...
+                        </span>
+                      ) : selectedTemplate === selectedTemplateDetails.key ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <CheckCircle2 size={18} />
+                          Already Selected
+                        </span>
+                      ) : (
+                        'Select Template'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Ads Setting */}
         <div className="bg-white border border-gray-200 rounded-xl p-5">
           <div className="flex items-start justify-between">

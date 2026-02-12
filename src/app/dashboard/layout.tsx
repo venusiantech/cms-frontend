@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
-import { LogOut, Globe, ChevronDown, Settings } from 'lucide-react';
+import Image from 'next/image';
+import { LogOut, ChevronDown, Settings } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 
@@ -77,14 +78,17 @@ export default function DashboardLayout({
       />
 
       {/* Top Navbar */}
-      <nav className="bg-white">
-        <div className="px-8 sm:px-16 lg:px-24 xl:px-32 h-20 flex items-center justify-between">
+      <nav className="bg-white border-b border-gray-100">
+        <div className="px-4 sm:px-8 lg:px-16 xl:px-24 h-16 sm:h-20 flex items-center justify-between">
           {/* Left: Logo */}
-          <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-gray-900 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-              <Globe size={20} className="text-white" />
-            </div>
-            <span className="text-xl font-medium text-gray-900">Domain CMS</span>
+          <Link href="/dashboard" className="flex items-center group">
+            <Image 
+              src="/templateA/assets/images/jaal.png" 
+              alt="Jaal Logo" 
+              width={220}
+              height={80}
+              className="h-24 sm:h-32 w-auto group-hover:scale-105 transition-transform duration-200"
+            />
           </Link>
 
           {/* Right: User Avatar & Menu */}
@@ -138,7 +142,7 @@ export default function DashboardLayout({
       </nav>
 
       {/* Main content */}
-      <main className={`${isEditorPage ? '' : 'px-8 sm:px-16 lg:px-24 xl:px-32 pt-12 pb-16'}`}>
+      <main className={`${isEditorPage ? '' : 'px-4 sm:px-8 lg:px-16 xl:px-24 pt-8 sm:pt-12 pb-12 sm:pb-16'}`}>
         {children}
       </main>
     </div>

@@ -52,22 +52,22 @@ export default function DashboardPage() {
       )}
 
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="text-3xl font-medium text-gray-900 mb-2">Domains</h1>
-            <p className="text-gray-600 text-sm">
-              {domains?.length || 0} {domains?.length === 1 ? 'domain' : 'domains'} • Manage your websites
-            </p>
+            <h1 className="text-2xl sm:text-3xl font-medium text-gray-900">Domains</h1>
           </div>
           <button
             onClick={() => setShowAddDomain(true)}
-            className="group px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+            className="group w-8 h-8 sm:w-9 sm:h-9 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md flex-shrink-0"
+            title="Add Domain"
           >
             <Plus size={18} className="group-hover:rotate-90 transition-transform duration-200" />
-            <span className="font-medium">Add Domain</span>
           </button>
         </div>
+        <p className="text-gray-600 text-sm">
+          {domains?.length || 0} {domains?.length === 1 ? 'domain' : 'domains'} • Manage your websites
+        </p>
       </div>
 
       {/* Initial Loading State - Inline */}
@@ -201,17 +201,17 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
 
   return (
     <div 
-      className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-6 transition-all duration-200 hover:shadow-lg"
+      className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-4 sm:p-6 transition-all duration-200 hover:shadow-lg"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-            <Globe size={24} className="text-gray-700" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Globe size={20} className="text-gray-700 sm:w-6 sm:h-6" />
           </div>
-          <div>
-            <h3 className="font-medium text-lg text-gray-900 mb-1">{domain.domainName}</h3>
+          <div className="min-w-0">
+            <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-1 truncate">{domain.domainName}</h3>
             {isGenerating ? (
               <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
                 <div className="w-2 h-2 bg-gray-700 rounded-full animate-pulse"></div>
@@ -246,16 +246,16 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
       </div>
 
       {domain.website ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Info Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-50 rounded-lg p-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            <div className="bg-gray-50 rounded-lg p-2.5 sm:p-3">
               <p className="text-xs text-gray-500 mb-1 font-medium">Subdomain</p>
-              <p className="text-sm font-medium text-gray-900 truncate">{domain.website.subdomain}</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{domain.website.subdomain}</p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-3">
+            <div className="bg-gray-50 rounded-lg p-2.5 sm:p-3">
               <p className="text-xs text-gray-500 mb-1 font-medium">Status</p>
-              <p className="text-sm font-semibold text-green-600 flex items-center gap-1.5">
+              <p className="text-xs sm:text-sm font-semibold text-green-600 flex items-center gap-1.5">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 Live
               </p>
@@ -323,18 +323,18 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-200">
-        <h2 className="text-2xl font-medium text-gray-900 mb-2">Add Domain</h2>
-        <p className="text-gray-600 text-sm mb-6">Enter your domain name to get started</p>
+      <div className="bg-white rounded-xl p-5 sm:p-6 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-200">
+        <h2 className="text-xl sm:text-2xl font-medium text-gray-900 mb-2">Add Domain</h2>
+        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Enter your domain name to get started</p>
         <input
           type="text"
           value={domainName}
           onChange={(e) => setDomainName(e.target.value)}
           placeholder="example.com"
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 mb-6"
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 mb-4 sm:mb-6"
           autoFocus
         />
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button 
             onClick={onClose} 
             className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 font-medium border border-gray-200"
@@ -612,20 +612,20 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
   });
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-      <div className="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 relative z-[61] max-h-[90vh] overflow-y-auto">
-        <div className="mb-5">
-          <h2 className="text-2xl font-medium text-gray-900 mb-2">Generate Website</h2>
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
+      <div className="bg-white rounded-xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+        <div className="mb-4 sm:mb-5">
+          <h2 className="text-xl sm:text-2xl font-medium text-gray-900 mb-2">Generate Website</h2>
           {/* <p className="text-gray-600 text-sm">
             Choose a template and create a website with AI-powered content
           </p> */}
         </div>
 
         {/* Template selection */}
-        <div className="mb-5">
-          <p className="text-sm font-semibold text-gray-900 mb-4">Choose template</p>
+        <div className="mb-4 sm:mb-5">
+          <p className="text-xs sm:text-sm font-semibold text-gray-900 mb-3 sm:mb-4">Choose template</p>
           {/* <p className="text-xs text-gray-500 mb-3">Click a card to select. Use the expand icon to preview full size.</p> */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {TEMPLATE_OPTIONS.map((opt) => (
               <div
                 key={opt.key}
@@ -641,20 +641,20 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                   disabled={mutation.isPending}
                   className="text-left disabled:opacity-60 disabled:cursor-not-allowed flex flex-col flex-1 min-w-0"
                 >
-                  <div className="w-full h-44 bg-gray-100 flex-shrink-0 relative">
+                  <div className="w-full h-36 sm:h-44 bg-gray-100 flex-shrink-0 relative">
                     <img
                       src={opt.image}
                       alt={opt.label}
                       className="w-full h-full object-cover object-top"
                     />
                     {selectedTemplateKey === opt.key && (
-                      <div className="absolute top-2 right-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
-                        <CheckCircle size={14} className="text-white" />
+                      <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                        <CheckCircle size={12} className="text-white sm:w-[14px] sm:h-[14px]" />
                       </div>
                     )}
                   </div>
-                  <div className="p-3 bg-white border-t border-gray-100 flex-shrink-0 flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium text-gray-900">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
+                  <div className="p-2.5 sm:p-3 bg-white border-t border-gray-100 flex-shrink-0 flex items-center justify-between gap-2">
+                    <span className="text-xs sm:text-sm font-medium text-gray-900">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
                   </div>
                 </button>
                 <button
@@ -665,10 +665,10 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                     setEnlargedTemplateKey(opt.key);
                   }}
                   disabled={mutation.isPending}
-                  className="absolute bottom-12 right-2 w-8 h-8 rounded-lg bg-white/90 hover:bg-white border border-gray-200 flex items-center justify-center shadow-sm transition-colors disabled:opacity-50"
+                  className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/90 hover:bg-white border border-gray-200 flex items-center justify-center shadow-sm transition-colors disabled:opacity-50"
                   title="Preview full size"
                 >
-                  <Maximize2 size={16} className="text-gray-700" />
+                  <Maximize2 size={14} className="text-gray-700 sm:w-4 sm:h-4" />
                 </button>
               </div>
             ))}
@@ -681,36 +681,36 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
           if (!opt) return null;
           return (
             <div
-              className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/70"
+              className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-black/70"
               onClick={() => setEnlargedTemplateKey(null)}
             >
               <div
-                className="relative bg-white rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[90vh] flex flex-col"
+                className="relative bg-white rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
-                  <span className="font-medium text-gray-900">{opt.label}</span>
+                <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-gray-200 bg-gray-50">
+                  <span className="font-medium text-sm sm:text-base text-gray-900">{opt.label}</span>
                   <button
                     type="button"
                     onClick={() => setEnlargedTemplateKey(null)}
-                    className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="p-1.5 sm:p-2 rounded-lg hover:bg-gray-200 transition-colors"
                     aria-label="Close preview"
                   >
-                    <X size={20} className="text-gray-600" />
+                    <X size={18} className="text-gray-600 sm:w-5 sm:h-5" />
                   </button>
                 </div>
-                <div className="p-4 overflow-auto flex-1 min-h-0 bg-gray-100">
+                <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-gray-100">
                   <img
                     src={opt.image}
                     alt={opt.label}
                     className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg"
                   />
                 </div>
-                <div className="flex gap-3 px-4 py-3 border-t border-gray-200 bg-white">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-gray-200 bg-white">
                   <button
                     type="button"
                     onClick={() => setEnlargedTemplateKey(null)}
-                    className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50"
+                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-gray-200 text-gray-700 text-xs sm:text-sm font-medium hover:bg-gray-50"
                   >
                     Back
                   </button>
@@ -720,7 +720,7 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                       setSelectedTemplateKey(opt.key);
                       setEnlargedTemplateKey(null);
                     }}
-                    className="flex-1 px-4 py-2.5 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800"
+                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-gray-900 text-white text-xs sm:text-sm font-medium hover:bg-gray-800"
                   >
                     Use this template
                   </button>
@@ -756,10 +756,10 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
         </div> */}
 
         {/* Contact Form Toggle */}
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-          <label className="flex items-start gap-3 cursor-pointer">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <label className="flex items-start gap-2.5 sm:gap-3 cursor-pointer">
             {/* Toggle Switch */}
-            <span className="relative inline-block w-11 h-6 align-middle select-none transition duration-200 ease-in">
+            <span className="relative inline-block w-10 sm:w-11 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
               <input
                 type="checkbox"
                 checked={contactFormEnabled}
@@ -776,42 +776,43 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                 className={`
                   absolute left-0 top-0 h-6 w-6 bg-white border border-gray-200 rounded-full shadow-sm
                   transition-transform duration-200 ease-in-out
-                  peer-checked:translate-x-5
+                  peer-checked:translate-x-[18px] sm:peer-checked:translate-x-5
                 `}
                 style={{
                   boxShadow: "0 1px 2px rgba(16,21,43,0.04)"
                 }}
               ></span>
             </span>
-            <div>
-              <p className="font-medium text-gray-900 text-sm mb-1">Enable Contact Form</p>
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-gray-900 text-xs sm:text-sm mb-1">Enable Contact Form</p>
               <p className="text-xs text-gray-600">Allow visitors to contact you through your website</p>
             </div>
           </label>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button 
             onClick={onClose} 
             disabled={mutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 font-medium border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center justify-center gap-2"
+            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-medium flex items-center justify-center gap-2"
           >
             {mutation.isPending ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 Starting...
               </>
             ) : (
               <>
-                <Sparkles size={16} />
-                Generate Website
+                <Sparkles size={14} className="sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Generate Website</span>
+                <span className="xs:hidden">Generate</span>
               </>
             )}
           </button>

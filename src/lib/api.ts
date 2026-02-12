@@ -48,6 +48,11 @@ export const websitesAPI = {
     api.put(`/websites/${websiteId}/contact-form`, data),
   generateMoreBlogs: (websiteId: string) =>
     api.post(`/websites/${websiteId}/generate-more-blogs`),
+  // NEW: Template APIs
+  getTemplates: () =>
+    api.get('/websites/templates'),
+  updateTemplate: (websiteId: string, data: { templateKey: string }) =>
+    api.put(`/websites/${websiteId}/template`, data),
 };
 
 export const contentAPI = {
