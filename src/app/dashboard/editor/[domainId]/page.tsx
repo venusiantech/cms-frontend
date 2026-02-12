@@ -87,9 +87,9 @@ export default function EditorPage() {
 
   // Generate more blogs mutation
   const generateMoreBlogsMutation = useMutation({
-    mutationFn: (websiteId: string) => {
-      toast.loading('Starting blog generation...', { id: 'generate-blogs' });
-      return websitesAPI.generateMoreBlogs(websiteId);
+    mutationFn: ({ websiteId, quantity }: { websiteId: string; quantity: number }) => {
+      toast.loading(`Starting generation of ${quantity} blog(s)...`, { id: 'generate-blogs' });
+      return websitesAPI.generateMoreBlogs(websiteId, quantity);
     },
     onSuccess: (response) => {
       const jobId = response.data.jobId;
@@ -161,6 +161,20 @@ export default function EditorPage() {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to delete blog', { id: 'delete-blog' });
+    },
+  });
+
+  const reorderSectionMutation = useMutation({
+    mutationFn: ({ sectionId, direction }: { sectionId: string; direction: 'up' | 'down' }) => {
+      return contentAPI.reorderSection(sectionId, direction);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      queryClient.refetchQueries({ queryKey: ['domain', domainId] });
+      toast.success('Blog reordered successfully!');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to reorder blog');
     },
   });
 
@@ -450,6 +464,7 @@ export default function EditorPage() {
                 regenerateContentMutation={regenerateContentMutation}
                 regenerateImageMutation={regenerateImageMutation}
                 deleteSectionMutation={deleteSectionMutation}
+                reorderSectionMutation={reorderSectionMutation}
                 onEditBlog={handleEditBlog}
               />
             )}

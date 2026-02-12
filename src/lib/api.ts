@@ -42,12 +42,18 @@ export const websitesAPI = {
     api.post('/websites/generate', { domainId, templateKey, contactFormEnabled }),
   checkJobStatus: (jobId: string) =>
     api.get(`/websites/jobs/${jobId}`),
+  cancelJob: (jobId: string) =>
+    api.delete(`/websites/jobs/${jobId}`),
+  clearPendingJobs: () =>
+    api.post('/websites/jobs/clear-pending'),
+  getQueueStats: () =>
+    api.get('/websites/jobs/stats'),
   updateAds: (websiteId: string, data: any) =>
     api.put(`/websites/${websiteId}/ads`, data),
   updateContactForm: (websiteId: string, data: { contactFormEnabled: boolean }) =>
     api.put(`/websites/${websiteId}/contact-form`, data),
-  generateMoreBlogs: (websiteId: string) =>
-    api.post(`/websites/${websiteId}/generate-more-blogs`),
+  generateMoreBlogs: (websiteId: string, quantity: number = 3) =>
+    api.post(`/websites/${websiteId}/generate-more-blogs`, { quantity }),
   // Template APIs
   getTemplates: () =>
     api.get('/websites/templates'),
@@ -71,6 +77,8 @@ export const contentAPI = {
     api.post(`/content-blocks/${sectionId}/regenerate-image`),
   deleteSection: (sectionId: string) =>
     api.delete(`/content-blocks/section/${sectionId}`),
+  reorderSection: (sectionId: string, direction: 'up' | 'down') =>
+    api.post(`/content-blocks/section/${sectionId}/reorder`, { direction }),
 };
 
 export const leadsAPI = {

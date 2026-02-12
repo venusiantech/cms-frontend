@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -81,11 +81,11 @@ export default function ModernNews({ page, website, domain, articleId }: ModernN
     }
   }, [selectedBlog]);
 
-  // Extract all blogs from content sections
+  // Extract all blogs from content sections (memoized to prevent infinite loops)
   const contentSections = page.sections.filter((s) => s.type === 'content');
   const heroSection = page.sections.find((s) => s.type === 'hero');
 
-  const blogs: Blog[] = contentSections.map((section) => {
+  const blogs: Blog[] = useMemo(() => contentSections.map((section) => {
     // Try new format first (with flags)
     let titleBlock = section.blocks.find((b) => b.type === 'text' && b.content.isTitle);
     let contentBlock = section.blocks.find((b) => b.type === 'text' && b.content.isFullContent);
@@ -123,7 +123,7 @@ export default function ModernNews({ page, website, domain, articleId }: ModernN
       image: imageBlock?.content?.url || 'https://placehold.co/800x400/6366f1/white?text=Article',
       sectionId: section.id,
     };
-  });
+  }), [page.sections]); // Only recalculate when sections change
 
   // If articleId is provided (from URL), find and set the selected blog
   useEffect(() => {
