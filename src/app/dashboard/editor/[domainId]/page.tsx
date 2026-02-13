@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { domainsAPI, contentAPI, websitesAPI, leadsAPI } from '@/lib/api';
-import { ArrowLeft, RefreshCw, Trash2, FileText, Image as ImageIcon, Type, Plus, Mail, Rocket, Settings as SettingsIcon, FileCode, ExternalLink, CheckCircle2, Edit3, X, Save, Globe } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Trash2, FileText, Image as ImageIcon, Type, Plus, Mail, Rocket, Settings as SettingsIcon, FileCode, ExternalLink, CheckCircle2, Edit3, X, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useJobStatus } from '@/hooks/useJobStatus';
 import CustomLoader from '@/components/CustomLoader';
-import { BlogsTab, LeadsTab, MetadataTab, DeploymentTab, SettingsTab, TabButton } from '../components';
+import { BlogsTab, LeadsTab, DeploymentTab, SettingsTab, TabButton } from '../components';
 
 // Helper to get the correct site URL based on environment
 function getSiteUrl(subdomain: string): string {
@@ -37,7 +37,7 @@ export default function EditorPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const domainId = params.domainId as string;
-  const [activeTab, setActiveTab] = useState<'blogs' | 'leads' | 'metadata' | 'deployment' | 'settings'>('blogs');
+  const [activeTab, setActiveTab] = useState<'blogs' | 'leads' | 'deployment' | 'settings'>('blogs');
   const [editingBlog, setEditingBlog] = useState<any>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
@@ -430,13 +430,6 @@ export default function EditorPage() {
                 Leads
               </TabButton>
               <TabButton
-                active={activeTab === 'metadata'}
-                onClick={() => setActiveTab('metadata')}
-                icon={<Globe size={18} />}
-              >
-                Metadata
-              </TabButton>
-              <TabButton
                 active={activeTab === 'deployment'}
                 onClick={() => setActiveTab('deployment')}
                 icon={<Rocket size={18} />}
@@ -470,8 +463,6 @@ export default function EditorPage() {
             )}
 
             {activeTab === 'leads' && <LeadsTab domain={domain} />}
-
-            {activeTab === 'metadata' && <MetadataTab domain={domain} domainId={domainId} queryClient={queryClient} />}
 
             {activeTab === 'deployment' && <DeploymentTab domain={domain} />}
 

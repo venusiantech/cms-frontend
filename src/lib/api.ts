@@ -62,6 +62,9 @@ export const websitesAPI = {
   // Metadata APIs
   updateMetadata: (websiteId: string, data: { metaTitle?: string; metaDescription?: string; metaImage?: string }) =>
     api.put(`/websites/${websiteId}/metadata`, data),
+  // Social Media APIs
+  updateSocialMedia: (websiteId: string, data: { instagramUrl?: string; facebookUrl?: string; twitterUrl?: string }) =>
+    api.put(`/websites/${websiteId}/social-media`, data),
 };
 
 export const contentAPI = {

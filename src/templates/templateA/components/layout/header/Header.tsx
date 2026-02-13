@@ -7,9 +7,12 @@ interface HeaderProps {
   scroll?: boolean;
   siteName?: string;
   assetsPath?: string;
+  instagramUrl?: string | null;
+  facebookUrl?: string | null;
+  twitterUrl?: string | null;
 }
 
-export default function Header({ scroll, siteName = 'Site', assetsPath = '/templateA/assets' }: HeaderProps) {
+export default function Header({ scroll, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl }: HeaderProps) {
   const [isSearch, setIsSearch] = useState<number | null>(null);
 
   const handleSearch = (key: number) => {
@@ -37,23 +40,36 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
                 <Link href="#" className="dark-light-toggle" onClick={handleDark}>
                   <i className="icon-adjust" />
                 </Link>
-                <ul className="social-network heading navbar-nav d-lg-flex align-items-center">
-                  <li>
-                    <Link href="#">
-                      <i className="icon-facebook" />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#">
-                      <i className="icon-instagram" />
-                    </Link>
-                  </li>
-                </ul>
+                {(facebookUrl || instagramUrl || twitterUrl) && (
+                  <ul className="social-network heading navbar-nav d-lg-flex align-items-center">
+                    {facebookUrl && (
+                      <li>
+                        <a href={facebookUrl} target="_blank" rel="noopener noreferrer">
+                          <i className="icon-facebook" />
+                        </a>
+                      </li>
+                    )}
+                    {instagramUrl && (
+                      <li>
+                        <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+                          <i className="icon-instagram" />
+                        </a>
+                      </li>
+                    )}
+                    {twitterUrl && (
+                      <li>
+                        <a href={twitterUrl} target="_blank" rel="noopener noreferrer">
+                          <i className="icon-twitter" />
+                        </a>
+                      </li>
+                    )}
+                  </ul>
+                )}
                 <ul className="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
                   <li>
-                    <Link href="/contact" className="btn">
+                    <a href="/contact" className="btn">
                       Contact
-                    </Link>
+                    </a>
                   </li>
                 </ul>
 

@@ -9,6 +9,7 @@ import HomeSection2 from '@/templates/templateA/components/sections/home/Section
 import HomeSection3 from '@/templates/templateA/components/sections/home/Section3';
 import HomeSection4 from '@/templates/templateA/components/sections/home/Section4';
 import SingleSection1 from '@/templates/templateA/components/sections/single/Section1';
+import ContactSection from '@/templates/templateA/components/sections/contact/ContactSection';
 
 // TemplateA styles will be loaded dynamically to avoid affecting other templates
 
@@ -34,9 +35,13 @@ interface TemplateAProps {
     adsEnabled: boolean;
     adsApproved: boolean;
     contactFormEnabled: boolean;
+    instagramUrl?: string | null;
+    facebookUrl?: string | null;
+    twitterUrl?: string | null;
   };
   domain: { name: string };
   articleId?: string; // For direct article page rendering
+  pageType?: 'home' | 'contact' | 'article'; // Type of page to render
 }
 
 const PLACEHOLDER_IMAGE = 'https://placehold.co/800x400/e5e5e5/737373?text=Article';
@@ -144,7 +149,7 @@ function mapPageToTemplateAData(page: PageData, domain: { name: string }): Templ
   };
 }
 
-export default function TemplateA({ page, website, domain, articleId }: TemplateAProps) {
+export default function TemplateA({ page, website, domain, articleId, pageType = 'home' }: TemplateAProps) {
   const router = useRouter();
   const blogData = useMemo(() => mapPageToTemplateAData(page, domain), [page, domain]);
   const blogsWithContent = useMemo(() => {
@@ -154,6 +159,7 @@ export default function TemplateA({ page, website, domain, articleId }: Template
   }, [page, domain.name]);
 
   const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
+  const showContactForm = pageType === 'contact';
 
   // Dynamically load TemplateA CSS files
   useEffect(() => {
@@ -187,17 +193,19 @@ export default function TemplateA({ page, website, domain, articleId }: Template
     };
   }, []);
 
-  // Update document title based on selected article
+  // Update document title based on selected article or contact page
   useEffect(() => {
     const name = domain.name.split('.')[0];
     const siteName = name.charAt(0).toUpperCase() + name.slice(1);
-    if (selectedId) {
+    if (showContactForm) {
+      document.title = `Contact Us - ${siteName}`;
+    } else if (selectedId) {
       const article = blogsWithContent.find((a) => a.id === selectedId);
       document.title = article ? `${article.title} - ${siteName}` : siteName;
     } else {
       document.title = siteName;
     }
-  }, [domain.name, selectedId, blogsWithContent]);
+  }, [domain.name, selectedId, blogsWithContent, showContactForm]);
 
   // Update selected article when articleId prop changes (from URL)
   useEffect(() => {
@@ -220,12 +228,43 @@ export default function TemplateA({ page, website, domain, articleId }: Template
   
   const onBack = () => {
     // Navigate back to home page
-    router.push('/');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    } else {
+      router.push('/');
+    }
   };
+
+  // Contact Form Page
+  if (showContactForm) {
+    return (
+      <Layout 
+        classLisst="single" 
+        siteName={siteDisplay} 
+        assetsPath={ASSETS}
+        instagramUrl={website.instagramUrl}
+        facebookUrl={website.facebookUrl}
+        twitterUrl={website.twitterUrl}
+      >
+        <ContactSection
+          domain={domain}
+          onBack={onBack}
+          assetsPath={ASSETS}
+        />
+      </Layout>
+    );
+  }
 
   if (selectedArticle) {
     return (
-      <Layout classLisst="single" siteName={siteDisplay} assetsPath={ASSETS}>
+      <Layout 
+        classLisst="single" 
+        siteName={siteDisplay} 
+        assetsPath={ASSETS}
+        instagramUrl={website.instagramUrl}
+        facebookUrl={website.facebookUrl}
+        twitterUrl={website.twitterUrl}
+      >
         <SingleSection1
           article={selectedArticle}
           relatedArticles={relatedArticles}
@@ -238,7 +277,14 @@ export default function TemplateA({ page, website, domain, articleId }: Template
   }
 
   return (
-    <Layout classLisst="home" siteName={siteDisplay} assetsPath={ASSETS}>
+    <Layout 
+      classLisst="home" 
+      siteName={siteDisplay} 
+      assetsPath={ASSETS}
+      instagramUrl={website.instagramUrl}
+      facebookUrl={website.facebookUrl}
+      twitterUrl={website.twitterUrl}
+    >
       
       <HomeSection1
         featured={blogData.featured}
