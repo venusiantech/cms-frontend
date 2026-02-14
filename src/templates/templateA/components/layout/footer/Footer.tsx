@@ -8,9 +8,10 @@ interface FooterProps {
   instagramUrl?: string;
   facebookUrl?: string;
   twitterUrl?: string;
+  onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, twitterUrl }: FooterProps) {
+export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, twitterUrl, onContactClick }: FooterProps) {
   const [domain, setDomain] = useState('');
 
   useEffect(() => {
@@ -48,11 +49,24 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                   Home
                 </a>
               </li>
-              <li className="mb-2">
-                <a href="/contact" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
-                  Contact Us
-                </a>
-              </li>
+              {onContactClick && (
+                <li className="mb-2">
+                  <a 
+                    onClick={onContactClick} 
+                    className="text-muted text-decoration-none" 
+                    style={{ 
+                      transition: 'color 0.2s',
+                      background: 'none',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      font: 'inherit'
+                    }}
+                  >
+                    Contact Us
+                  </a>
+                </li>
+              )}
               <li className="mb-2">
                 <a href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
                   Privacy Policy

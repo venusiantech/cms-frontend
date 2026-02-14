@@ -14,9 +14,10 @@ interface LayoutProps {
   instagramUrl?: string | null;
   facebookUrl?: string | null;
   twitterUrl?: string | null;
+  onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Layout({ classLisst, children, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl }: LayoutProps) {
+export default function Layout({ classLisst, children, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: LayoutProps) {
   const [scroll, setScroll] = useState<boolean>(false);
   // Mobile Menu
   const [isMobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -52,6 +53,7 @@ export default function Layout({ classLisst, children, siteName = 'Site', assets
             instagramUrl={instagramUrl}
             facebookUrl={facebookUrl}
             twitterUrl={twitterUrl}
+            onContactClick={onContactClick}
           />
 
           <main id="content">
@@ -63,6 +65,7 @@ export default function Layout({ classLisst, children, siteName = 'Site', assets
             instagramUrl={instagramUrl || undefined}
             facebookUrl={facebookUrl || undefined}
             twitterUrl={twitterUrl || undefined}
+            onContactClick={onContactClick}
           />
 
           <BackToTop />

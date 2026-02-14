@@ -160,7 +160,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
   const [cssLoaded, setCssLoaded] = useState(false);
-  const showContactForm = pageType === 'contact';
+  const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
 
   // Dynamically load TemplateA CSS files with loading state
   useEffect(() => {
@@ -275,6 +275,13 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     }
   };
 
+  // Handle contact form toggle - only if contactFormEnabled is true
+  const handleContactClick = website.contactFormEnabled ? () => {
+    setShowContactForm(true);
+    // Navigate to contact page
+    router.push('/contact');
+  } : undefined;
+
   // Show loading screen while CSS is loading
   if (!cssLoaded) {
     return (
@@ -334,6 +341,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
           twitterUrl={website.twitterUrl}
+          onContactClick={handleContactClick}
         >
           <ContactSection
             domain={domain}
@@ -354,6 +362,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
           twitterUrl={website.twitterUrl}
+          onContactClick={handleContactClick}
         >
           <SingleSection1
             article={selectedArticle}
@@ -375,6 +384,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
         instagramUrl={website.instagramUrl}
         facebookUrl={website.facebookUrl}
         twitterUrl={website.twitterUrl}
+        onContactClick={handleContactClick}
       >
         <HomeSection1
           featured={blogData.featured}

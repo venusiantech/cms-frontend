@@ -10,9 +10,10 @@ interface HeaderProps {
   instagramUrl?: string | null;
   facebookUrl?: string | null;
   twitterUrl?: string | null;
+  onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Header({ scroll, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl }: HeaderProps) {
+export default function Header({ scroll, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: HeaderProps) {
   const [isSearch, setIsSearch] = useState<number | null>(null);
 
   const handleSearch = (key: number) => {
@@ -65,13 +66,15 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
                     )}
                   </ul>
                 )}
-                <ul className="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
-                  <li>
-                    <a href="/contact" className="btn">
-                      Contact
-                    </a>
-                  </li>
-                </ul>
+                {onContactClick && (
+                  <ul className="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
+                    <li>
+                      <a onClick={onContactClick} className="btn" style={{ background: 'none', border: 'none', padding: 0 }}>
+                        Contact
+                      </a>
+                    </li>
+                  </ul>
+                )}
 
               </div>
               <form action="/search" method="get" className={`search-form d-lg-flex float-end ${isSearch == 1 ? "open-search" : ""}`}>
