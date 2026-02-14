@@ -159,9 +159,10 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
   }, [page, domain.name]);
 
   const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
+  const [cssLoaded, setCssLoaded] = useState(false);
   const showContactForm = pageType === 'contact';
 
-  // Dynamically load TemplateA CSS files
+  // Dynamically load TemplateA CSS files with loading state
   useEffect(() => {
     const cssFiles = [
       '/templateA/assets/css/bootstrap.css',
@@ -173,18 +174,57 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     ];
 
     const linkElements: HTMLLinkElement[] = [];
+    const preloadElements: HTMLLinkElement[] = [];
+    let loadedCount = 0;
 
+    const checkAllLoaded = () => {
+      loadedCount++;
+      if (loadedCount === cssFiles.length) {
+        // Small delay to ensure styles are fully applied
+        setTimeout(() => {
+          setCssLoaded(true);
+        }, 30);
+      }
+    };
+
+    // First, add preload hints for faster loading
+    cssFiles.forEach((href) => {
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'style';
+      preload.href = href;
+      document.head.appendChild(preload);
+      preloadElements.push(preload);
+    });
+
+    // Then add actual stylesheets
     cssFiles.forEach((href) => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = href;
       link.setAttribute('data-template', 'templateA');
+      
+      // Wait for CSS to load
+      link.onload = checkAllLoaded;
+      link.onerror = checkAllLoaded; // Still proceed even if one fails
+      
       document.head.appendChild(link);
       linkElements.push(link);
     });
 
+    // Fallback: If CSS doesn't load in 1.5 seconds, show content anyway
+    const fallbackTimer = setTimeout(() => {
+      setCssLoaded(true);
+    }, 1500);
+
     // Cleanup: Remove CSS files when component unmounts
     return () => {
+      clearTimeout(fallbackTimer);
+      preloadElements.forEach((link) => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+      });
       linkElements.forEach((link) => {
         if (link.parentNode) {
           link.parentNode.removeChild(link);
@@ -235,65 +275,133 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     }
   };
 
-  // Contact Form Page
-  if (showContactForm) {
+  // Show loading screen while CSS is loading
+  if (!cssLoaded) {
     return (
-      <Layout 
-        classLisst="single" 
-        siteName={siteDisplay} 
-        assetsPath={ASSETS}
-        instagramUrl={website.instagramUrl}
-        facebookUrl={website.facebookUrl}
-        twitterUrl={website.twitterUrl}
-      >
-        <ContactSection
-          domain={domain}
-          onBack={onBack}
-          assetsPath={ASSETS}
-        />
-      </Layout>
+      <>
+        <div className="template-loader">
+          <div className="loader-content">
+            <h1 className="loader-logo">{siteDisplay}</h1>
+            <div className="spinner"></div>
+          </div>
+        </div>
+        <style jsx>{`
+          .template-loader {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+          }
+          .loader-content {
+            text-align: center;
+          }
+          .loader-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+          }
+          .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #333;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </>
     );
   }
 
-  if (selectedArticle) {
+  // Render content with fade-in animation
+  const renderContent = () => {
+    // Contact Form Page
+    if (showContactForm) {
+      return (
+        <Layout 
+          classLisst="single" 
+          siteName={siteDisplay} 
+          assetsPath={ASSETS}
+          instagramUrl={website.instagramUrl}
+          facebookUrl={website.facebookUrl}
+          twitterUrl={website.twitterUrl}
+        >
+          <ContactSection
+            domain={domain}
+            onBack={onBack}
+            assetsPath={ASSETS}
+          />
+        </Layout>
+      );
+    }
+
+    // Single Article Page
+    if (selectedArticle) {
+      return (
+        <Layout 
+          classLisst="single" 
+          siteName={siteDisplay} 
+          assetsPath={ASSETS}
+          instagramUrl={website.instagramUrl}
+          facebookUrl={website.facebookUrl}
+          twitterUrl={website.twitterUrl}
+        >
+          <SingleSection1
+            article={selectedArticle}
+            relatedArticles={relatedArticles}
+            onBack={onBack}
+            onArticleClick={onArticleClick}
+            assetsPath={ASSETS}
+          />
+        </Layout>
+      );
+    }
+
+    // Home Page
     return (
       <Layout 
-        classLisst="single" 
+        classLisst="home" 
         siteName={siteDisplay} 
         assetsPath={ASSETS}
         instagramUrl={website.instagramUrl}
         facebookUrl={website.facebookUrl}
         twitterUrl={website.twitterUrl}
       >
-        <SingleSection1
-          article={selectedArticle}
-          relatedArticles={relatedArticles}
-          onBack={onBack}
+        <HomeSection1
+          featured={blogData.featured}
+          trending={blogData.trending}
           onArticleClick={onArticleClick}
-          assetsPath={ASSETS}
         />
+        <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
+        {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} />
+        <HomeSection4 mostRecent={blogData.mostRecent} onArticleClick={onArticleClick} /> */}
       </Layout>
     );
-  }
+  };
 
   return (
-    <Layout 
-      classLisst="home" 
-      siteName={siteDisplay} 
-      assetsPath={ASSETS}
-      instagramUrl={website.instagramUrl}
-      facebookUrl={website.facebookUrl}
-      twitterUrl={website.twitterUrl}
-    >
-      
-      <HomeSection1
-        featured={blogData.featured}
-        trending={blogData.trending}
-        onArticleClick={onArticleClick}
-      />
-      <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
-      {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} />
-      <HomeSection4 mostRecent={blogData.mostRecent} onArticleClick={onArticleClick} /> */}
-    </Layout>
+    <>
+      <div className="template-content">
+        {renderContent()}
+      </div>
+      <style jsx>{`
+        .template-content {
+          animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+    </>
   );
 }
