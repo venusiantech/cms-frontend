@@ -106,7 +106,7 @@ export default function Comments({ comments = [] }: CommentsProps) {
             />
           )}
         </div>
-        <section id="comments">
+        {/* <section id="comments">
           <div className="comments-inner clr">
             <div id="respond" className="comment-respond">
               <h3 id="reply-title" className="comment-reply-title">
@@ -140,7 +140,7 @@ export default function Comments({ comments = [] }: CommentsProps) {
               </form>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   );

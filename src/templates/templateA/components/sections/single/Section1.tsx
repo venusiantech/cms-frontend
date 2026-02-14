@@ -162,7 +162,7 @@ export default function Section1({ article, relatedArticles, onBack, onArticleCl
             </div>
           </div>
         </article>
-        {relatedArticles.length > 0 && (
+        {/* {relatedArticles.length > 0 && (
           <div className="related-posts mb-5">
             <h4 className="spanborder text-center">
               <span>Related Posts</span>
@@ -218,8 +218,8 @@ export default function Section1({ article, relatedArticles, onBack, onArticleCl
               </Swiper>
             </div>
           </div>
-        )}
-        <Comments />
+        )} */}
+        {/* <Comments /> */}
       </div>
       <style jsx>{`
         .responsive-image {
