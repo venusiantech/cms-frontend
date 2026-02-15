@@ -212,6 +212,10 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
     try {
       const response = await domainsAPI.checkDnsStatus(domain.id);
       const newStatus = response.data.nameServersStatus;
+      const autoDeployed = response.data.autoDeployed;
+      const deploymentSuccess = response.data.deploymentSuccess;
+      const deploymentError = response.data.deploymentError;
+      
       setDnsStatus(newStatus);
       
       // Update query cache
@@ -223,7 +227,20 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
           clearInterval(pollingIntervalRef.current);
           pollingIntervalRef.current = null;
         }
-        toast.success('DNS is now active! 🎉');
+        
+        // Show appropriate message based on auto-deployment
+        if (autoDeployed) {
+          if (deploymentSuccess) {
+            toast.success('DNS is active! Worker domains and KV mappings deployed automatically! 🚀', { duration: 5000 });
+          } else {
+            toast.success('DNS is active! 🎉', { duration: 4000 });
+            if (deploymentError) {
+              toast.error(`Auto-deployment failed: ${deploymentError}`, { duration: 5000 });
+            }
+          }
+        } else {
+          toast.success('DNS is now active! 🎉');
+        }
       }
     } catch (error: any) {
       console.error('Failed to check DNS status:', error);

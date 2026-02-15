@@ -1,7 +1,10 @@
 'use client';
 
-import { CheckCircle2, ExternalLink, Clock, Copy } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Clock, Copy, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { domainsAPI } from '@/lib/api';
+import { useState } from 'react';
 
 interface DeploymentTabProps {
   domain: any;
@@ -17,6 +20,30 @@ const getSiteUrl = (subdomain: string) => {
 };
 
 export default function DeploymentTab({ domain }: DeploymentTabProps) {
+  const queryClient = useQueryClient();
+  const [isDeploying, setIsDeploying] = useState(false);
+
+  const deployWorkersMutation = useMutation({
+    mutationFn: () => domainsAPI.deployWorkers(domain.id),
+    onMutate: () => {
+      setIsDeploying(true);
+      toast.loading('Deploying DNS records...', { id: 'deploy-workers' });
+    },
+    onSuccess: (response) => {
+      setIsDeploying(false);
+      if (response.data.success) {
+        toast.success('DNS records deployed successfully! 🎉', { id: 'deploy-workers' });
+      } else {
+        toast.error('Failed to deploy some DNS records', { id: 'deploy-workers' });
+      }
+      queryClient.invalidateQueries({ queryKey: ['domain', domain.id] });
+    },
+    onError: (error: any) => {
+      setIsDeploying(false);
+      toast.error(error.response?.data?.message || 'Failed to deploy DNS records', { id: 'deploy-workers' });
+    },
+  });
+
   return (
     <div className="space-y-6">
       <div>
@@ -112,6 +139,23 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                     💡 Update nameservers at your domain registrar. Changes may take 24-48 hours to propagate.
                   </p>
                 </div>
+
+                {/* Deploy Worker Domains Button - Only show when DNS is active */}
+                {domain.nameServersStatus === 'active' && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => deployWorkersMutation.mutate()}
+                      disabled={isDeploying}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm"
+                    >
+                      <Rocket size={16} className={isDeploying ? 'animate-bounce' : ''} />
+                      {isDeploying ? 'Deploying...' : 'Deploy DNS Records'}
+                    </button>
+                    <p className="text-xs text-gray-500 mt-2 text-center">
+                      Configures both {domain.domainName} and www.{domain.domainName}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
