@@ -348,7 +348,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
         </button>
       </div>
 
-      {domain.website ? (
+      {domain.website && domain.website.pages && domain.website.pages.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
           {/* Info Grid */}
           <div className="grid grid-cols-2 gap-2 sm:gap-3">
