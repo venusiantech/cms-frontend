@@ -19,6 +19,67 @@ interface SingleSection1Props {
   assetsPath?: string;
 }
 
+// Helper function to convert URLs in text to clickable links
+function linkifyText(text: string) {
+  // First handle Markdown-style links: [text](url)
+  const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let parts: (string | JSX.Element)[] = [];
+  let lastIndex = 0;
+  let match;
+  
+  while ((match = markdownLinkRegex.exec(text)) !== null) {
+    // Add text before the link
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    
+    // Add the link with custom text
+    parts.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800 underline"
+      >
+        {match[1]}
+      </a>
+    );
+    
+    lastIndex = match.index + match[0].length;
+  }
+  
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+  
+  // If no markdown links found, check for plain URLs
+  if (parts.length === 0) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urlParts = text.split(urlRegex);
+    
+    return urlParts.map((part, i) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  }
+  
+  return parts;
+}
+
 function renderMarkdownContent(content: string, articleTitle: string) {
   const clean = content.replace(/```markdown\n?/g, '').replace(/```\n?/g, '').trim();
   const lines = clean.split('\n');
@@ -35,27 +96,27 @@ function renderMarkdownContent(content: string, articleTitle: string) {
   return lines.slice(startIndex).map((line, idx) => {
     if (line.trim() === '```' || line.trim() === '```markdown') return null;
     if (line.startsWith('# ')) {
-      return <h1 key={idx} className="mb-4 mt-4">{line.substring(2)}</h1>;
+      return <h1 key={idx} className="mb-4 mt-4">{linkifyText(line.substring(2))}</h1>;
     }
     if (line.startsWith('## ')) {
-      return <h2 key={idx} className="mb-3 mt-4">{line.substring(3)}</h2>;
+      return <h2 key={idx} className="mb-3 mt-4">{linkifyText(line.substring(3))}</h2>;
     }
     if (line.startsWith('### ')) {
-      return <h3 key={idx} className="mb-2 mt-3">{line.substring(4)}</h3>;
+      return <h3 key={idx} className="mb-2 mt-3">{linkifyText(line.substring(4))}</h3>;
     }
     if (line.startsWith('#### ')) {
-      return <h4 key={idx} className="mb-2 mt-3">{line.substring(5)}</h4>;
+      return <h4 key={idx} className="mb-2 mt-3">{linkifyText(line.substring(5))}</h4>;
     }
     if (line.trim() === '') {
       return <div key={idx} className="h-3" />;
     }
     if (line.startsWith('- ') || line.startsWith('* ')) {
-      return <li key={idx} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{line.substring(2)}</li>;
+      return <li key={idx} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{linkifyText(line.substring(2))}</li>;
     }
     if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
-      return <li key={idx} className="ml-4 mb-2 list-decimal text-justify">{line.replace(/^\d+\.\s/, '')}</li>;
+      return <li key={idx} className="ml-4 mb-2 list-decimal text-justify">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>;
     }
-    return <p key={idx} className="mb-4 text-justify">{line}</p>;
+    return <p key={idx} className="mb-4 text-justify">{linkifyText(line)}</p>;
   }).filter(Boolean);
 }
 

@@ -35,6 +35,7 @@ export const domainsAPI = {
   update: (id: string, data: any) => api.put(`/domains/${id}`, data),
   delete: (id: string) => api.delete(`/domains/${id}`),
   getSynonyms: (id: string) => api.get(`/domains/${id}/synonyms`),
+  checkDnsStatus: (id: string) => api.get(`/domains/${id}/dns-status`),
 };
 
 export const websitesAPI = {

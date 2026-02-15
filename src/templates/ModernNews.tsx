@@ -281,6 +281,67 @@ function FullArticleView({ blog, domain, website }: { blog: Blog; domain: { name
     };
   }, [blog.title, domain.name]);
 
+  // Helper function to convert URLs in text to clickable links
+  const linkifyText = (text: string) => {
+    // First handle Markdown-style links: [text](url)
+    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let parts: (string | JSX.Element)[] = [];
+    let lastIndex = 0;
+    let match;
+    
+    while ((match = markdownLinkRegex.exec(text)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      
+      // Add the link with custom text
+      parts.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline"
+        >
+          {match[1]}
+        </a>
+      );
+      
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    
+    // If no markdown links found, check for plain URLs
+    if (parts.length === 0) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const urlParts = text.split(urlRegex);
+      
+      return urlParts.map((part, i) => {
+        if (urlRegex.test(part)) {
+          return (
+            <a
+              key={i}
+              href={part}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              {part}
+            </a>
+          );
+        }
+        return part;
+      });
+    }
+    
+    return parts;
+  };
+
   // Convert markdown headings to HTML-friendly format
   const renderContent = (content: string) => {
     // Clean the content: remove code fence markers and first H1 (duplicate title)
@@ -312,22 +373,22 @@ function FullArticleView({ blog, domain, website }: { blog: Blog; domain: { name
       
       // Handle headings
       if (line.startsWith('# ')) {
-        return <h1 key={idx} className="text-4xl font-bold text-gray-900 mb-6 mt-8">{line.substring(2)}</h1>;
+        return <h1 key={idx} className="text-4xl font-bold text-gray-900 mb-6 mt-8">{linkifyText(line.substring(2))}</h1>;
       } else if (line.startsWith('## ')) {
-        return <h2 key={idx} className="text-3xl font-bold text-gray-900 mb-4 mt-6">{line.substring(3)}</h2>;
+        return <h2 key={idx} className="text-3xl font-bold text-gray-900 mb-4 mt-6">{linkifyText(line.substring(3))}</h2>;
       } else if (line.startsWith('### ')) {
-        return <h3 key={idx} className="text-2xl font-semibold text-gray-800 mb-3 mt-5">{line.substring(4)}</h3>;
+        return <h3 key={idx} className="text-2xl font-semibold text-gray-800 mb-3 mt-5">{linkifyText(line.substring(4))}</h3>;
       } else if (line.startsWith('#### ')) {
-        return <h4 key={idx} className="text-xl font-semibold text-gray-800 mb-2 mt-4">{line.substring(5)}</h4>;
+        return <h4 key={idx} className="text-xl font-semibold text-gray-800 mb-2 mt-4">{linkifyText(line.substring(5))}</h4>;
       } else if (line.trim() === '') {
         return <div key={idx} className="h-4"></div>;
       } else if (line.startsWith('- ') || line.startsWith('* ')) {
-        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2">{line.substring(2)}</li>;
+        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2">{linkifyText(line.substring(2))}</li>;
       } else if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
         // Handle numbered lists
-        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2 list-decimal">{line.replace(/^\d+\.\s/, '')}</li>;
+        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2 list-decimal">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>;
       } else {
-        return <p key={idx} className="text-gray-700 leading-relaxed mb-4">{line}</p>;
+        return <p key={idx} className="text-gray-700 leading-relaxed mb-4">{linkifyText(line)}</p>;
       }
     }).filter(Boolean); // Remove null entries
   };

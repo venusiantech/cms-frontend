@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI, websitesAPI } from '@/lib/api';
-import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X } from 'lucide-react';
+import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Info, Server, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useJobStatus } from '@/hooks/useJobStatus';
@@ -161,6 +161,11 @@ export default function DashboardPage() {
 function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any) {
   const queryClient = useQueryClient();
   const [generationJobId, setGenerationJobId] = useState<string | null>(null);
+  const [showDnsTooltip, setShowDnsTooltip] = useState(false);
+  const [showDnsModal, setShowDnsModal] = useState(false);
+  const [dnsStatus, setDnsStatus] = useState(domain.nameServersStatus);
+  const [isCheckingDns, setIsCheckingDns] = useState(false);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Poll for job status if there's a job ID
   const { status, progress, isCompleted, isFailed } = useJobStatus(
@@ -199,6 +204,60 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
   // Check if this domain is generating
   const isGenerating = !!generationJobId && !isCompleted && !isFailed;
 
+  // Function to check DNS status
+  const checkDnsStatus = async () => {
+    if (!domain.nameServers || domain.nameServers.length === 0) return;
+    
+    setIsCheckingDns(true);
+    try {
+      const response = await domainsAPI.checkDnsStatus(domain.id);
+      const newStatus = response.data.nameServersStatus;
+      setDnsStatus(newStatus);
+      
+      // Update query cache
+      queryClient.invalidateQueries({ queryKey: ['domains'] });
+      
+      // If status is active, stop polling
+      if (newStatus === 'active') {
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = null;
+        }
+        toast.success('DNS is now active! 🎉');
+      }
+    } catch (error: any) {
+      console.error('Failed to check DNS status:', error);
+    } finally {
+      setIsCheckingDns(false);
+    }
+  };
+
+  // Auto-poll DNS status when modal is open
+  useEffect(() => {
+    if (showDnsModal && dnsStatus !== 'active' && domain.nameServers && domain.nameServers.length > 0) {
+      // Initial check
+      checkDnsStatus();
+      
+      // Set up polling every 3 seconds
+      pollingIntervalRef.current = setInterval(() => {
+        checkDnsStatus();
+      }, 3000);
+    }
+
+    // Cleanup on unmount or modal close
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
+    };
+  }, [showDnsModal, dnsStatus]);
+
+  // Update local status when domain prop changes
+  useEffect(() => {
+    setDnsStatus(domain.nameServersStatus);
+  }, [domain.nameServersStatus]);
+
   return (
     <div 
       className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-4 sm:p-6 transition-all duration-200 hover:shadow-lg"
@@ -212,23 +271,50 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
           </div>
           <div className="min-w-0">
             <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-1 truncate">{domain.domainName}</h3>
-            {isGenerating ? (
-              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                <div className="w-2 h-2 bg-gray-700 rounded-full animate-pulse"></div>
-                Generating website
-              </span>
-            ) : (
-              <span
-                className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full ${
-                  domain.status === 'ACTIVE'
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-gray-100 text-gray-600'
-                }`}
-              >
-                {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
-                {domain.status}
-              </span>
-            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              {isGenerating ? (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                  <div className="w-2 h-2 bg-gray-700 rounded-full animate-pulse"></div>
+                  Generating website
+                </span>
+              ) : (
+                <span
+                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border ${
+                    domain.status === 'ACTIVE'
+                      ? 'bg-green-50 text-green-700 border-green-200'
+                      : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                  }`}
+                >
+                  {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                  {domain.status}
+                </span>
+              )}
+              
+              {/* DNS Status Badge - Show next to domain status */}
+              {domain.nameServers && domain.nameServers.length > 0 && (
+                <button
+                  onClick={() => setShowDnsModal(true)}
+                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${
+                    dnsStatus === 'active'
+                      ? 'bg-green-50 text-green-700 border-green-200'
+                      : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                  }`}
+                  title="Click to view DNS configuration"
+                >
+                  {dnsStatus === 'active' ? (
+                    <>
+                      <CheckCircle size={12} />
+                      DNS Active
+                    </>
+                  ) : (
+                    <>
+                      <Clock size={12} />
+                      DNS Pending
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <button
@@ -254,7 +340,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
               <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{domain.website.subdomain}</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-2.5 sm:p-3">
-              <p className="text-xs text-gray-500 mb-1 font-medium">Status</p>
+              <p className="text-xs text-gray-500 mb-1 font-medium">Website Status</p>
               <p className="text-xs sm:text-sm font-semibold text-green-600 flex items-center gap-1.5">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 Live
@@ -289,13 +375,159 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
           isCompleted={isCompleted}
         />
       ) : (
-        <button
-          onClick={() => onGenerateWebsite(setGenerationJobId)}
-          className="w-full px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium border border-gray-200 hover:border-gray-300"
+        <div className="space-y-3">
+          {/* DNS Info Button - Show if nameservers exist */}
+          {domain.nameServers && domain.nameServers.length > 0 && (
+            <button
+              onClick={() => setShowDnsModal(true)}
+              className={`w-full bg-white hover:bg-gray-50 rounded-lg p-3 transition-all duration-200 flex items-center justify-between border-2 ${
+                dnsStatus === 'active'
+                  ? 'border-green-500'
+                  : 'border-yellow-500'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Server size={16} className="text-gray-700" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-semibold text-gray-900">DNS Configuration</p>
+                  <p className="text-xs text-gray-600">Click to view nameservers</p>
+                </div>
+              </div>
+              <ArrowRight size={16} className="text-gray-400" />
+            </button>
+          )}
+
+          <button
+            onClick={() => onGenerateWebsite(setGenerationJobId)}
+            className="w-full px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium border-2 border-gray-900 hover:border-gray-800"
+          >
+            <Sparkles size={16} />
+            Generate Website
+          </button>
+        </div>
+      )}
+
+      {/* DNS Modal */}
+      {showDnsModal && domain.nameServers && domain.nameServers.length > 0 && (
+        <div 
+          className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          onClick={() => setShowDnsModal(false)}
         >
-          <Sparkles size={16} />
-          Generate Website
-        </button>
+          <div 
+            className="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-50 rounded-xl flex items-center justify-center shadow-sm">
+                  <Server size={24} className="text-gray-700" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">DNS Configuration</h3>
+                  <p className="text-sm text-gray-500 mt-0.5">Configure your domain nameservers</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDnsModal(false)}
+                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-all"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-5">
+              {/* Domain Info */}
+              <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4">
+                <p className="text-sm text-gray-600">
+                  Point your domain to these nameservers
+                </p>
+                <p className="text-base font-semibold text-gray-900 mt-1">{domain.domainName}</p>
+              </div>
+
+              {/* Nameservers */}
+              <div className="space-y-3">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nameservers</p>
+                {domain.nameServers.map((ns: string, idx: number) => (
+                  <div 
+                    key={idx} 
+                    className="group relative bg-white border-2 border-gray-200 hover:border-gray-300 rounded-xl px-4 py-3.5 transition-all duration-200"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-sm text-gray-900 flex-1">{ns}</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(ns);
+                          toast.success('Copied to clipboard!');
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-900 hover:text-white rounded-lg transition-all duration-200"
+                      >
+                        <span>Copy</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Status */}
+              {domain.nameServersStatus && (
+                <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${
+                        domain.nameServersStatus === 'active' ? 'bg-green-500' : 'bg-yellow-500'
+                      }`}></div>
+                      <p className="text-sm font-semibold text-gray-900">Status</p>
+                    </div>
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${
+                      domain.nameServersStatus === 'active' 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {domain.nameServersStatus === 'active' ? (
+                        <>
+                          <CheckCircle size={12} />
+                          Active
+                        </>
+                      ) : (
+                        <>
+                          <Clock size={12} />
+                          Pending
+                        </>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Tip */}
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    i
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-blue-900 mb-1">Next Steps</p>
+                    <p className="text-xs text-blue-800 leading-relaxed">
+                      Update these nameservers at your domain registrar (e.g., GoDaddy, Namecheap). Changes may take up to 24-48 hours to propagate.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={() => setShowDnsModal(false)}
+                className="w-full px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
