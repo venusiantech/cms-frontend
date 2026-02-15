@@ -11,8 +11,9 @@ import CustomLoader from '@/components/CustomLoader';
 
 // Helper to get the correct site URL based on environment
 function getSiteUrl(subdomain: string): string {
-  const isProduction = process.env.NODE_ENV === 'production' || 
-                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  // Use environment variable instead of window check to avoid hydration mismatch
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
   
   if (isProduction) {
     return `https://${subdomain}.jaal.com`;
@@ -35,6 +36,58 @@ export default function DashboardPage() {
       return response.data;
     },
   });
+
+  // Auto-poll DNS status for all pending domains every 15 seconds
+  useEffect(() => {
+    if (!domains || domains.length === 0) return;
+
+    // Find all domains with pending DNS status
+    const pendingDomains = domains.filter(
+      (domain: any) => domain.nameServersStatus === 'pending' && domain.nameServers && domain.nameServers.length > 0
+    );
+
+    if (pendingDomains.length === 0) return;
+
+    console.log(`🔄 Starting DNS status polling for ${pendingDomains.length} pending domain(s)`);
+
+    // Check DNS status for all pending domains
+    const checkAllPendingDns = async () => {
+      for (const domain of pendingDomains) {
+        try {
+          const response = await domainsAPI.checkDnsStatus(domain.id);
+          const newStatus = response.data.nameServersStatus;
+          
+          if (newStatus === 'active') {
+            console.log(`✅ DNS became active for ${domain.domainName}`);
+            
+            // Show toast notification
+            if (response.data.autoDeployed && response.data.deploymentSuccess) {
+              toast.success(`${domain.domainName}: DNS active! Worker domains deployed! 🚀`, { duration: 5000 });
+            } else {
+              toast.success(`${domain.domainName}: DNS is now active! 🎉`, { duration: 4000 });
+            }
+            
+            // Invalidate queries to update UI
+            queryClient.invalidateQueries({ queryKey: ['domains'] });
+          }
+        } catch (error) {
+          console.error(`Failed to check DNS for ${domain.domainName}:`, error);
+        }
+      }
+    };
+
+    // Initial check
+    checkAllPendingDns();
+
+    // Set up interval for polling every 15 seconds
+    const intervalId = setInterval(checkAllPendingDns, 15000);
+
+    // Cleanup interval on unmount or when dependencies change
+    return () => {
+      console.log('🛑 Stopping DNS status polling');
+      clearInterval(intervalId);
+    };
+  }, [domains, queryClient]);
 
   return (
     <div className="relative">

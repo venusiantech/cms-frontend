@@ -12,8 +12,9 @@ import { BlogsTab, LeadsTab, DeploymentTab, SettingsTab, TabButton } from '../co
 
 // Helper to get the correct site URL based on environment
 function getSiteUrl(subdomain: string): string {
-  const isProduction = process.env.NODE_ENV === 'production' || 
-                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  // Use environment variable instead of window check to avoid hydration mismatch
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
   
   if (isProduction) {
     return `https://${subdomain}.jaal.com`;
@@ -23,8 +24,9 @@ function getSiteUrl(subdomain: string): string {
 
 // Helper to get display subdomain (without protocol/port)
 function getDisplaySubdomain(subdomain: string): string {
-  const isProduction = process.env.NODE_ENV === 'production' || 
-                       (typeof window !== 'undefined' && !window.location.hostname.includes('localhost'));
+  // Use environment variable instead of window check to avoid hydration mismatch
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
   
   if (isProduction) {
     return `${subdomain}.jaal.com`;

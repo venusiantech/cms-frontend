@@ -18,15 +18,26 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { isAuthenticated, logout, user } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
   
   // Check if we're on the editor page (no padding needed)
   const isEditorPage = pathname?.includes('/dashboard/editor/');
 
+  // Handle client-side mounting
   useEffect(() => {
-    if (!isAuthenticated()) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isAuthenticated()) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [mounted, isAuthenticated, router]);
+
+  // Don't render anything until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return null;
+  }
 
   if (!isAuthenticated()) {
     return null;
@@ -87,6 +98,7 @@ export default function DashboardLayout({
               alt="Jaal Logo" 
               width={220}
               height={80}
+              priority
               className="h-24 sm:h-32 w-auto group-hover:scale-105 transition-transform duration-200"
             />
           </Link>
