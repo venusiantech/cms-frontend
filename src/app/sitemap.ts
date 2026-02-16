@@ -38,7 +38,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const siteData = response.data;
 
     const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-    const baseUrl = `${protocol}://${host}`;
+    
+    // Use actual domain name (not subdomain) for sitemap URLs
+    const actualDomain = siteData.domain.name; // e.g., "betcricket.com"
+    const baseUrl = `${protocol}://${actualDomain}`;
 
     const sitemap: MetadataRoute.Sitemap = [];
 
