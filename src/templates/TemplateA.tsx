@@ -131,7 +131,7 @@ function mapPageToTemplateAData(page: PageData, domain: { name: string }): Templ
     featured: {
       title: "Editor's Picks",
       mainArticle: main != null ? main : toTemplateAArticle(
-        { sectionId: '', title: 'No posts yet', content: '', preview: '', image: PLACEHOLDER_IMAGE, dateStr: '', readTime: '0 min read', domainName: domainDisplay },
+        { sectionId: '', slug: 'no-posts', title: 'No posts yet', content: '', preview: '', image: PLACEHOLDER_IMAGE, dateStr: '', readTime: '0 min read', domainName: domainDisplay },
         0
       ),
       sideArticles: side.length ? side : [],
