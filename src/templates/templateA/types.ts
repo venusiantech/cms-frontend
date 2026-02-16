@@ -3,7 +3,8 @@
  * id = sectionId from CMS.
  */
 export interface TemplateAArticle {
-  id: string;
+  id: string; // SEO-friendly slug for URLs
+  sectionId?: string; // Original section UUID for matching
   title: string;
   excerpt?: string;
   author: string;

@@ -23,10 +23,16 @@ export async function generateMetadata(): Promise<Metadata> {
     const title = siteData.website.metaTitle || `${siteName} - Your Source for Quality Content`;
     const description = siteData.website.metaDescription || `Discover amazing content on ${siteName}. Your trusted source for news, insights, and updates.`;
     const image = siteData.website.metaImage || 'https://placehold.co/1200x630/6366f1/white?text=' + encodeURIComponent(siteName);
+    const keywords = siteData.website.metaKeywords || `${siteName}, blog, news, articles`;
+    const author = siteData.website.metaAuthor || siteName;
 
     return {
       title,
       description,
+      keywords: keywords.split(',').map((k: string) => k.trim()),
+      authors: [{ name: author }],
+      creator: author,
+      publisher: author,
       openGraph: {
         title,
         description,
@@ -39,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title,
         description,
         images: [image],
+        creator: author,
       },
     };
   } catch (error) {

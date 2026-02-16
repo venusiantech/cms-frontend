@@ -62,7 +62,13 @@ export const websitesAPI = {
   updateTemplate: (websiteId: string, data: { templateKey: string }) =>
     api.put(`/websites/${websiteId}/template`, data),
   // Metadata APIs
-  updateMetadata: (websiteId: string, data: { metaTitle?: string; metaDescription?: string; metaImage?: string }) =>
+  updateMetadata: (websiteId: string, data: { 
+    metaTitle?: string; 
+    metaDescription?: string; 
+    metaImage?: string;
+    metaKeywords?: string;
+    metaAuthor?: string;
+  }) =>
     api.put(`/websites/${websiteId}/metadata`, data),
   // Social Media APIs
   updateSocialMedia: (websiteId: string, data: { instagramUrl?: string; facebookUrl?: string; twitterUrl?: string }) =>

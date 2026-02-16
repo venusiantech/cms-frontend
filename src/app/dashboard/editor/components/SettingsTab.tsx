@@ -32,6 +32,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
   const [metaTitle, setMetaTitle] = useState(domain.website.metaTitle || '');
   const [metaDescription, setMetaDescription] = useState(domain.website.metaDescription || '');
   const [metaImage, setMetaImage] = useState(domain.website.metaImage || '');
+  const [metaKeywords, setMetaKeywords] = useState(domain.website.metaKeywords || '');
+  const [metaAuthor, setMetaAuthor] = useState(domain.website.metaAuthor || '');
   const [isUpdatingMetadata, setIsUpdatingMetadata] = useState(false);
 
   const settingCategories = [
@@ -130,9 +132,11 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         metaTitle: metaTitle.trim() || undefined,
         metaDescription: metaDescription.trim() || undefined,
         metaImage: metaImage.trim() || undefined,
+        metaKeywords: metaKeywords.trim() || undefined,
+        metaAuthor: metaAuthor.trim() || undefined,
       });
       queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
-      toast.success('Website metadata updated! 🎉');
+      toast.success('SEO metadata updated successfully! 🎉');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to update metadata');
     } finally {
@@ -509,109 +513,189 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Metadata Settings */}
         {selectedCategory === 'metadata' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <div className="space-y-5">
-              {/* Meta Title */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Website Title
-                </label>
-                <input
-                  type="text"
-                  value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
-                  placeholder={`${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)} - Your Source for Quality Content`}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                />
-                <p className="text-xs text-gray-500 mt-1.5">
-                  This appears as the title when your website is shared (50-60 characters recommended)
-                </p>
-              </div>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">SEO & Social Sharing Settings</h3>
+              <p className="text-sm text-gray-600">Optimize your website for search engines and social media platforms</p>
+            </div>
 
-              {/* Meta Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Website Description
-                </label>
-                <textarea
-                  value={metaDescription}
-                  onChange={(e) => setMetaDescription(e.target.value)}
-                  placeholder="Discover amazing content. Your trusted source for news, insights, and updates."
-                  rows={3}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                />
-                <div className="flex items-center justify-between mt-1.5">
-                  <p className="text-xs text-gray-500">
-                    Brief description shown in social media previews
-                  </p>
-                  <span className={`text-xs font-medium ${
-                    metaDescription.length > 160 ? 'text-red-600' : 'text-gray-500'
-                  }`}>
-                    {metaDescription.length}/160
-                  </span>
-                </div>
-              </div>
-
-              {/* Meta Image */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Preview Image URL
-                </label>
-                <input
-                  type="url"
-                  value={metaImage}
-                  onChange={(e) => setMetaImage(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                />
-                <p className="text-xs text-gray-500 mt-1.5">
-                  Image shown in social media previews (1200x630px recommended)
-                </p>
-              </div>
-
-              {/* Social Media Preview Card */}
-              {(metaTitle || metaDescription || metaImage) && (
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-xs font-medium text-gray-700 mb-3">Preview:</p>
-                  <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
-                    {metaImage && (
-                      <img
-                        src={metaImage}
-                        alt="Preview"
-                        className="w-full h-48 object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    )}
-                    <div className="p-4">
-                      <p className="text-xs text-gray-500 mb-1">{domain.domainName}</p>
-                      <h4 className="font-semibold text-gray-900 mb-1 line-clamp-2">
-                        {metaTitle || `${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)}`}
-                      </h4>
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {metaDescription || 'Discover amazing content'}
-                      </p>
-                    </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="space-y-5">
+                {/* Meta Title */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    SEO Title *
+                  </label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder={`${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)} - Your Source for Quality Content`}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                  <div className="flex items-center justify-between mt-1.5">
+                    <p className="text-xs text-gray-500">
+                      Appears in search results and browser tabs (50-60 characters recommended)
+                    </p>
+                    <span className={`text-xs font-medium ${
+                      metaTitle.length > 60 ? 'text-red-600' : 'text-gray-500'
+                    }`}>
+                      {metaTitle.length}/60
+                    </span>
                   </div>
                 </div>
-              )}
 
-              {/* Save Button */}
-              <button
-                onClick={handleMetadataUpdate}
-                disabled={isUpdatingMetadata}
-                className="w-full px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isUpdatingMetadata ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Updating...
-                  </span>
-                ) : (
-                  'Update Metadata'
+                {/* Meta Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    SEO Description *
+                  </label>
+                  <textarea
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    placeholder="Discover amazing content. Your trusted source for news, insights, and updates."
+                    rows={3}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                  <div className="flex items-center justify-between mt-1.5">
+                    <p className="text-xs text-gray-500">
+                      Brief description shown in search results and social media
+                    </p>
+                    <span className={`text-xs font-medium ${
+                      metaDescription.length > 160 ? 'text-red-600' : 'text-gray-500'
+                    }`}>
+                      {metaDescription.length}/160
+                    </span>
+                  </div>
+                </div>
+
+                {/* Meta Image */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Preview Image URL *
+                  </label>
+                  <input
+                    type="url"
+                    value={metaImage}
+                    onChange={(e) => setMetaImage(e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Image shown in social media previews (1200x630px recommended for best results)
+                  </p>
+                </div>
+
+                {/* Meta Keywords */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    SEO Keywords
+                  </label>
+                  <input
+                    type="text"
+                    value={metaKeywords}
+                    onChange={(e) => setMetaKeywords(e.target.value)}
+                    placeholder="keyword1, keyword2, keyword3"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Comma-separated keywords that describe your website content (helps with SEO)
+                  </p>
+                </div>
+
+                {/* Meta Author */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Author / Owner Name
+                  </label>
+                  <input
+                    type="text"
+                    value={metaAuthor}
+                    onChange={(e) => setMetaAuthor(e.target.value)}
+                    placeholder="Your Name or Company Name"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Website owner or author name (appears in search results and metadata)
+                  </p>
+                </div>
+
+                {/* Social Media Preview Card */}
+                {(metaTitle || metaDescription || metaImage) && (
+                  <div className="pt-4 border-t border-gray-200">
+                    <p className="text-xs font-medium text-gray-700 mb-3">How it will look when shared:</p>
+                    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                      {metaImage && (
+                        <img
+                          src={metaImage}
+                          alt="Preview"
+                          className="w-full h-48 object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      <div className="p-4">
+                        <p className="text-xs text-gray-500 mb-1">{domain.domainName}</p>
+                        <h4 className="font-semibold text-gray-900 mb-1 line-clamp-2">
+                          {metaTitle || `${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)}`}
+                        </h4>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {metaDescription || 'Discover amazing content'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </button>
+
+                {/* Save Button */}
+                <div className="pt-2">
+                  <button
+                    onClick={handleMetadataUpdate}
+                    disabled={isUpdatingMetadata}
+                    className="w-full sm:w-auto px-8 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm shadow-sm"
+                  >
+                    {isUpdatingMetadata ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Updating...
+                      </span>
+                    ) : (
+                      'Update SEO Metadata'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* SEO Tips */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                SEO Best Practices
+              </h4>
+              <ul className="space-y-2 text-sm text-blue-800">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span><strong>Title:</strong> Keep it under 60 characters, include main keywords</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span><strong>Description:</strong> 150-160 characters, compelling and descriptive</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span><strong>Image:</strong> Use high-quality images (1200x630px for social media)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span><strong>Keywords:</strong> Choose 5-10 relevant keywords that match your content</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span><strong>Robots.txt:</strong> Automatically generated at <code className="bg-blue-100 px-1 py-0.5 rounded text-xs">{domain.domainName}/robots.txt</code></span>
+                </li>
+              </ul>
             </div>
           </div>
         )}

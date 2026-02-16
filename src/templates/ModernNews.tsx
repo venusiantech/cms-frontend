@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { createUniqueSlug } from '@/lib/slugify';
 
 interface Section {
   id: string;
@@ -48,6 +49,7 @@ interface Blog {
   title: string;
   content: string;
   preview: string;
+  slug: string; // SEO-friendly URL slug
   image: string;
   sectionId: string;
 }
@@ -120,12 +122,15 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
       }
     }
 
+    const title = titleBlock?.content?.text || 'Untitled';
+    
     return {
-      title: titleBlock?.content?.text || 'Untitled',
+      title,
       content: contentBlock?.content?.text || previewBlock?.content?.text || '',
       preview: previewBlock?.content?.text || contentBlock?.content?.text?.substring(0, 300) + '...' || '',
       image: imageBlock?.content?.url || 'https://placehold.co/800x400/6366f1/white?text=Article',
       sectionId: section.id,
+      slug: createUniqueSlug(title, section.id), // Generate SEO-friendly slug
     };
   }), [page.sections]); // Only recalculate when sections change
 
@@ -141,7 +146,7 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
 
   // Handle blog click - Navigate to article page (SEO-friendly)
   const handleBlogClick = (blog: Blog) => {
-    router.push(`/blog/${blog.sectionId}`);
+    router.push(`/blog/${blog.slug}`); // Use SEO-friendly slug
   };
 
   if (selectedBlog) {

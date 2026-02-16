@@ -10,6 +10,7 @@ import HomeSection3 from '@/templates/templateA/components/sections/home/Section
 import HomeSection4 from '@/templates/templateA/components/sections/home/Section4';
 import SingleSection1 from '@/templates/templateA/components/sections/single/Section1';
 import ContactSection from '@/templates/templateA/components/sections/contact/ContactSection';
+import { createUniqueSlug } from '@/lib/slugify';
 
 // TemplateA styles will be loaded dynamically to avoid affecting other templates
 
@@ -50,7 +51,7 @@ const ASSETS = '/templateA/assets';
 function blogsFromPage(
   page: PageData,
   domainName: string
-): Array<{ sectionId: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string }> {
+): Array<{ sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string }> {
   const contentSections = page.sections.filter((s) => s.type === 'content');
   const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   return contentSections.map((section) => {
@@ -80,17 +81,19 @@ function blogsFromPage(
     const preview = previewBlock?.content?.text || content?.substring(0, 300) + '...' || '';
     const image = imageBlock?.content?.url || PLACEHOLDER_IMAGE;
     const readTime = `${Math.max(1, Math.ceil(content.length / 1000))} min read`;
-    return { sectionId: section.id, title, content, preview, image, dateStr, readTime, domainName };
+    const slug = createUniqueSlug(title, section.id); // Generate SEO-friendly slug
+    return { sectionId: section.id, slug, title, content, preview, image, dateStr, readTime, domainName };
   });
 }
 
 function toTemplateAArticle(
-  b: { sectionId: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string },
+  b: { sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string },
   index: number,
   opts?: { tag?: string; number?: string }
 ): TemplateAArticle {
   return {
-    id: b.sectionId,
+    id: b.slug, // Use SEO-friendly slug as ID for URLs
+    sectionId: b.sectionId, // Keep original UUID for matching
     title: b.title,
     excerpt: b.preview,
     author: b.domainName,
@@ -240,7 +243,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     if (showContactForm) {
       document.title = `Contact Us - ${siteName}`;
     } else if (selectedId) {
-      const article = blogsWithContent.find((a) => a.id === selectedId);
+      const article = blogsWithContent.find((a) => a.sectionId === selectedId);
       document.title = article ? `${article.title} - ${siteName}` : siteName;
     } else {
       document.title = siteName;
@@ -255,9 +258,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
   }, [articleId]);
 
   const selectedArticle = selectedId
-    ? (blogsWithContent.find((a) => a.id === selectedId) || null)
+    ? (blogsWithContent.find((a) => a.sectionId === selectedId) || null)
     : null;
-  const relatedArticles = blogsWithContent.filter((a) => a.id !== selectedId).slice(0, 5);
+  const relatedArticles = blogsWithContent.filter((a) => a.sectionId !== selectedId).slice(0, 5);
   const siteName = domain.name.split('.')[0];
   const siteDisplay = siteName.charAt(0).toUpperCase() + siteName.slice(1);
 

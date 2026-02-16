@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation';
 import { publicAPI } from '@/lib/api';
 import TemplateRenderer from '@/components/TemplateRenderer';
 import type { Metadata } from 'next';
+import { extractSectionIdFromSlug } from '@/lib/slugify';
 
 interface PageProps {
   params: {
-    id: string;
+    id: string; // Can be either slug or UUID
   };
 }
 
@@ -22,8 +23,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const response = await publicAPI.getSiteByDomain(domain);
     const siteData = response.data;
     
+    // Get the home page (where blogs are stored)
+    const homePage = siteData.pages?.find((p: any) => p.slug === '/');
+    
+    if (!homePage) {
+      return {
+        title: 'Article Not Found',
+      };
+    }
+    
+    // Find the actual section ID from slug or UUID
+    const sectionId = findSectionIdFromSlugOrId(homePage, params.id);
+    
+    if (!sectionId) {
+      return {
+        title: 'Article Not Found',
+      };
+    }
+    
     // Find the article by section ID
-    const article = findArticleById(siteData.page, params.id);
+    const article = findArticleById(homePage, sectionId);
     
     if (!article) {
       return {
@@ -66,8 +85,6 @@ export default async function ArticlePage({ params }: PageProps) {
   const host = headersList.get('host') || '';
   const domain = host.split(':')[0];
 
-  console.log('📄 Rendering article page for:', domain, 'article:', params.id);
-
   // Fetch site data
   let siteData;
   try {
@@ -78,11 +95,53 @@ export default async function ArticlePage({ params }: PageProps) {
     notFound();
   }
 
+  // Get the home page (where blogs are stored)
+  const homePage = siteData.pages?.find((p: any) => p.slug === '/');
+  
+  if (!homePage) {
+    notFound();
+  }
+
+  // Find the actual section ID from slug or UUID
+  const sectionId = findSectionIdFromSlugOrId(homePage, params.id);
+  
+  if (!sectionId) {
+    notFound();
+  }
+
   // Render template with article ID in context
-  return <TemplateRenderer siteData={siteData} articleId={params.id} />;
+  return <TemplateRenderer siteData={siteData} articleId={sectionId} />;
 }
 
-// Helper function to find article
+/**
+ * Find section ID from slug or UUID
+ * Supports both slug format (e.g., "top-10-recipes-abc123") and legacy UUID format
+ */
+function findSectionIdFromSlugOrId(page: any, slugOrId: string): string | null {
+  const contentSections = page.sections.filter((s: any) => s.type === 'content');
+  
+  // First, try to match by full UUID (backward compatibility)
+  for (const section of contentSections) {
+    if (section.id === slugOrId) {
+      return section.id;
+    }
+  }
+  
+  // If not a UUID, try to extract suffix from slug and match
+  const slugSuffix = extractSectionIdFromSlug(slugOrId);
+  
+  if (slugSuffix) {
+    for (const section of contentSections) {
+      if (section.id.endsWith(slugSuffix)) {
+        return section.id;
+      }
+    }
+  }
+  
+  return null;
+}
+
+// Helper function to find article metadata by ID
 function findArticleById(page: any, articleId: string) {
   const contentSections = page.sections.filter((s: any) => s.type === 'content');
   
