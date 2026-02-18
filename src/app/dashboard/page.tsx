@@ -658,7 +658,7 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
 
 function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading }: any) {
   const [selectedMeanings, setSelectedMeanings] = useState<Array<{ key: string; context: string }>>([]);
-  const [skipSelection, setSkipSelection] = useState(false);
+  const [userDescription, setUserDescription] = useState('');
   const MAX_SELECTIONS = 3;
 
   // Fetch synonyms for the domain
@@ -670,9 +670,10 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
     },
   });
 
-  // Update domain with selected meaning
+  // Update domain with selected meaning and user description
   const updateMutation = useMutation({
-    mutationFn: (meaning: string) => domainsAPI.update(domainId, { selectedMeaning: meaning }),
+    mutationFn: (data: { selectedMeaning?: string; userDescription?: string }) => 
+      domainsAPI.update(domainId, data),
     onMutate: () => {
       setGlobalLoading(true);
     },
@@ -688,17 +689,26 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
   });
 
   const handleContinue = () => {
-    if (skipSelection || selectedMeanings.length === 0) {
-      // Skip meaning selection - just close
-      onSuccess();
-    } else {
-      // Combine selected meaning keys only (no descriptions)
+    const updateData: any = {};
+    
+    // Add selected meaning if any
+    if (selectedMeanings.length > 0) {
       const combinedContext = selectedMeanings.map(({ key }) => key).join(', ');
-      
-      console.log('📝 Saving context:', combinedContext); // Debug log
-      
-      // Update domain with meaning keys only
-      updateMutation.mutate(combinedContext);
+      updateData.selectedMeaning = combinedContext;
+    }
+    
+    // Add user description if provided
+    if (userDescription.trim()) {
+      updateData.userDescription = userDescription.trim();
+    }
+    
+    // If we have data to save, update it
+    if (Object.keys(updateData).length > 0) {
+      console.log('📝 Saving context:', updateData);
+      updateMutation.mutate(updateData);
+    } else {
+      // Nothing to save, just continue
+      onSuccess();
     }
   };
 
@@ -708,7 +718,7 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
         <div className="bg-white rounded-xl p-8 max-w-md w-full shadow-2xl">
           <div className="flex flex-col items-center gap-4">
             <CustomLoader />
-            <p className="text-sm text-gray-600">Finding different meanings...</p>
+            <p className="text-sm text-gray-600">Let'e get you ready with our recommended contexts...</p>
           </div>
         </div>
       </div>
@@ -746,18 +756,6 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
   const meaningEntries = Object.entries(meanings);
   const hasMeanings = meaningEntries.length > 1; // Show selection only if multiple meanings exist
 
-  if (!hasMeanings) {
-    // No multiple meanings, just continue
-    if (meaningEntries.length === 0) {
-      toast('No multiple meanings found. Proceeding with default context.', { 
-        icon: 'ℹ️',
-        duration: 3000 
-      });
-    }
-    setTimeout(() => onSuccess(), 100);
-    return null;
-  }
-
   const handleMeaningToggle = (meaning: string, exampleSentence: string) => {
     const isSelected = selectedMeanings.some(m => m.key === meaning);
     
@@ -768,7 +766,6 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
       // Add if not at max limit
       if (selectedMeanings.length < MAX_SELECTIONS) {
         setSelectedMeanings(prev => [...prev, { key: meaning, context: exampleSentence }]);
-        setSkipSelection(false);
       } else {
         toast.error(`You can select up to ${MAX_SELECTIONS} contexts only`);
       }
@@ -776,111 +773,149 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-start justify-between mb-2">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 max-h-[95vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-2xl font-medium text-gray-900">Choose Your Domain Context</h2>
-            <p className="text-gray-600 text-sm mt-2">
-              "{synonymsData?.word}" can mean different things. Select up to {MAX_SELECTIONS} contexts that describe your website.
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+              {hasMeanings ? 'Choose Your Domain Context' : 'Describe Your Domain'}
+            </h2>
+            <p className="text-gray-600 text-xs sm:text-sm mt-1">
+              {hasMeanings 
+                ? `"${synonymsData?.word}" can mean different things`
+                : 'Help AI understand your website better'}
             </p>
           </div>
           {selectedMeanings.length > 0 && (
-            <div className="bg-gray-900 text-white text-xs px-2.5 py-1 rounded-full font-medium">
+            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-bold whitespace-nowrap bg-gray-900 text-white">
               {selectedMeanings.length}/{MAX_SELECTIONS}
             </div>
           )}
         </div>
 
-        <div className="space-y-3 mb-6 mt-6">
-          {meaningEntries.map(([meaning, exampleSentence]: [string, any]) => {
-            const isSelected = selectedMeanings.some(m => m.key === meaning);
-            return (
-              <label
-                key={meaning}
-                className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                  isSelected
-                    ? 'border-gray-900 bg-gray-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                } ${selectedMeanings.length >= MAX_SELECTIONS && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  onChange={() => handleMeaningToggle(meaning, exampleSentence)}
-                  disabled={selectedMeanings.length >= MAX_SELECTIONS && !isSelected}
-                  className="w-4 h-4 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900 disabled:opacity-50"
-                />
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900 mb-1 capitalize">{meaning}</p>
-                  <p className="text-sm text-gray-600 italic">
-                    "{exampleSentence}"
-                  </p>
-                </div>
-              </label>
-            );
-          })}
-          
-          <label
-            className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
-              skipSelection
-                ? 'border-gray-900 bg-gray-50'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            <input
-              type="checkbox"
-              checked={skipSelection}
-              onChange={(e) => {
-                setSkipSelection(e.target.checked);
-                if (e.target.checked) {
-                  setSelectedMeanings([]);
-                }
-              }}
-              className="w-4 h-4 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900"
-            />
-            <div className="flex-1">
-              <p className="font-medium text-gray-900 mb-1">Skip context selection</p>
-              <p className="text-sm text-gray-600">
-                Let AI decide based on general knowledge
-              </p>
-            </div>
+        {/* User Description Input */}
+        <div className="mb-4 sm:mb-6">
+          <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+            Describe your domain <span className="text-gray-400 font-normal">(Optional)</span>
           </label>
+          <textarea
+            value={userDescription}
+            onChange={(e) => setUserDescription(e.target.value)}
+            placeholder="E.g., A blog about chocolate recipes and baking tips..."
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all duration-200 resize-none text-xs sm:text-sm"
+            rows={3}
+            maxLength={500}
+          />
+          <p className="text-xs text-gray-500 mt-1.5">
+            {userDescription.length}/500 characters
+          </p>
         </div>
 
-        {/* Selected contexts preview */}
-        {selectedMeanings.length > 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm font-medium text-blue-900 mb-2">Selected contexts:</p>
-            <div className="flex flex-wrap gap-2">
-              {selectedMeanings.map(({ key }) => (
-                <span key={key} className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-blue-300 text-blue-900 rounded-full text-xs font-medium">
-                  {key}
-                  <button
-                    onClick={() => handleMeaningToggle(key, '')}
-                    className="hover:text-blue-700"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
+        {/* Meanings as Chips */}
+        {hasMeanings && (
+          <div className="mb-4 sm:mb-6">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3">
+              Select contexts (up to {MAX_SELECTIONS}) or skip
+            </label>
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-gray-50 rounded-xl border-2 border-gray-100 min-h-[120px] relative">
+              {meaningEntries.map(([meaning, exampleSentence]: [string, any]) => {
+                const isSelected = selectedMeanings.some(m => m.key === meaning);
+                const isDisabled = selectedMeanings.length >= MAX_SELECTIONS && !isSelected;
+                return (
+                  <div key={meaning} className="relative">
+                    <button
+                      onClick={() => handleMeaningToggle(meaning, exampleSentence)}
+                      disabled={isDisabled}
+                      className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border-2 transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${
+                        isSelected
+                          ? 'bg-gray-900 border-gray-900 text-white scale-105'
+                          : isDisabled
+                          ? 'bg-white border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                          : 'bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:scale-105 hover:shadow-md'
+                      }`}
+                    >
+                      {isSelected && '✓ '}
+                      {meaning}
+                    </button>
+                    {/* Tooltip with peer-hover */}
+                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-2xl min-w-max max-w-[280px]">
+                      <div className="italic normal-case text-center leading-relaxed">"{exampleSentence}"</div>
+                      {/* Arrow */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
+                        <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-gray-900"></div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              
+              {/* Skip Option */}
+              <div className="relative">
+                <button
+                  onClick={() => setSelectedMeanings([])}
+                  className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border-2 transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${
+                    selectedMeanings.length === 0
+                      ? 'bg-gray-900 border-gray-900 text-white scale-105'
+                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:scale-105 hover:shadow-md'
+                  }`}
+                >
+                  {selectedMeanings.length === 0 && '✓ '}
+                  SKIP & LET AI DECIDE
+                </button>
+                {/* Tooltip with peer-hover */}
+                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-2xl whitespace-nowrap">
+                  <div className="normal-case">Let AI decide based on general knowledge</div>
+                  {/* Arrow */}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
+                    <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-gray-900"></div>
+                  </div>
+                </div>
+              </div>
             </div>
+            {selectedMeanings.length > 0 && (
+              <div className="mt-2 sm:mt-3">
+                <p className="text-[10px] sm:text-xs font-medium text-gray-600 mb-1.5 sm:mb-2">Selected contexts:</p>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  {selectedMeanings.map(({ key, context }) => (
+                    <div
+                      key={key}
+                      title={`"${context}"`}
+                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-900 text-white rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-gray-800 transition-colors"
+                    >
+                      {key}
+                      <button
+                        onClick={() => handleMeaningToggle(key, context)}
+                        className="hover:bg-gray-700 rounded-full p-0.5"
+                      >
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        <div className="flex gap-3">
+        {/* Helper Tip */}
+        <div className="text-[10px] sm:text-xs text-center text-gray-500  border border-blue-200 rounded-xl p-2 sm:p-3 mb-4 sm:mb-6">
+          💡 This context helps AI generate more relevant and personalized content for your website
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-200">
           <button 
             onClick={onClose} 
-            className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 font-medium border border-gray-200"
+            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border-2 border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-semibold hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleContinue}
-            disabled={(selectedMeanings.length === 0 && !skipSelection) || updateMutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            disabled={updateMutation.isPending}
+            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600 text-white rounded-xl text-sm sm:text-base font-semibold transition-all disabled:opacity-50 shadow-lg"
           >
-            {updateMutation.isPending ? 'Saving...' : `Continue ${selectedMeanings.length > 0 ? `(${selectedMeanings.length} selected)` : ''}`}
+            {updateMutation.isPending ? 'Saving...' : `Continue ${selectedMeanings.length > 0 ? `(${selectedMeanings.length})` : ''}`}
           </button>
         </div>
       </div>

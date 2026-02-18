@@ -1,13 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { X, Plus, FileText, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, Plus, FileText, Loader2, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { domainsAPI } from '@/lib/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface GenerateContentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onGenerate: (type: string, quantity: number) => void;
   isGenerating: boolean;
+  domainId: string;
 }
 
 export default function GenerateContentModal({
@@ -15,156 +21,311 @@ export default function GenerateContentModal({
   onClose,
   onGenerate,
   isGenerating,
+  domainId,
 }: GenerateContentModalProps) {
   const [contentType, setContentType] = useState('blog');
   const [quantity, setQuantity] = useState(3);
+  const [userDescription, setUserDescription] = useState('');
+  const [keywords, setKeywords] = useState('');
+  const [savedKeywords, setSavedKeywords] = useState<string[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const queryClient = useQueryClient();
 
-  if (!isOpen) return null;
+  // Fetch domain data
+  const { data: domainData } = useQuery({
+    queryKey: ['domain', domainId],
+    queryFn: async () => {
+      const response = await domainsAPI.getOne(domainId);
+      return response.data;
+    },
+    enabled: isOpen && !!domainId,
+  });
+
+  // Initialize fields when data loads
+  useEffect(() => {
+    if (domainData) {
+      setUserDescription(domainData.userDescription || '');
+      const savedKeywordsStr = domainData.selectedMeaning || '';
+      setKeywords('');
+      // Parse saved keywords into array
+      if (savedKeywordsStr) {
+        const keywordsArray = savedKeywordsStr.split(',').map((k: string) => k.trim()).filter(Boolean);
+        setSavedKeywords(keywordsArray);
+      } else {
+        setSavedKeywords([]);
+      }
+    }
+  }, [domainData]);
+
+  // Handler to add keyword
+  const handleAddKeyword = () => {
+    if (keywords.trim()) {
+      const newKeywords = keywords.split(',').map(k => k.trim()).filter(Boolean);
+      setSavedKeywords(prev => [...prev, ...newKeywords]);
+      setKeywords('');
+    }
+  };
+
+  // Handler to remove keyword
+  const handleRemoveKeyword = (keywordToRemove: string) => {
+    setSavedKeywords(prev => prev.filter(k => k !== keywordToRemove));
+  };
+
+  // Handler to add keyword on Enter key
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddKeyword();
+    }
+  };
+
+  const handleSaveContext = async () => {
+    setIsSaving(true);
+    try {
+      await domainsAPI.update(domainId, {
+        userDescription: userDescription.trim() || undefined,
+        selectedMeaning: savedKeywords.join(', ') || undefined,
+      });
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      toast.success('Context updated successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update context');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleGenerate = () => {
     onGenerate(contentType, quantity);
   };
 
+  if (!isOpen) return null;
+
+  const originalKeywords = domainData?.selectedMeaning || '';
+  const currentKeywords = savedKeywords.join(', ');
+  const hasChanges = 
+    userDescription !== (domainData?.userDescription || '') ||
+    currentKeywords !== originalKeywords;
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-        onClick={onClose}
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+            onClick={onClose}
+          />
 
-      {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 rounded-lg">
-                <Plus size={20} className="text-gray-700" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900">Generate Content</h2>
-            </div>
-            <button
-              onClick={onClose}
-              disabled={isGenerating}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+          {/* Modal Container */}
+          <div className="flex min-h-full items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              className="relative bg-white rounded-2xl shadow-2xl max-w-5xl w-full p-10"
             >
-              <X size={20} className="text-gray-500" />
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="space-y-5">
-            {/* Content Type Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Content Type
-              </label>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setContentType('blog')}
-                  disabled={isGenerating}
-                  className={`w-full p-4 rounded-lg border-2 transition-all text-left flex items-center gap-3 ${
-                    contentType === 'blog'
-                      ? 'border-gray-900 bg-gray-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  <div className={`p-2 rounded-lg ${contentType === 'blog' ? 'bg-gray-900' : 'bg-gray-100'}`}>
-                    <FileText size={20} className={contentType === 'blog' ? 'text-white' : 'text-gray-600'} />
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-gradient-to-br from-gray-900 to-gray-700 rounded-xl shadow-md">
+                    <Sparkles size={26} className="text-white" />
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Blog Posts</div>
-                    <div className="text-xs text-gray-500">AI-generated articles with images</div>
+                    <h2 className="text-3xl font-bold text-gray-900">Generate Content</h2>
+                    <p className="text-sm text-gray-500 mt-0.5">Powered by AI</p>
                   </div>
-                </button>
-
-                {/* Future content types can be added here */}
-                {/* <button className="w-full p-4 rounded-lg border-2 border-gray-200 opacity-50 cursor-not-allowed">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gray-100">
-                      <Image size={20} className="text-gray-400" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-400">Gallery Images</div>
-                      <div className="text-xs text-gray-400">Coming soon</div>
-                    </div>
-                  </div>
-                </button> */}
-              </div>
-            </div>
-
-            {/* Quantity Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                How many would you like to generate?
-              </label>
-              <div className="grid grid-cols-5 gap-2">
-                {[1, 2, 3, 5, 10].map((num) => (
-                  <button
-                    key={num}
-                    onClick={() => setQuantity(num)}
-                    disabled={isGenerating}
-                    className={`p-3 rounded-lg border-2 font-semibold transition-all ${
-                      quantity === num
-                        ? 'border-gray-900 bg-gray-900 text-white'
-                        : 'border-gray-200 text-gray-700 hover:border-gray-300'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {num}
-                  </button>
-                ))}
-              </div>
-              <div className="mt-3">
-                <input
-                  type="number"
-                  min="1"
-                  max="20"
-                  value={quantity}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value) || 1;
-                    setQuantity(Math.max(1, Math.min(20, val)));
-                  }}
+                </div>
+                <button
+                  onClick={onClose}
                   disabled={isGenerating}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:opacity-50"
-                  placeholder="Or enter custom number (1-20)"
-                />
+                  className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <X size={22} className="text-gray-500" />
+                </button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                Estimated cost: ${(quantity * 0.08).toFixed(2)} (approx. $0.08 per blog)
-              </p>
-            </div>
-          </div>
 
-          {/* Actions */}
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={onClose}
-              disabled={isGenerating}
-              className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Plus size={18} />
-                  Generate {quantity} {contentType}(s)
-                </>
-              )}
-            </button>
+              {/* Modal - Two Column Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* LEFT COLUMN - Prompt & Keywords */}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-5">Context & Keywords</h3>
+                    
+                    {/* Domain Description */}
+                    <div className="mb-5">
+                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                        Domain Description
+                      </label>
+                      <textarea
+                        value={userDescription}
+                        onChange={(e) => setUserDescription(e.target.value)}
+                        placeholder="Describe what your domain is about..."
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all duration-200 resize-none text-sm placeholder:text-gray-400"
+                        rows={5}
+                        maxLength={500}
+                      />
+                      <p className="text-xs text-gray-400 mt-2">
+                        {userDescription.length}/500 characters
+                      </p>
+                    </div>
+
+                    {/* Keywords Input */}
+                    <div className="mb-5">
+                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                        Keywords
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={keywords}
+                          onChange={(e) => setKeywords(e.target.value)}
+                          onKeyDown={handleKeyDown}
+                          placeholder="Add keywords..."
+                          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all placeholder:text-gray-400"
+                        />
+                        <button
+                          onClick={handleAddKeyword}
+                          disabled={!keywords.trim()}
+                          className="px-5 py-3 bg-gray-900 text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Add
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-2">
+                        Press Enter or click Add to save keywords
+                      </p>
+                      
+                      {/* Display Saved Keywords as Chips */}
+                      {savedKeywords.length > 0 && (
+                        <div className="mt-4">
+                          <div className="flex flex-wrap gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                            <AnimatePresence mode="popLayout">
+                              {savedKeywords.map((keyword) => (
+                                <motion.div
+                                  key={keyword}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.8 }}
+                                  className="px-3 py-1.5 bg-gray-900 text-white rounded-full text-xs font-bold uppercase flex items-center gap-1.5 hover:bg-gray-800 transition-colors"
+                                >
+                                  {keyword}
+                                  <button
+                                    onClick={() => handleRemoveKeyword(keyword)}
+                                    className="hover:bg-gray-700 rounded-full p-0.5"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </motion.div>
+                              ))}
+                            </AnimatePresence>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Save Context Button - Always visible */}
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleSaveContext}
+                      disabled={isSaving || !hasChanges}
+                      className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {isSaving ? (
+                        <>
+                          <Loader2 size={18} className="animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Check size={18} />
+                          Save Context
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN - Content Generation */}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-5">Content Generation</h3>
+                    
+                    {/* Content Type Selection */}
+                    <div className="mb-8">
+                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                        Content Type
+                      </label>
+                      <div className="p-4 rounded-xl border-2 border-gray-900 bg-gray-50/50 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2.5 rounded-lg bg-gray-900">
+                            <FileText size={22} className="text-white" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">Blog Posts</div>
+                            <div className="text-xs text-gray-500">AI-generated articles with images</div>
+                          </div>
+                        </div>
+                        <input
+                          type="number"
+                          min="1"
+                          max="20"
+                          value={quantity}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value) || 1;
+                            setQuantity(Math.max(1, Math.min(20, val)));
+                          }}
+                          disabled={isGenerating}
+                          className="w-20 px-3 py-2 border-2 border-gray-200 rounded-lg text-center text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 disabled:opacity-50"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Actions - Side by Side */}
+                    <div className="flex gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={onClose}
+                        disabled={isGenerating}
+                        className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
+                      >
+                        Cancel
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleGenerate}
+                        disabled={isGenerating}
+                        className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" />
+                            Generating...
+                          </>
+                        ) : (
+                          <>
+                            {/* <Plus size={16} /> */}
+                            Generate Content
+                            <ArrowRight size={16} />
+                          </>
+                        )}
+                      </motion.button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }

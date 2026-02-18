@@ -73,6 +73,7 @@ export default function BlogsTab({
         onClose={() => setShowGenerateModal(false)}
         onGenerate={handleGenerate}
         isGenerating={generateMoreBlogsMutation.isPending}
+        domainId={domain.id}
       />
 
       {/* Blogs List */}
