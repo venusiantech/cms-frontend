@@ -37,6 +37,7 @@ export const domainsAPI = {
   getSynonyms: (id: string) => api.get(`/domains/${id}/synonyms`),
   checkDnsStatus: (id: string) => api.get(`/domains/${id}/dns-status`),
   deployWorkers: (id: string) => api.post(`/domains/${id}/deploy-workers`),
+  retryCloudflare: (id: string) => api.post(`/domains/${id}/retry-cloudflare`),
 };
 
 export const websitesAPI = {

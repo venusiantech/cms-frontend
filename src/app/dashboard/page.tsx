@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI, websitesAPI } from '@/lib/api';
-import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Info, Server, RefreshCw } from 'lucide-react';
+import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Info, Server, RefreshCw, AlertCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useJobStatus } from '@/hooks/useJobStatus';
@@ -254,6 +254,18 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
     },
   });
 
+  const retryCloudfareMutation = useMutation({
+    mutationFn: () => domainsAPI.retryCloudflare(domain.id),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ['domains'] });
+      toast.success('Nameservers created successfully! 🎉');
+      setDnsStatus(response.data.nameServersStatus);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to create nameservers');
+    },
+  });
+
   // Check if this domain is generating
   const isGenerating = !!generationJobId && !isCompleted && !isFailed;
 
@@ -361,7 +373,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
               )}
               
               {/* DNS Status Badge - Show next to domain status */}
-              {domain.nameServers && domain.nameServers.length > 0 && (
+              {domain.nameServers && domain.nameServers.length > 0 ? (
                 <button
                   onClick={() => setShowDnsModal(true)}
                   className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${
@@ -380,6 +392,25 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
                     <>
                       <Clock size={12} />
                       DNS Pending
+                    </>
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => retryCloudfareMutation.mutate()}
+                  disabled={retryCloudfareMutation.isPending}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Click to create nameserver records"
+                >
+                  {retryCloudfareMutation.isPending ? (
+                    <>
+                      <Loader2 size={12} className="animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle size={12} />
+                      Setup Nameservers
                     </>
                   )}
                 </button>
@@ -447,7 +478,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
       ) : (
         <div className="space-y-3">
           {/* DNS Info Button - Show if nameservers exist */}
-          {domain.nameServers && domain.nameServers.length > 0 && (
+          {domain.nameServers && domain.nameServers.length > 0 ? (
             <button
               onClick={() => setShowDnsModal(true)}
               className={`w-full bg-white hover:bg-gray-50 rounded-lg p-3 transition-all duration-200 flex items-center justify-between border-2 ${
@@ -466,6 +497,29 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
                 </div>
               </div>
               <ArrowRight size={16} className="text-gray-400" />
+            </button>
+          ) : (
+            <button
+              onClick={() => retryCloudfareMutation.mutate()}
+              disabled={retryCloudfareMutation.isPending}
+              className="w-full bg-orange-50 hover:bg-orange-100 rounded-lg p-3 transition-all duration-200 flex items-center justify-between border-2 border-orange-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <AlertCircle size={16} className="text-orange-700" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-semibold text-orange-900">
+                    {retryCloudfareMutation.isPending ? 'Creating Nameservers...' : 'Nameservers Not Setup'}
+                  </p>
+                  <p className="text-xs text-orange-700">Click to create DNS records</p>
+                </div>
+              </div>
+              {retryCloudfareMutation.isPending ? (
+                <Loader2 size={16} className="text-orange-700 animate-spin" />
+              ) : (
+                <RefreshCw size={16} className="text-orange-700" />
+              )}
             </button>
           )}
 
@@ -605,6 +659,33 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
 
 function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
   const [domainName, setDomainName] = useState('');
+  const [validationError, setValidationError] = useState('');
+
+  // Validate domain format
+  const validateDomain = (domain: string): boolean => {
+    if (!domain.trim()) {
+      setValidationError('Domain name is required');
+      return false;
+    }
+    
+    // Check for valid domain format with TLD
+    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+    
+    if (!domainRegex.test(domain)) {
+      setValidationError('Invalid domain format. Must include a valid extension (e.g., example.com)');
+      return false;
+    }
+    
+    setValidationError('');
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (!validateDomain(domainName)) {
+      return;
+    }
+    mutation.mutate();
+  };
 
   const mutation = useMutation({
     mutationFn: () => domainsAPI.create(domainName),
@@ -627,15 +708,38 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl p-5 sm:p-6 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-200">
         <h2 className="text-xl sm:text-2xl font-medium text-gray-900 mb-2">Add Domain</h2>
-        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Enter your domain name to get started</p>
-        <input
-          type="text"
-          value={domainName}
-          onChange={(e) => setDomainName(e.target.value)}
-          placeholder="example.com"
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 mb-4 sm:mb-6"
-          autoFocus
-        />
+        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Enter your complete domain name with extension</p>
+        <div className="mb-4 sm:mb-6">
+          <input
+            type="text"
+            value={domainName}
+            onChange={(e) => {
+              setDomainName(e.target.value);
+              setValidationError(''); // Clear error on input
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSubmit();
+              }
+            }}
+            placeholder="example.com"
+            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+              validationError 
+                ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                : 'border-gray-200 focus:ring-gray-900 focus:border-transparent'
+            }`}
+            autoFocus
+          />
+          {validationError && (
+            <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
+              <AlertCircle size={12} />
+              {validationError}
+            </p>
+          )}
+          <p className="text-xs text-gray-500 mt-2">
+            Examples: chocolate.com, myblog.net, shop.io
+          </p>
+        </div>
         <div className="flex flex-col sm:flex-row gap-3">
           <button 
             onClick={onClose} 
@@ -644,7 +748,7 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
             Cancel
           </button>
           <button
-            onClick={() => mutation.mutate()}
+            onClick={handleSubmit}
             disabled={mutation.isPending || !domainName}
             className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >

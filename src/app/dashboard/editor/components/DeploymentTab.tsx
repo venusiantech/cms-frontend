@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, ExternalLink, Clock, Copy, Rocket } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Clock, Copy, Rocket, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI } from '@/lib/api';
@@ -41,6 +41,17 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
     onError: (error: any) => {
       setIsDeploying(false);
       toast.error(error.response?.data?.message || 'Failed to deploy DNS records', { id: 'deploy-workers' });
+    },
+  });
+
+  const retryCloudfareMutation = useMutation({
+    mutationFn: () => domainsAPI.retryCloudflare(domain.id),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ['domain', domain.id] });
+      toast.success('Nameservers created successfully! 🎉');
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to create nameservers');
     },
   });
 
@@ -85,8 +96,8 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="font-mono text-sm text-gray-900 mb-3 break-all">{domain.domainName}</p>
             
-            {/* DNS Configuration */}
-            {domain.nameServers && domain.nameServers.length > 0 && (
+            {/* DNS Configuration - Show if nameservers exist */}
+            {domain.nameServers && domain.nameServers.length > 0 ? (
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-sm font-semibold text-gray-900">DNS Configuration</p>
@@ -156,6 +167,46 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                     </p>
                   </div>
                 )}
+              </div>
+            ) : (
+              <div className="mt-4">
+                <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <AlertCircle size={20} className="text-orange-700" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-orange-900 mb-1">Nameservers Not Configured</p>
+                      <p className="text-xs text-orange-700 leading-relaxed">
+                        DNS records need to be created for this domain. Click below to set up nameservers via Cloudflare.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => retryCloudfareMutation.mutate()}
+                    disabled={retryCloudfareMutation.isPending}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm"
+                  >
+                    {retryCloudfareMutation.isPending ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Creating Nameservers...
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw size={16} />
+                        Setup Nameservers
+                      </>
+                    )}
+                  </button>
+                  
+                  <div className="mt-3 bg-white rounded-lg p-3 border-l-2 border-orange-400">
+                    <p className="text-xs text-orange-800 leading-relaxed">
+                      ⚠️ <strong>Note:</strong> Domain must have a valid extension (e.g., .com, .net, .io). If setup fails, verify your domain format is correct.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
