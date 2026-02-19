@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createUniqueSlug } from '@/lib/slugify';
@@ -58,18 +58,27 @@ interface Blog {
  * Modern News Magazine Template
  * Professional news/magazine layout with hero, content grid, and sidebar
  */
+// Detect crawlers/SEO tools so we don’t show loader/skeleton and they can capture real screenshots
+const isCrawler =
+  typeof navigator !== 'undefined' &&
+  /bot|crawler|spider|headless|seo|screenshot|prerender|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkshare|w3c_validator|whatsapp|screaming frog/i.test(navigator.userAgent);
+
 export default function ModernNews({ page, website, domain, articleId, pageType = 'home' }: ModernNewsProps) {
   const router = useRouter();
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading for images
+  // Crawlers: show real content immediately so screenshot tools get the actual page
   useEffect(() => {
+    if (isCrawler) setIsLoading(false);
+  }, [isCrawler]);
+
+  // Simulate loading for images (skip delay for crawlers)
+  useEffect(() => {
+    if (isCrawler) return;
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -349,55 +358,111 @@ function FullArticleView({ blog, domain, website }: { blog: Blog; domain: { name
     return parts;
   };
 
-  // Convert markdown headings to HTML-friendly format
+  // Parse a markdown table row into cell strings
+  const parseTableRow = (line: string): string[] => {
+    const cells = line.split('|').map((s) => s.trim());
+    if (cells[0] === '') cells.shift();
+    if (cells[cells.length - 1] === '') cells.pop();
+    return cells;
+  };
+  const isTableSeparatorRow = (cells: string[]): boolean =>
+    cells.length > 0 && cells.every((c) => /^[-:\s]+$/.test(c));
+  // Format cell text: **bold** and links
+  const formatCellContent = (text: string, keyPrefix: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) =>
+      part.match(/^\*\*.*\*\*$/) ? (
+        <strong key={`${keyPrefix}-${i}`}>{part.slice(2, -2)}</strong>
+      ) : (
+        <span key={`${keyPrefix}-${i}`}>{linkifyText(part)}</span>
+      )
+    );
+  };
+
+  // Convert markdown headings to HTML-friendly format (including tables)
   const renderContent = (content: string) => {
-    // Clean the content: remove code fence markers and first H1 (duplicate title)
     let cleanContent = content
-      // Remove markdown code fence markers
       .replace(/```markdown\n?/g, '')
       .replace(/```\n?/g, '')
       .trim();
-    
-    // Split into lines
     const lines = cleanContent.split('\n');
-    
-    // Remove first H1 if it matches or contains the blog title (avoid duplicate)
     let startIndex = 0;
     if (lines[0]?.startsWith('# ')) {
       const firstHeading = lines[0].substring(2).trim();
-      // Skip if it's similar to the blog title
-      if (firstHeading.toLowerCase().includes(blog.title.toLowerCase().substring(0, 20)) || 
+      if (firstHeading.toLowerCase().includes(blog.title.toLowerCase().substring(0, 20)) ||
           blog.title.toLowerCase().includes(firstHeading.toLowerCase().substring(0, 20))) {
         startIndex = 1;
       }
     }
-    
-    return lines.slice(startIndex).map((line, idx) => {
-      // Skip empty code fence markers
-      if (line.trim() === '```' || line.trim() === '```markdown') {
-        return null;
+    const result: (React.ReactNode | null)[] = [];
+    let keyIdx = 0;
+    const slice = lines.slice(startIndex);
+    for (let i = 0; i < slice.length; i++) {
+      const line = slice[i];
+      if (line.trim() === '```' || line.trim() === '```markdown') continue;
+      if (line.trim() === '') {
+        result.push(<div key={keyIdx++} className="h-4" />);
+        continue;
       }
-      
-      // Handle headings
+      // Markdown table: consecutive lines starting with |
+      if (line.trim().startsWith('|')) {
+        const tableRows: string[][] = [];
+        let j = i;
+        while (j < slice.length && slice[j].trim().startsWith('|')) {
+          tableRows.push(parseTableRow(slice[j]));
+          j++;
+        }
+        if (tableRows.length >= 1) {
+          const isSep = tableRows.length > 1 && isTableSeparatorRow(tableRows[1]);
+          const headerRow = tableRows[0];
+          const bodyRows = isSep ? tableRows.slice(2) : tableRows.slice(1);
+          result.push(
+            <div key={keyIdx++} className="mt-6 mb-3 overflow-x-auto">
+              <table className="min-w-full border border-gray-300 border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    {headerRow.map((cell, c) => (
+                      <th key={c} className="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">
+                        {formatCellContent(cell, `th-${keyIdx}-${c}`)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {bodyRows.map((row, r) => (
+                    <tr key={r} className={r % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      {row.map((cell, c) => (
+                        <td key={c} className="border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                          {formatCellContent(cell, `td-${keyIdx}-${r}-${c}`)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+          i = j - 1;
+          continue;
+        }
+      }
       if (line.startsWith('# ')) {
-        return <h1 key={idx} className="text-4xl font-bold text-gray-900 mb-6 mt-8">{linkifyText(line.substring(2))}</h1>;
+        result.push(<h1 key={keyIdx++} className="text-4xl font-bold text-gray-900 mb-4 mt-6">{linkifyText(line.substring(2))}</h1>);
       } else if (line.startsWith('## ')) {
-        return <h2 key={idx} className="text-3xl font-bold text-gray-900 mb-4 mt-6">{linkifyText(line.substring(3))}</h2>;
+        result.push(<h2 key={keyIdx++} className="text-3xl font-bold text-gray-900 mb-4 mt-4">{linkifyText(line.substring(3))}</h2>);
       } else if (line.startsWith('### ')) {
-        return <h3 key={idx} className="text-2xl font-semibold text-gray-800 mb-3 mt-5">{linkifyText(line.substring(4))}</h3>;
+        result.push(<h3 key={keyIdx++} className="text-2xl font-semibold text-gray-800 mb-3 mt-4">{linkifyText(line.substring(4))}</h3>);
       } else if (line.startsWith('#### ')) {
-        return <h4 key={idx} className="text-xl font-semibold text-gray-800 mb-2 mt-4">{linkifyText(line.substring(5))}</h4>;
-      } else if (line.trim() === '') {
-        return <div key={idx} className="h-4"></div>;
+        result.push(<h4 key={keyIdx++} className="text-xl font-semibold text-gray-800 mb-2 mt-3">{linkifyText(line.substring(5))}</h4>);
       } else if (line.startsWith('- ') || line.startsWith('* ')) {
-        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2">{linkifyText(line.substring(2))}</li>;
+        result.push(<li key={keyIdx++} className="ml-6 text-gray-700 leading-relaxed mb-2">{linkifyText(line.substring(2))}</li>);
       } else if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
-        // Handle numbered lists
-        return <li key={idx} className="ml-6 text-gray-700 leading-relaxed mb-2 list-decimal">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>;
+        result.push(<li key={keyIdx++} className="ml-6 text-gray-700 leading-relaxed mb-2 list-decimal">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>);
       } else {
-        return <p key={idx} className="text-gray-700 leading-relaxed mb-4">{linkifyText(line)}</p>;
+        result.push(<p key={keyIdx++} className="text-gray-700 leading-relaxed mb-4">{linkifyText(line)}</p>);
       }
-    }).filter(Boolean); // Remove null entries
+    }
+    return result.filter(Boolean);
   };
 
   return (

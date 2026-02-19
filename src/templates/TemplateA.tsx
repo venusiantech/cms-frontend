@@ -166,6 +166,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
   const [loaderFadingOut, setLoaderFadingOut] = useState(false);
   const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
 
+  // Don’t show loader overlay to crawlers/bots so SEO tools can capture real page screenshots
+  const isCrawler = typeof navigator !== 'undefined' && /bot|crawler|spider|headless|seo|screenshot|prerender|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkshare|w3c_validator|whatsapp|screaming frog/i.test(navigator.userAgent);
+
   // When CSS is ready, fade out the loader overlay then remove it (smooth transition to actual page)
   useEffect(() => {
     if (!cssLoaded) return;
@@ -173,6 +176,11 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     const t = setTimeout(() => setLoaderFadingOut(false), 450);
     return () => clearTimeout(t);
   }, [cssLoaded]);
+
+  // Crawler/bot: skip overlay so screenshot and content are visible immediately
+  useEffect(() => {
+    if (isCrawler) setCssLoaded(true);
+  }, [isCrawler]);
 
   // Dynamically load TemplateA CSS files with loading state
   useEffect(() => {

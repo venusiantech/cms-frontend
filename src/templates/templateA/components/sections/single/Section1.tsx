@@ -1,5 +1,6 @@
 'use client';
 
+import React, { Fragment } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -80,6 +81,24 @@ function linkifyText(text: string) {
   return parts;
 }
 
+function parseTableRow(line: string): string[] {
+  const cells = line.split('|').map((s) => s.trim());
+  if (cells[0] === '') cells.shift();
+  if (cells[cells.length - 1] === '') cells.pop();
+  return cells;
+}
+function isTableSeparatorRow(cells: string[]): boolean {
+  return cells.length > 0 && cells.every((c) => /^[-:\s]+$/.test(c));
+}
+function formatCellContent(text: string, keyPrefix: string): (string | JSX.Element)[] {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.flatMap((part, i) =>
+    part.match(/^\*\*.*\*\*$/)
+      ? [<strong key={`${keyPrefix}-${i}`}>{part.slice(2, -2)}</strong>]
+      : [<Fragment key={`${keyPrefix}-${i}`}>{linkifyText(part)}</Fragment>]
+  );
+}
+
 function renderMarkdownContent(content: string, articleTitle: string) {
   const clean = content.replace(/```markdown\n?/g, '').replace(/```\n?/g, '').trim();
   const lines = clean.split('\n');
@@ -93,31 +112,74 @@ function renderMarkdownContent(content: string, articleTitle: string) {
       startIndex = 1;
     }
   }
-  return lines.slice(startIndex).map((line, idx) => {
-    if (line.trim() === '```' || line.trim() === '```markdown') return null;
-    if (line.startsWith('# ')) {
-      return <h1 key={idx} className="mb-4 mt-4">{linkifyText(line.substring(2))}</h1>;
-    }
-    if (line.startsWith('## ')) {
-      return <h2 key={idx} className="mb-3 mt-4">{linkifyText(line.substring(3))}</h2>;
-    }
-    if (line.startsWith('### ')) {
-      return <h3 key={idx} className="mb-2 mt-3">{linkifyText(line.substring(4))}</h3>;
-    }
-    if (line.startsWith('#### ')) {
-      return <h4 key={idx} className="mb-2 mt-3">{linkifyText(line.substring(5))}</h4>;
-    }
+  const result: (JSX.Element | null)[] = [];
+  let keyIdx = 0;
+  const slice = lines.slice(startIndex);
+  for (let i = 0; i < slice.length; i++) {
+    const line = slice[i];
+    if (line.trim() === '```' || line.trim() === '```markdown') continue;
     if (line.trim() === '') {
-      return <div key={idx} className="h-3" />;
+      result.push(<div key={keyIdx++} className="h-3" />);
+      continue;
     }
-    if (line.startsWith('- ') || line.startsWith('* ')) {
-      return <li key={idx} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{linkifyText(line.substring(2))}</li>;
+    if (line.trim().startsWith('|')) {
+      const tableRows: string[][] = [];
+      let j = i;
+      while (j < slice.length && slice[j].trim().startsWith('|')) {
+        tableRows.push(parseTableRow(slice[j]));
+        j++;
+      }
+      if (tableRows.length >= 1) {
+        const isSep = tableRows.length > 1 && isTableSeparatorRow(tableRows[1]);
+        const headerRow = tableRows[0];
+        const bodyRows = isSep ? tableRows.slice(2) : tableRows.slice(1);
+        result.push(
+          <div key={keyIdx++} className="mt-4 mb-2 overflow-x-auto">
+            <table className="table table-bordered" style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f8f9fa' }}>
+                  {headerRow.map((cell, c) => (
+                    <th key={c} style={{ border: '1px solid #dee2e6', padding: '0.5rem 0.75rem', textAlign: 'left' }}>
+                      {formatCellContent(cell, `th-${keyIdx}-${c}`)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {bodyRows.map((row, r) => (
+                  <tr key={r} style={{ backgroundColor: r % 2 === 0 ? '#fff' : '#f8f9fa' }}>
+                    {row.map((cell, c) => (
+                      <td key={c} style={{ border: '1px solid #dee2e6', padding: '0.5rem 0.75rem' }}>
+                        {formatCellContent(cell, `td-${keyIdx}-${r}-${c}`)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+        i = j - 1;
+        continue;
+      }
     }
-    if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
-      return <li key={idx} className="ml-4 mb-2 list-decimal text-justify">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>;
+    if (line.startsWith('# ')) {
+      result.push(<h1 key={keyIdx++} className="mb-4 mt-4">{linkifyText(line.substring(2))}</h1>);
+    } else if (line.startsWith('## ')) {
+      result.push(<h2 key={keyIdx++} className="mb-3 mt-4">{linkifyText(line.substring(3))}</h2>);
+    } else if (line.startsWith('### ')) {
+      result.push(<h3 key={keyIdx++} className="mb-2 mt-3">{linkifyText(line.substring(4))}</h3>);
+    } else if (line.startsWith('#### ')) {
+      result.push(<h4 key={keyIdx++} className="mb-2 mt-3">{linkifyText(line.substring(5))}</h4>);
+    } else if (line.startsWith('- ') || line.startsWith('* ')) {
+      result.push(<li key={keyIdx++} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{linkifyText(line.substring(2))}</li>);
+    } else if (line.startsWith('1. ') || /^\d+\.\s/.test(line)) {
+      result.push(<li key={keyIdx++} className="ml-4 mb-2 list-decimal text-justify">{linkifyText(line.replace(/^\d+\.\s/, ''))}</li>);
+    } else {
+      result.push(<p key={keyIdx++} className="mb-4 text-justify">{linkifyText(line)}</p>);
     }
-    return <p key={idx} className="mb-4 text-justify">{linkifyText(line)}</p>;
-  }).filter(Boolean);
+  }
+  return result.filter(Boolean);
 }
 
 export default function Section1({ article, relatedArticles, onBack, onArticleClick, assetsPath = '/templateA/assets' }: SingleSection1Props) {
