@@ -163,7 +163,16 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
   const [cssLoaded, setCssLoaded] = useState(false);
+  const [loaderFadingOut, setLoaderFadingOut] = useState(false);
   const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
+
+  // When CSS is ready, fade out the loader overlay then remove it (smooth transition to actual page)
+  useEffect(() => {
+    if (!cssLoaded) return;
+    setLoaderFadingOut(true);
+    const t = setTimeout(() => setLoaderFadingOut(false), 450);
+    return () => clearTimeout(t);
+  }, [cssLoaded]);
 
   // Dynamically load TemplateA CSS files with loading state
   useEffect(() => {
@@ -285,8 +294,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     router.push('/contact');
   } : undefined;
 
-  // Do not block main content on CSS load: crawlers and SSR need full content in HTML for SEO.
-  // (Previously we returned a loader here, which led to ~1 word count on every page.)
+  // Content is always in the DOM for SEO. Show overlay with spinner while dynamic CSS loads
+  // so users don't see a flash of unstyled content (FOUC).
 
   // Render content with fade-in animation
   const renderContent = () => {
@@ -362,6 +371,54 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       <div className="template-content">
         {renderContent()}
       </div>
+      {/* Loader overlay: fades out smoothly when CSS is ready, then unmounts – content stays in DOM for SEO */}
+      {(!cssLoaded || loaderFadingOut) && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 2147483647,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#fff',
+            opacity: loaderFadingOut ? 0 : 1,
+            transition: 'opacity 0.4s ease-out',
+            pointerEvents: loaderFadingOut ? 'none' : 'auto',
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <h1
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: '2.5rem',
+                fontWeight: 700,
+                color: '#333',
+                margin: '0 0 1.5rem',
+                letterSpacing: '1px',
+              }}
+            >
+              {siteDisplay}
+            </h1>
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                border: '3px solid #f3f3f3',
+                borderTopColor: '#333',
+                borderRadius: '50%',
+                animation: 'templateA-loader-spin 0.8s linear infinite',
+                margin: '0 auto',
+              }}
+            />
+          </div>
+          <style dangerouslySetInnerHTML={{ __html: '@keyframes templateA-loader-spin { to { transform: rotate(360deg); } }' }} />
+        </div>
+      )}
       <style jsx>{`
         .template-content {
           animation: fadeIn 0.3s ease-in;
