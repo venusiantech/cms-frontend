@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Script from 'next/script';
 import { createUniqueSlug } from '@/lib/slugify';
 
 
@@ -38,6 +39,7 @@ interface ModernNewsProps {
     instagramUrl?: string | null;
     facebookUrl?: string | null;
     twitterUrl?: string | null;
+    googleAnalyticsId?: string | null;
   };
   domain: {
     name: string;
@@ -182,12 +184,36 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header - Always visible, no skeleton */}
-      <Header 
-        domain={domain} 
-        onContactClick={website.contactFormEnabled ? () => setShowContactForm(true) : undefined} 
-      />
+    <>
+      {/* Google tag (gtag.js) */}
+      {website.googleAnalyticsId && (
+        <>
+          <Script
+            async
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${website.googleAnalyticsId}`}
+          />
+          <Script 
+            id="gtag-init"
+            strategy="afterInteractive"
+          >
+            {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${website.googleAnalyticsId}');
+            `}
+          </Script>
+        </>
+      )}
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Header - Always visible, no skeleton */}
+        <Header 
+          domain={domain} 
+          onContactClick={website.contactFormEnabled ? () => setShowContactForm(true) : undefined} 
+        />
 
       {/* Main Content - Tighter margins for professional look */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -215,7 +241,8 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
         domain={domain} 
         onContactClick={website.contactFormEnabled ? () => setShowContactForm(true) : undefined} 
       />
-    </div>
+      </div>
+    </>
   );
 }
 

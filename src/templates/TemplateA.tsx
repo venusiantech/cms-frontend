@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
 import type { TemplateAArticle, TemplateABlogData } from '@/templates/templateA/types';
 import Layout from '@/templates/templateA/components/layout/Layout';
 import HomeSection1 from '@/templates/templateA/components/sections/home/Section1';
@@ -41,6 +42,7 @@ interface TemplateAProps {
     twitterUrl?: string | null;
     contactEmail?: string | null;
     contactPhone?: string | null;
+    googleAnalyticsId?: string | null;
   };
   domain: { name: string };
   articleId?: string; // For direct article page rendering
@@ -385,6 +387,29 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   return (
     <>
+      {/* Google tag (gtag.js) */}
+      {website.googleAnalyticsId && (
+        <>
+          <Script
+            async
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${website.googleAnalyticsId}`}
+          />
+          <Script 
+            id="gtag-init"
+            strategy="afterInteractive"
+          >
+            {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${website.googleAnalyticsId}');
+            `}
+          </Script>
+        </>
+      )}
+
       <div className="template-content">
         {renderContent()}
       </div>

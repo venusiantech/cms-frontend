@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save } from 'lucide-react';
+import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save, BarChart3 } from 'lucide-react';
 import { websitesAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
@@ -13,7 +13,7 @@ interface SettingsTabProps {
   queryClient: any;
 }
 
-type SettingCategory = 'templates' | 'ads' | 'contact' | 'social' | 'metadata' | null;
+type SettingCategory = 'templates' | 'ads' | 'contact' | 'social' | 'metadata' | 'analytics' | null;
 
 export default function SettingsTab({ domain, domainId, queryClient }: SettingsTabProps) {
   const [selectedCategory, setSelectedCategory] = useState<SettingCategory>(null);
@@ -40,6 +40,10 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
   const [metaKeywords, setMetaKeywords] = useState(domain.website.metaKeywords || '');
   const [metaAuthor, setMetaAuthor] = useState(domain.website.metaAuthor || '');
   const [isUpdatingMetadata, setIsUpdatingMetadata] = useState(false);
+
+  // Google Analytics State
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState(domain.website.googleAnalyticsId || '');
+  const [isUpdatingAnalytics, setIsUpdatingAnalytics] = useState(false);
 
   const settingCategories = [
     {
@@ -75,6 +79,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
       name: 'Social Media',
       description: 'Add social links',
       icon: Share2,
+      color: 'bg-gray-100 text-[#111827]',
+    },
+    {
+      id: 'analytics' as SettingCategory,
+      name: 'Analytics',
+      description: 'Google Analytics tracking',
+      icon: BarChart3,
       color: 'bg-gray-100 text-[#111827]',
     },
   ];
@@ -777,6 +788,106 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   <span><strong>Robots.txt:</strong> Automatically generated at <code className="bg-blue-100 px-1 py-0.5 rounded text-xs">{domain.domainName}/robots.txt</code></span>
                 </li>
               </ul>
+            </div>
+          </div>
+        )}
+
+        {/* Google Analytics Settings */}
+        {selectedCategory === 'analytics' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Google Analytics Tracking</h3>
+              <p className="text-sm text-gray-600">Add Google Analytics to track your website visitors and behavior</p>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="space-y-5">
+                {/* Google Analytics ID */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <BarChart3 size={18} className="text-orange-500" />
+                    Google Analytics Measurement ID
+                  </label>
+                  <input
+                    type="text"
+                    value={googleAnalyticsId}
+                    onChange={(e) => setGoogleAnalyticsId(e.target.value)}
+                    placeholder="G-XXXXXXXXXX"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm font-mono"
+                  />
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Enter your Google Analytics 4 (GA4) measurement ID (format: G-XXXXXXXXXX)
+                  </p>
+                </div>
+
+                {/* Current Status */}
+                {googleAnalyticsId && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle2 size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-green-900">Google Analytics Enabled</p>
+                        <p className="text-xs text-green-700 mt-1">
+                          Tracking ID: <code className="bg-green-100 px-2 py-0.5 rounded font-mono">{googleAnalyticsId}</code>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Save Button */}
+                <button
+                  onClick={async () => {
+                    setIsUpdatingAnalytics(true);
+                    try {
+                      await websitesAPI.updateGoogleAnalytics(domain.website.id, {
+                        googleAnalyticsId: googleAnalyticsId || undefined,
+                      });
+                      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+                      toast.success('Google Analytics settings updated successfully');
+                    } catch (error: any) {
+                      toast.error(error.response?.data?.message || 'Failed to update Google Analytics settings');
+                    } finally {
+                      setIsUpdatingAnalytics(false);
+                    }
+                  }}
+                  disabled={isUpdatingAnalytics}
+                  className="w-full px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isUpdatingAnalytics ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={18} />
+                      Save Analytics Settings
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Setup Instructions */}
+            <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-orange-900 mb-3 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                How to Get Your Google Analytics ID
+              </h4>
+              <ol className="space-y-2 text-sm text-orange-800 list-decimal list-inside">
+                <li>Visit <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">Google Analytics</a></li>
+                <li>Sign in with your Google account</li>
+                <li>Create a new property (or use existing)</li>
+                <li>Select <strong>Web</strong> as the platform</li>
+                <li>Copy the <strong>Measurement ID</strong> (starts with G-)</li>
+                <li>Paste it above and click Save</li>
+              </ol>
+              <div className="mt-4 pt-4 border-t border-orange-300">
+                <p className="text-xs text-orange-700">
+                  <strong>Note:</strong> It may take 24-48 hours for data to start appearing in Google Analytics after setup.
+                </p>
+              </div>
             </div>
           </div>
         )}

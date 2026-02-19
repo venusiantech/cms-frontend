@@ -77,6 +77,10 @@ export const websitesAPI = {
   // Contact Info APIs
   updateContactInfo: (websiteId: string, data: { contactEmail?: string; contactPhone?: string }) =>
     api.put(`/websites/${websiteId}/contact-info`, data),
+  
+  // Google Analytics API
+  updateGoogleAnalytics: (websiteId: string, data: { googleAnalyticsId?: string }) =>
+    api.put(`/websites/${websiteId}/google-analytics`, data),
 };
 
 export const contentAPI = {
