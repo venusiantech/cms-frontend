@@ -64,13 +64,6 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
   const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Set document title for browser tab
-  useEffect(() => {
-    const domainName = domain.name.split('.')[0];
-    const titleSuffix = selectedBlog ? ` - ${selectedBlog.title}` : ' - News & Articles';
-    document.title = `${domainName.charAt(0).toUpperCase() + domainName.slice(1)}${titleSuffix}`;
-  }, [domain.name, selectedBlog]);
-
   // Simulate loading for images
   useEffect(() => {
     setIsLoading(true);
@@ -134,25 +127,34 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
     };
   }), [page.sections]); // Only recalculate when sections change
 
-  // If articleId is provided (from URL), find and set the selected blog
+  // Derive selected blog from URL (articleId) so first paint/SSR includes full article for crawlers/SEO
+  const selectedBlogFromUrl = articleId ? blogs.find((b) => b.sectionId === articleId) ?? null : null;
+  const effectiveSelectedBlog = selectedBlogFromUrl ?? selectedBlog;
+
+  // Sync selectedBlog when articleId is set (for client-side back/forward and hydration)
   useEffect(() => {
     if (articleId) {
       const blog = blogs.find((b) => b.sectionId === articleId);
-      if (blog) {
-        setSelectedBlog(blog);
-      }
+      if (blog) setSelectedBlog(blog);
     }
   }, [articleId, blogs]);
+
+  // Set document title for browser tab (after effectiveSelectedBlog is defined)
+  useEffect(() => {
+    const domainName = domain.name.split('.')[0];
+    const titleSuffix = effectiveSelectedBlog ? ` - ${effectiveSelectedBlog.title}` : ' - News & Articles';
+    document.title = `${domainName.charAt(0).toUpperCase() + domainName.slice(1)}${titleSuffix}`;
+  }, [domain.name, effectiveSelectedBlog]);
 
   // Handle blog click - Navigate to article page (SEO-friendly)
   const handleBlogClick = (blog: Blog) => {
     router.push(`/blog/${blog.slug}`); // Use SEO-friendly slug
   };
 
-  if (selectedBlog) {
+  if (effectiveSelectedBlog) {
     return (
       <FullArticleView
-        blog={selectedBlog}
+        blog={effectiveSelectedBlog}
         domain={domain}
         website={website}
       />

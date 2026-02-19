@@ -285,52 +285,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     router.push('/contact');
   } : undefined;
 
-  // Show loading screen while CSS is loading
-  if (!cssLoaded) {
-    return (
-      <>
-        <div className="template-loader">
-          <div className="loader-content">
-            <h1 className="loader-logo">{siteDisplay}</h1>
-            <div className="spinner"></div>
-          </div>
-        </div>
-        <style jsx>{`
-          .template-loader {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-          }
-          .loader-content {
-            text-align: center;
-          }
-          .loader-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
-          }
-          .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #333;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-          }
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </>
-    );
-  }
+  // Do not block main content on CSS load: crawlers and SSR need full content in HTML for SEO.
+  // (Previously we returned a loader here, which led to ~1 word count on every page.)
 
   // Render content with fade-in animation
   const renderContent = () => {
