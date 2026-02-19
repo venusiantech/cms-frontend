@@ -2,16 +2,18 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 interface FooterProps {
   siteName?: string;
   instagramUrl?: string;
   facebookUrl?: string;
   twitterUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
   onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, twitterUrl, onContactClick }: FooterProps) {
+export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick }: FooterProps) {
   const [domain, setDomain] = useState('');
 
   useEffect(() => {
@@ -20,6 +22,17 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
     }
   }, []);
 
+  const hasContact = contactEmail || contactPhone;
+  const hasSocial = instagramUrl || facebookUrl || twitterUrl;
+  
+  // Calculate grid columns
+  let colClass = 'col-lg-4'; // Base: Brand, Quick Links, Categories
+  if (hasContact && hasSocial) {
+    colClass = 'col-lg-2'; // 5 columns
+  } else if (hasContact || hasSocial) {
+    colClass = 'col-lg-3'; // 4 columns
+  }
+
   return (
     <footer className="mt-5 pt-5 pb-4 footer-section">
       <div className="container">
@@ -27,19 +40,16 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
         {/* Main Footer Content */}
         <div className={`row g-4 mb-4`}>
           {/* Brand/Logo Section */}
-          <div className={`${(instagramUrl || facebookUrl || twitterUrl) ? 'col-lg-3' : 'col-lg-4'} col-md-6`}>
+          <div className={`${colClass} col-md-6`}>
             <h1 className="logo navbar-brand mb-3" style={{ fontSize: '1.8rem' }}>
               <Link href="/" className="logo text-decoration-none">
                 {siteName}
               </Link>
             </h1>
-            {/* <p className="text-muted" style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Your trusted source for {siteName.toLowerCase()} news and information.
-            </p> */}
           </div>
 
           {/* Quick Links */}
-          <div className={`${(instagramUrl || facebookUrl || twitterUrl) ? 'col-lg-3' : 'col-lg-4'} col-md-6`}>
+          <div className={`${colClass} col-md-6`}>
             <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
               Quick Links
             </h5>
@@ -76,7 +86,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
           </div>
 
           {/* Categories */}
-          <div className={`${(instagramUrl || facebookUrl || twitterUrl) ? 'col-lg-3' : 'col-lg-4'} col-md-6`}>
+          <div className={`${colClass} col-md-6`}>
             <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
               Categories
             </h5>
@@ -96,17 +106,47 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                   Insights
                 </a>
               </li>
-              {/* <li className="mb-2">
-                <Link href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
-                  Resources
-                </Link>
-              </li> */}
             </ul>
           </div>
 
+          {/* Contact Information - Only show if exists */}
+          {hasContact && (
+            <div className={`${colClass} col-md-6`}>
+              <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+                Contact
+              </h5>
+              <ul className="list-unstyled footer-links footer-contact-links" style={{ fontSize: '0.9rem' }}>
+                {contactEmail && (
+                  <li className="mb-2">
+                    <a 
+                      href={`mailto:${contactEmail}`}
+                      className="text-muted text-decoration-none d-flex align-items-center contact-link" 
+                      style={{ transition: 'color 0.2s' }}
+                    >
+                      <FaEnvelope className="me-2 contact-icon" style={{ fontSize: '1rem' }} />
+                      <span className="contact-text">{contactEmail}</span>
+                    </a>
+                  </li>
+                )}
+                {contactPhone && (
+                  <li className="mb-2">
+                    <a 
+                      href={`tel:${contactPhone}`}
+                      className="text-muted text-decoration-none d-flex align-items-center contact-link" 
+                      style={{ transition: 'color 0.2s' }}
+                    >
+                      <FaPhoneAlt className="me-2 contact-icon" style={{ fontSize: '1rem' }} />
+                      <span className="contact-text">{contactPhone}</span>
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
           {/* Follow Us / Social Media - Only show if at least one social link exists */}
-          {(instagramUrl || facebookUrl || twitterUrl) && (
-            <div className="col-lg-3 col-md-6">
+          {hasSocial && (
+            <div className={`${colClass} col-md-6`}>
               <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
                 Follow Us
               </h5>
@@ -238,6 +278,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
           color: #000 !important;
         }
         
+        /* Dark mode styles */
         :global(.dark-mode) .footer-heading {
           color: #f8f9fa !important;
         }
@@ -258,6 +299,24 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
           color: rgba(255, 255, 255, 0.7) !important;
         }
         :global(.dark-mode) .copyright-link:hover {
+          color: #ffffff !important;
+        }
+        
+        /* Contact links dark mode - explicit styling */
+        :global(.dark-mode) .footer-contact-links .contact-link {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        :global(.dark-mode) .footer-contact-links .contact-icon {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        :global(.dark-mode) .footer-contact-links .contact-text {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        :global(.dark-mode) .footer-contact-links .contact-link:hover {
+          color: #ffffff !important;
+        }
+        :global(.dark-mode) .footer-contact-links .contact-link:hover .contact-icon,
+        :global(.dark-mode) .footer-contact-links .contact-link:hover .contact-text {
           color: #ffffff !important;
         }
       `}</style>

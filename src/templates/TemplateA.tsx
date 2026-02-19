@@ -39,6 +39,8 @@ interface TemplateAProps {
     instagramUrl?: string | null;
     facebookUrl?: string | null;
     twitterUrl?: string | null;
+    contactEmail?: string | null;
+    contactPhone?: string | null;
   };
   domain: { name: string };
   articleId?: string; // For direct article page rendering
@@ -317,10 +319,13 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
           twitterUrl={website.twitterUrl}
+          contactEmail={website.contactEmail}
+          contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
         >
           <ContactSection
             domain={domain}
+            website={website}
             onBack={onBack}
             assetsPath={ASSETS}
           />
@@ -338,6 +343,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
           twitterUrl={website.twitterUrl}
+          contactEmail={website.contactEmail}
+          contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
         >
           <SingleSection1
@@ -360,6 +367,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
         instagramUrl={website.instagramUrl}
         facebookUrl={website.facebookUrl}
         twitterUrl={website.twitterUrl}
+        contactEmail={website.contactEmail}
+        contactPhone={website.contactPhone}
         onContactClick={handleContactClick}
       >
         <HomeSection1

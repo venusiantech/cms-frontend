@@ -10,9 +10,12 @@ interface MobileMenuProps {
   handleMobileMenu: () => void;
   siteName?: string;
   assetsPath?: string;
+  instagramUrl?: string | null;
+  facebookUrl?: string | null;
+  twitterUrl?: string | null;
 }
 
-export default function MobileMenu({ isMobileMenu, handleMobileMenu, siteName = 'Site', assetsPath = '/templateA/assets' }: MobileMenuProps) {
+export default function MobileMenu({ isMobileMenu, handleMobileMenu, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl }: MobileMenuProps) {
   const [isAccordion, setIsAccordion] = useState<number | null>(null);
   const pathname = usePathname();
 
@@ -47,18 +50,31 @@ export default function MobileMenu({ isMobileMenu, handleMobileMenu, siteName = 
             <Link href="#" className="dark-light-toggle mt-05" onClick={handleDark}>
               <i className="icon-adjust" />
             </Link>
-            <ul className="social-network heading navbar-nav d-lg-flex align-items-center">
-              <li>
-                <Link href="#">
-                  <i className="icon-facebook" />
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <i className="icon-instagram" />
-                </Link>
-              </li>
-            </ul>
+            {(facebookUrl || instagramUrl || twitterUrl) && (
+              <ul className="social-network heading navbar-nav d-lg-flex align-items-center">
+                {facebookUrl && (
+                  <li>
+                    <a href={facebookUrl} target="_blank" rel="noopener noreferrer">
+                      <i className="icon-facebook" />
+                    </a>
+                  </li>
+                )}
+                {instagramUrl && (
+                  <li>
+                    <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+                      <i className="icon-instagram" />
+                    </a>
+                  </li>
+                )}
+                {twitterUrl && (
+                  <li>
+                    <a href={twitterUrl} target="_blank" rel="noopener noreferrer">
+                      <i className="icon-twitter" />
+                    </a>
+                  </li>
+                )}
+              </ul>
+            )}
             <Link href="#" className={`menu-toggle-icon ${isMobileMenu ? "act" : ""}`} onClick={handleMobileMenu}>
               <span className="lines" />
             </Link>

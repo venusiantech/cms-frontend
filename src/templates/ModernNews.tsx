@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createUniqueSlug } from '@/lib/slugify';
 
+
 interface Section {
   id: string;
   type: string;
@@ -837,9 +838,40 @@ function ContactFormPage({ domain, website, onBack }: { domain: { name: string }
 
         <div className="bg-white rounded-lg shadow-md p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Contact Us</h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-gray-600 mb-6">
             Have a question or want to get in touch? Fill out the form below and we'll get back to you soon.
           </p>
+
+          {/* Contact Information Display */}
+          {(website?.contactEmail || website?.contactPhone) && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+              <h3 className="text-sm font-semibold text-blue-900 mb-3">Get In Touch</h3>
+              <div className="space-y-3">
+                {website?.contactEmail && (
+                  <a 
+                    href={`mailto:${website.contactEmail}`}
+                    className="flex items-center gap-3 text-blue-700 hover:text-blue-800 transition-colors"
+                  >
+                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-sm font-medium">{website.contactEmail}</span>
+                  </a>
+                )}
+                {website?.contactPhone && (
+                  <a 
+                    href={`tel:${website.contactPhone}`}
+                    className="flex items-center gap-3 text-blue-700 hover:text-blue-800 transition-colors"
+                  >
+                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <span className="text-sm font-medium">{website.contactPhone}</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
 
           {submitted ? (
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
@@ -948,10 +980,21 @@ function Footer({ sections, website, domain, onContactClick }: { sections: Secti
     hasAny: !!(website?.instagramUrl || website?.facebookUrl || website?.twitterUrl)
   });
 
+  const hasContact = website?.contactEmail || website?.contactPhone;
+  const hasSocial = website?.instagramUrl || website?.facebookUrl || website?.twitterUrl;
+  
+  // Calculate grid columns based on what sections we have
+  let gridCols = 'md:grid-cols-3'; // Base: About, Quick Links, Categories
+  if (hasContact && hasSocial) {
+    gridCols = 'md:grid-cols-2 lg:grid-cols-5'; // All sections
+  } else if (hasContact || hasSocial) {
+    gridCols = 'md:grid-cols-2 lg:grid-cols-4'; // One extra section
+  }
+
   return (
     <footer className="bg-gray-900 text-white mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className={`grid gap-8 mb-8 ${(website?.instagramUrl || website?.facebookUrl || website?.twitterUrl) ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'}`}>
+        <div className={`grid gap-8 mb-8 ${gridCols}`}>
           {/* About */}
           <div>
             <h3 className="text-lg font-bold mb-4">About Us</h3>
@@ -990,8 +1033,43 @@ function Footer({ sections, website, domain, onContactClick }: { sections: Secti
             </ul>
           </div>
 
+          {/* Contact Information - Show if exists */}
+          {hasContact && (
+            <div>
+              <h3 className="text-lg font-bold mb-4">Contact</h3>
+              <ul className="space-y-3 text-sm">
+                {website?.contactEmail && (
+                  <li>
+                    <a 
+                      href={`mailto:${website.contactEmail}`} 
+                      className="text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      {website.contactEmail}
+                    </a>
+                  </li>
+                )}
+                {website?.contactPhone && (
+                  <li>
+                    <a 
+                      href={`tel:${website.contactPhone}`} 
+                      className="text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      {website.contactPhone}
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
           {/* Follow Us - Only show if social media exists */}
-          {(website?.instagramUrl || website?.facebookUrl || website?.twitterUrl) && (
+          {hasSocial && (
             <div>
               <h3 className="text-lg font-bold mb-4">Follow Us</h3>
               <p className="text-gray-400 text-sm mb-4">Stay connected with our latest updates</p>

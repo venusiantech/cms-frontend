@@ -243,11 +243,11 @@ export default function Section1({ article, relatedArticles, onBack, onArticleCl
         )}
         <article className="entry-wraper mb-5">
           <div className="entry-left-col">
-            <div className="social-sticky">
+            {/* <div className="social-sticky">
               <a href="#"><i className="icon-facebook" /></a>
               <a href="#"><i className="icon-heart" /></a>
               <a href="#"><i className="icon-paper-plane" /></a>
-            </div>
+            </div> */}
           </div>
           {article.excerpt && (
             <div className="excerpt mb-4">

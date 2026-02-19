@@ -14,10 +14,12 @@ interface LayoutProps {
   instagramUrl?: string | null;
   facebookUrl?: string | null;
   twitterUrl?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
   onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Layout({ classLisst, children, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: LayoutProps) {
+export default function Layout({ classLisst, children, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick }: LayoutProps) {
   const [scroll, setScroll] = useState<boolean>(false);
   // Mobile Menu
   const [isMobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -44,7 +46,15 @@ export default function Layout({ classLisst, children, siteName = 'Site', assets
   return (
     <>
       <div className={classLisst}>
-        <MobileMenu isMobileMenu={isMobileMenu} handleMobileMenu={handleMobileMenu} siteName={siteName} assetsPath={assetsPath} />
+        <MobileMenu 
+          isMobileMenu={isMobileMenu} 
+          handleMobileMenu={handleMobileMenu} 
+          siteName={siteName} 
+          assetsPath={assetsPath}
+          instagramUrl={instagramUrl}
+          facebookUrl={facebookUrl}
+          twitterUrl={twitterUrl}
+        />
         <div id="wrapper">
           <Header 
             scroll={scroll} 
@@ -65,6 +75,8 @@ export default function Layout({ classLisst, children, siteName = 'Site', assets
             instagramUrl={instagramUrl || undefined}
             facebookUrl={facebookUrl || undefined}
             twitterUrl={twitterUrl || undefined}
+            contactEmail={contactEmail || undefined}
+            contactPhone={contactPhone || undefined}
             onContactClick={onContactClick}
           />
 

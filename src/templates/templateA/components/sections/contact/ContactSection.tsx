@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaCheck, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+
 
 interface ContactSectionProps {
   domain: { name: string };
+  website: any;
   onBack: () => void;
   assetsPath: string;
 }
 
-export default function ContactSection({ domain, onBack, assetsPath }: ContactSectionProps) {
+export default function ContactSection({ domain, website, onBack, assetsPath }: ContactSectionProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -65,30 +68,44 @@ export default function ContactSection({ domain, onBack, assetsPath }: ContactSe
           }}>
             <div className="pe-lg-3">
               {/* Domain Logo/Name */}
-              <h1 className="logo mb-4" style={{ fontSize: '3rem' }}>
-                {siteDisplay}
+              <h1 className="logo mb-4 contact-heading" style={{ fontSize: '3rem' }}>
+                Contact Us
               </h1>
               
               {/* Description */}
-              <p className="lead text-muted mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
+              <p className="lead text-muted contact-description mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
                 Have a question or want to get in touch? We'd love to hear from you. Fill out the form and we'll get back to you as soon as possible.
               </p>
 
               {/* Contact Info */}
-              <div className="mt-5">
-                <div className="mb-3 d-flex align-items-center">
-                  <i className="icon-envelope me-3" style={{ fontSize: '1.3rem', color: '#6c757d' }} />
-                  <span className="text-muted">info@{domain.name}</span>
+              {(website?.contactEmail || website?.contactPhone) && (
+                <div className="mt-5 contact-info-section">
+                  {website?.contactEmail && (
+                    <div className="mb-3 d-flex align-items-center">
+                      <FaEnvelope className="me-3 contact-icon" style={{ fontSize: '1.3rem' }} />
+                      <a 
+                        href={`mailto:${website.contactEmail}`}
+                        className="text-muted contact-link"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        {website.contactEmail}
+                      </a>
+                    </div>
+                  )}
+                  {website?.contactPhone && (
+                    <div className="mb-3 d-flex align-items-center">
+                      <FaPhoneAlt className="me-3 contact-icon" style={{ fontSize: '1.3rem' }} />
+                      <a 
+                        href={`tel:${website.contactPhone}`}
+                        className="text-muted contact-link"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        {website.contactPhone}
+                      </a>
+                    </div>
+                  )}
                 </div>
-                <div className="mb-3 d-flex align-items-center">
-                  <i className="icon-phone me-3" style={{ fontSize: '1.3rem', color: '#6c757d' }} />
-                  <span className="text-muted">+1 (555) 123-4567</span>
-                </div>
-                <div className="d-flex align-items-center">
-                  <i className="icon-location-pin me-3" style={{ fontSize: '1.3rem', color: '#6c757d' }} />
-                  <span className="text-muted">123 Business Street, City</span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -110,7 +127,7 @@ export default function ContactSection({ domain, onBack, assetsPath }: ContactSe
             <div style={{ padding: '1rem' }}>
                 {submitted ? (
                   /* Success Message */
-                  <div className="text-center py-4">
+                  <div className="text-center py-4 success-message">
                     <div 
                       className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
                       style={{ 
@@ -120,12 +137,12 @@ export default function ContactSection({ domain, onBack, assetsPath }: ContactSe
                         color: '#155724'
                       }}
                     >
-                      <i className="icon-check" style={{ fontSize: '2rem' }} />
+                      <FaCheck style={{ fontSize: '2rem' }} />
                     </div>
-                    <h3 className="h5 fw-bold mb-2" style={{ color: '#155724' }}>
+                    <h3 className="h5 fw-bold mb-2 success-title" style={{ color: '#155724' }}>
                       Message Sent!
                     </h3>
-                    <p className="text-muted mb-3 small">
+                    <p className="text-muted mb-3 small success-text">
                       We'll get back to you soon.
                     </p>
                     <button
@@ -137,8 +154,8 @@ export default function ContactSection({ domain, onBack, assetsPath }: ContactSe
                   </div>
                 ) : (
                   /* Contact Form */
-                  <form onSubmit={handleSubmit}>
-                    <h2 className="h4 fw-bold mb-3">Send us a message</h2>
+                  <form onSubmit={handleSubmit} className="contact-form">
+                    <h2 className="h4 fw-bold mb-3 form-heading">Send us a message</h2>
                     
                     {/* Name Field */}
                     <div className="mb-3">
@@ -225,6 +242,86 @@ export default function ContactSection({ domain, onBack, assetsPath }: ContactSe
           </div>
         </div>
       </div>
+
+      {/* Dark mode styles for contact section */}
+      <style jsx>{`
+        /* Light mode - default color */
+        :global(.contact-info-section) .contact-icon {
+          color: #6c757d !important;
+        }
+        :global(.contact-info-section) .contact-link {
+          color: #6c757d !important;
+        }
+        :global(.contact-info-section) .contact-link:hover {
+          color: #000 !important;
+        }
+        
+        /* Dark mode - Contact Info */
+        :global(.dark-mode) :global(.contact-info-section) .contact-icon {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        :global(.dark-mode) :global(.contact-info-section) .contact-link {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        :global(.dark-mode) :global(.contact-info-section) .contact-link:hover {
+          color: #ffffff !important;
+        }
+        
+        /* Dark mode - Main Heading */
+        :global(.dark-mode) .contact-heading {
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* Dark mode - Description Text */
+        :global(.dark-mode) .contact-description {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* Dark mode - Form Heading */
+        :global(.dark-mode) .form-heading {
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* Dark mode - Success Message */
+        :global(.dark-mode) .success-title {
+          color: #4ade80 !important;
+        }
+        
+        :global(.dark-mode) .success-text {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* Dark mode - Form Inputs */
+        :global(.dark-mode) :global(.contact-form) :global(.form-control) {
+          background-color: rgba(255, 255, 255, 0.05) !important;
+          border-color: rgba(255, 255, 255, 0.2) !important;
+          color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        :global(.dark-mode) :global(.contact-form) :global(.form-control):focus {
+          background-color: rgba(255, 255, 255, 0.08) !important;
+          border-color: rgba(255, 255, 255, 0.4) !important;
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+        
+        /* Dark mode - Placeholders */
+        :global(.dark-mode) :global(.contact-form) :global(.form-control)::placeholder {
+          color: rgba(255, 255, 255, 0.4) !important;
+          opacity: 1;
+        }
+        
+        :global(.dark-mode) :global(.contact-form) :global(.form-control)::-webkit-input-placeholder {
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+        
+        :global(.dark-mode) :global(.contact-form) :global(.form-control)::-moz-placeholder {
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+        
+        :global(.dark-mode) :global(.contact-form) :global(.form-control):-ms-input-placeholder {
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+      `}</style>
     </section>
   );
 }

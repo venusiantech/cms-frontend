@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe } from 'lucide-react';
+import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save } from 'lucide-react';
 import { websitesAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
@@ -27,6 +27,11 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
   const [facebookUrl, setFacebookUrl] = useState(domain.website.facebookUrl || '');
   const [twitterUrl, setTwitterUrl] = useState(domain.website.twitterUrl || '');
   const [isUpdatingSocial, setIsUpdatingSocial] = useState(false);
+
+  // Contact Info State
+  const [contactEmail, setContactEmail] = useState(domain.website.contactEmail || '');
+  const [contactPhone, setContactPhone] = useState(domain.website.contactPhone || '');
+  const [isUpdatingContact, setIsUpdatingContact] = useState(false);
 
   // Metadata State
   const [metaTitle, setMetaTitle] = useState(domain.website.metaTitle || '');
@@ -411,30 +416,106 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Contact Form Setting */}
         {selectedCategory === 'contact' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={domain.website.contactFormEnabled}
-                onChange={async (e) => {
-                  const newValue = e.target.checked;
+          <div className="space-y-6">
+            {/* Toggle Contact Form */}
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={domain.website.contactFormEnabled}
+                  onChange={async (e) => {
+                    const newValue = e.target.checked;
+                    try {
+                      await websitesAPI.updateContactForm(domain.website.id, {
+                        contactFormEnabled: newValue,
+                      });
+                      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+                      toast.success(newValue ? 'Contact form enabled' : 'Contact form disabled');
+                    } catch (error: any) {
+                      toast.error(error.response?.data?.message || 'Failed to update contact form settings');
+                    }
+                  }}
+                  className="w-5 h-5 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900"
+                />
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">Enable Contact Form</p>
+                  <p className="text-sm text-gray-600">Show "Contact Us" link in your website</p>
+                </div>
+              </label>
+            </div>
+
+            {/* Contact Information */}
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="mb-4">
+                <p className="font-semibold text-gray-900 mb-1">Contact Information</p>
+                <p className="text-sm text-gray-600">Add your contact details to display on your website</p>
+              </div>
+
+              <div className="space-y-4">
+                {/* Contact Email */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <Mail size={18} className="text-gray-600" />
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    placeholder="contact@example.com"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                </div>
+
+                {/* Contact Phone */}
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <Phone size={18} className="text-gray-600" />
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="+1 (555) 123-4567"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={async () => {
+                  setIsUpdatingContact(true);
                   try {
-                    await websitesAPI.updateContactForm(domain.website.id, {
-                      contactFormEnabled: newValue,
+                    await websitesAPI.updateContactInfo(domain.website.id, {
+                      contactEmail: contactEmail || undefined,
+                      contactPhone: contactPhone || undefined,
                     });
                     queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
-                    toast.success(newValue ? 'Contact form enabled' : 'Contact form disabled');
+                    toast.success('Contact information updated successfully');
                   } catch (error: any) {
-                    toast.error(error.response?.data?.message || 'Failed to update contact form settings');
+                    toast.error(error.response?.data?.message || 'Failed to update contact information');
+                  } finally {
+                    setIsUpdatingContact(false);
                   }
                 }}
-                className="w-5 h-5 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900"
-              />
-              <div>
-                <p className="font-semibold text-gray-900 mb-1">Enable Contact Form</p>
-                <p className="text-sm text-gray-600">Show "Contact Us" link in your website</p>
-              </div>
-            </label>
+                disabled={isUpdatingContact}
+                className="w-full mt-4 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isUpdatingContact ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save size={18} />
+                    Save Contact Info
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         )}
 

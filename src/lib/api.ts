@@ -74,6 +74,9 @@ export const websitesAPI = {
   // Social Media APIs
   updateSocialMedia: (websiteId: string, data: { instagramUrl?: string; facebookUrl?: string; twitterUrl?: string }) =>
     api.put(`/websites/${websiteId}/social-media`, data),
+  // Contact Info APIs
+  updateContactInfo: (websiteId: string, data: { contactEmail?: string; contactPhone?: string }) =>
+    api.put(`/websites/${websiteId}/contact-info`, data),
 };
 
 export const contentAPI = {
