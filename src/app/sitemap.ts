@@ -12,6 +12,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const host = headersList.get('host') || '';
   const domain = host.split(':')[0]; // Remove port if present
 
+  // Use x-forwarded-proto if set by reverse proxy, otherwise https for real domains
+  const forwardedProto = headersList.get('x-forwarded-proto');
+  const isLocalDomain =
+    domain === 'localhost' ||
+    domain.startsWith('127.0.0.1') ||
+    domain.endsWith('.local');
+  const siteProtocol = forwardedProto || (isLocalDomain ? 'http' : 'https');
+
   // Determine if this is the platform domain
   const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
   const platformDomains = platformDomainsEnv.split(',').map((d) => d.trim());
@@ -27,27 +35,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     (pd) => domain !== pd && domain.endsWith('.' + pd)
   );
 
-  // If it's the main platform domain (not a user site), return empty sitemap
+  // If it's the main platform domain (not a user site), return platform homepage only
   if (isPlatformDomain && !isSubdomainOfPlatform) {
-    return [];
+    return [
+      {
+        url: `${siteProtocol}://${domain}`,
+        lastModified: new Date(),
+        changeFrequency: 'daily',
+        priority: 1,
+      },
+    ];
   }
+
+  const baseUrl = `${siteProtocol}://${domain}`;
+
+  // Minimal fallback sitemap (always valid — ensures no "Missing XML tag" error)
+  const fallbackSitemap: MetadataRoute.Sitemap = [
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1,
+    },
+  ];
 
   // For user websites, generate sitemap with all blog articles
   try {
     const response = await publicAPI.getSiteByDomain(domain);
     const siteData = response.data;
 
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-    
     // Use actual domain name (not subdomain) for sitemap URLs
     const actualDomain = siteData.domain.name; // e.g., "betcricket.com"
-    const baseUrl = `${protocol}://${actualDomain}`;
+    const siteBaseUrl = `${siteProtocol}://${actualDomain}`;
 
     const sitemap: MetadataRoute.Sitemap = [];
 
     // Add homepage
     sitemap.push({
-      url: baseUrl,
+      url: siteBaseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
@@ -55,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Add contact page (available on all websites)
     sitemap.push({
-      url: `${baseUrl}/contact`,
+      url: `${siteBaseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
@@ -74,7 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           const slug = createUniqueSlug(titleBlock.content.text, section.id);
           
           sitemap.push({
-            url: `${baseUrl}/blog/${slug}`,
+            url: `${siteBaseUrl}/blog/${slug}`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.8,
@@ -85,8 +110,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return sitemap;
   } catch (error) {
-    // Return empty sitemap on error
-    return [];
+    // Return minimal sitemap with homepage so Google never sees an empty urlset
+    return fallbackSitemap;
   }
 }
 
