@@ -45,7 +45,7 @@ interface ModernNewsProps {
     name: string;
   };
   articleId?: string; // For direct article page rendering
-  pageType?: 'home' | 'contact' | 'article'; // Type of page to render
+  pageType?: 'home' | 'contact' | 'article' | 'categories'; // Type of page to render
 }
 
 interface Blog {

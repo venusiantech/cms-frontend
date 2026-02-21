@@ -86,6 +86,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     });
 
+    // Add categories page
+    sitemap.push({
+      url: `${siteBaseUrl}/categories`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    });
+
     // Add all blog articles with SEO-friendly slugs
     const homePage = siteData.pages?.find((p: any) => p.slug === '/');
     if (homePage) {
