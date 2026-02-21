@@ -17,7 +17,7 @@ export default function Section1({ featured, trending, onArticleClick }: Section
 
   return (
     <>
-      <div className="section-featured featured-style-1">
+      <div className="section-featured featured-style-1 mb-5">
         <div className="container">
           <div className="row">
             <div className="col-sm-12 col-md-9 col-xl-9">
@@ -148,7 +148,7 @@ export default function Section1({ featured, trending, onArticleClick }: Section
               </div>
             </div>
           </div>
-          <div className="divider" />
+          {/* <div className="divider" />÷ */}
         </div>
       </div>
     </>

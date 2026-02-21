@@ -42,7 +42,7 @@ interface SiteData {
 interface TemplateRendererProps {
   siteData: SiteData;
   articleId?: string; // Optional article ID for individual article pages
-  pageType?: 'home' | 'contact' | 'article'; // Type of page to render
+  pageType?: 'home' | 'contact' | 'article' | 'categories'; // Type of page to render
 }
 
 /**

@@ -24,7 +24,7 @@ export default function Section2({ featuredSlider, onArticleClick }: Section2Pro
 
   return (
     <>
-      <div className="content-widget">
+      <div className="content-widget mb-5">
         <div className="container">
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}

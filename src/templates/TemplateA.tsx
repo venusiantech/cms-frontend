@@ -11,6 +11,7 @@ import HomeSection3 from '@/templates/templateA/components/sections/home/Section
 import HomeSection4 from '@/templates/templateA/components/sections/home/Section4';
 import SingleSection1 from '@/templates/templateA/components/sections/single/Section1';
 import ContactSection from '@/templates/templateA/components/sections/contact/ContactSection';
+import CategoriesSection1 from '@/templates/templateA/components/sections/categories/section1';
 import { createUniqueSlug } from '@/lib/slugify';
 
 // TemplateA styles will be loaded dynamically to avoid affecting other templates
@@ -19,7 +20,8 @@ interface Section {
   id: string;
   type: string;
   order: number;
-  blocks: Array<{ id: string; type: string; content: any }>;
+  createdAt?: string;
+  blocks: Array<{ id: string; type: string; content: any; createdAt?: string }>;
 }
 
 interface PageData {
@@ -46,19 +48,41 @@ interface TemplateAProps {
   };
   domain: { name: string };
   articleId?: string; // For direct article page rendering
-  pageType?: 'home' | 'contact' | 'article'; // Type of page to render
+  pageType?: 'home' | 'contact' | 'article' | 'categories'; // Type of page to render
 }
 
 const PLACEHOLDER_IMAGE = 'https://placehold.co/800x400/e5e5e5/737373?text=Article';
 const ASSETS = '/templateA/assets';
+
+/** Strip markdown syntax and return clean plain text capped at maxLen chars */
+function stripMarkdown(text: string, maxLen = 220): string {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')       // headings
+    .replace(/\*\*(.+?)\*\*/g, '$1')   // bold
+    .replace(/\*(.+?)\*/g, '$1')       // italic
+    .replace(/~~(.+?)~~/g, '$1')       // strikethrough
+    .replace(/`{1,3}[^`]*`{1,3}/g, '') // inline code / code blocks
+    .replace(/!\[.*?\]\(.*?\)/g, '')   // images
+    .replace(/\[(.+?)\]\(.*?\)/g, '$1') // links → keep text
+    .replace(/^[-*_]{3,}\s*$/gm, '')   // horizontal rules
+    .replace(/^>\s+/gm, '')            // blockquotes
+    .replace(/^[-*+]\s+/gm, '')        // unordered list bullets
+    .replace(/^\d+\.\s+/gm, '')        // ordered list numbers
+    .replace(/\n{2,}/g, ' ')           // collapse newlines
+    .replace(/\n/g, ' ')
+    .trim()
+    .substring(0, maxLen)
+    .replace(/\s+\S*$/, '') + '…';    // trim at word boundary
+}
 
 function blogsFromPage(
   page: PageData,
   domainName: string
 ): Array<{ sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string }> {
   const contentSections = page.sections.filter((s) => s.type === 'content');
-  const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   return contentSections.map((section) => {
+    const sectionDate = section.createdAt ? new Date(section.createdAt) : new Date();
+    const dateStr = sectionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     let titleBlock = section.blocks.find((b) => b.type === 'text' && b.content?.isTitle);
     let contentBlock = section.blocks.find((b) => b.type === 'text' && b.content?.isFullContent);
     let previewBlock = section.blocks.find((b) => b.type === 'text' && b.content?.isPreview);
@@ -82,7 +106,8 @@ function blogsFromPage(
     title = title.replace(/^["']|["']$/g, '').trim();
     
     const content = contentBlock?.content?.text || previewBlock?.content?.text || '';
-    const preview = previewBlock?.content?.text || content?.substring(0, 300) + '...' || '';
+    const rawPreview = previewBlock?.content?.text || content?.substring(0, 400) || '';
+    const preview = stripMarkdown(rawPreview);
     const image = imageBlock?.content?.url || PLACEHOLDER_IMAGE;
     const readTime = `${Math.max(1, Math.ceil(content.length / 1000))} min read`;
     const slug = createUniqueSlug(title, section.id); // Generate SEO-friendly slug
@@ -123,7 +148,8 @@ function mapPageToTemplateAData(page: PageData, domain: { name: string }): Templ
   const main = articles[0];
   const side = articles.slice(1, 4);
   const trendingList = articles.slice(0, 5).map((a, i) => ({ ...a, number: String(i + 1).padStart(2, '0') }));
-  const sliderList = articles.slice(0, 5);
+  // const trendingList = articles.map((a, i) => ({ ...a, number: String(i + 1).padStart(2, '0') }));
+  const sliderList = articles.slice(0, 3);
   const todayList = articles.slice(0, 4);
   const mostRecentMain = articles.slice(0, 3).map((a, i) => ({ ...a, tag: i === 0 ? "Editors' Pick" : 'Article' }));
   const mostRecentSide = articles.slice(3, 7);
@@ -311,6 +337,29 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   // Render content with fade-in animation
   const renderContent = () => {
+    // Categories Page
+    if (pageType === 'categories') {
+      return (
+        <Layout
+          classLisst="home"
+          siteName={siteDisplay}
+          assetsPath={ASSETS}
+          instagramUrl={website.instagramUrl}
+          facebookUrl={website.facebookUrl}
+          twitterUrl={website.twitterUrl}
+          contactEmail={website.contactEmail}
+          contactPhone={website.contactPhone}
+          onContactClick={handleContactClick}
+        >
+          <CategoriesSection1
+            articles={blogsWithContent}
+            siteTitle="All Articles"
+            onArticleClick={onArticleClick}
+          />
+        </Layout>
+      );
+    }
+
     // Contact Form Page
     if (showContactForm) {
       return (
@@ -379,8 +428,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           onArticleClick={onArticleClick}
         />
         <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
-        {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} />
-        <HomeSection4 mostRecent={blogData.mostRecent} onArticleClick={onArticleClick} /> */}
+        {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} /> */}
+        <HomeSection4 mostRecent={blogData.mostRecent} onArticleClick={onArticleClick} />
       </Layout>
     );
   };

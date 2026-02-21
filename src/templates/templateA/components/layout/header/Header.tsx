@@ -28,7 +28,7 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
   };
   return (
     <>
-      <header id="header" className="d-lg-block d-none py-4">
+      <header id="header" className="d-lg-block d-none">
         <div className="container">
           <div className="align-items-center w-100">
             <h1 className="logo float-start navbar-brand">
@@ -87,14 +87,14 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
           </div>
           <div className="clearfix" />
         </div>
-        {/* <nav id="main-menu" className={`stick d-lg-block d-none ${scroll ? "scroll-to-fixed-fixed top-0 position-fixed w-100" : ""}`}>
+        <nav id="main-menu" className={`stick d-lg-block d-none ${scroll ? "scroll-to-fixed-fixed top-0 position-fixed w-100" : ""}`}>
           <div className="container">
             <div className="menu-primary">
-              <ul className="d-flex justify-content-between">
+              <ul className="d-flex justify-content-center mr-auto" style={{ gap: '2rem' }}>
                 <li className="current-menu-item">
                   <Link href="/">Home</Link>
                 </li>
-                <li className="menu-item-has-children">
+                {/* <li className="menu-item-has-children">
                   <Link href="/categories">Categories</Link>
                   <ul className="sub-menu">
                     <li>
@@ -107,11 +107,11 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
                       <Link href="/categories">Design</Link>
                     </li>
                   </ul>
-                </li>
+                </li> */}
                 <li>
-                  <Link href="/typography">Typography</Link>
+                  <Link href="/categories">Categories</Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link href="/categories">Politics</Link>
                 </li>
                 <li>
@@ -128,8 +128,8 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
                 </li>
                 <li>
                   <Link href="/contact">Contact</Link>
-                </li>
-                <li className="menu-item-has-children">
+                </li> */}
+                {/* <li className="menu-item-has-children">
                   <Link href="#">More...</Link>
                   <ul className="sub-menu">
                     <li>
@@ -142,12 +142,12 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
                       <Link href="/404">404</Link>
                     </li>
                   </ul>
-                </li>
+                </li> */}
               </ul>
               <span />
             </div>
           </div>
-        </nav> */}
+        </nav>
       </header>
     </>
   );
