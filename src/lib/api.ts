@@ -81,6 +81,20 @@ export const websitesAPI = {
   // Google Analytics API
   updateGoogleAnalytics: (websiteId: string, data: { googleAnalyticsId?: string }) =>
     api.put(`/websites/${websiteId}/google-analytics`, data),
+
+  // Logo display mode
+  updateLogoDisplayMode: (websiteId: string, logoDisplayMode: 'logo_only' | 'text_only' | 'both') =>
+    api.put(`/websites/${websiteId}/logo-display-mode`, { logoDisplayMode }),
+
+  // Logo APIs
+  uploadLogo: (websiteId: string, file: File) => {
+    const formData = new FormData();
+    formData.append('logo', file);
+    return api.post(`/websites/${websiteId}/logo`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  deleteLogo: (websiteId: string) => api.delete(`/websites/${websiteId}/logo`),
 };
 
 export const contentAPI = {

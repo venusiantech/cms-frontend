@@ -10,6 +10,8 @@ interface LayoutProps {
   children?: React.ReactNode;
   classLisst?: string;
   siteName?: string;
+  logoUrl?: string | null;
+  logoDisplayMode?: string | null;
   assetsPath?: string;
   instagramUrl?: string | null;
   facebookUrl?: string | null;
@@ -19,7 +21,7 @@ interface LayoutProps {
   onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Layout({ classLisst, children, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick }: LayoutProps) {
+export default function Layout({ classLisst, children, siteName = 'Site', logoUrl, logoDisplayMode, assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick }: LayoutProps) {
   const [scroll, setScroll] = useState<boolean>(false);
   // Mobile Menu
   const [isMobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -58,7 +60,9 @@ export default function Layout({ classLisst, children, siteName = 'Site', assets
         <div id="wrapper">
           <Header 
             scroll={scroll} 
-            siteName={siteName} 
+            siteName={siteName}
+            logoUrl={logoUrl}
+            logoDisplayMode={logoDisplayMode}
             assetsPath={assetsPath}
             instagramUrl={instagramUrl}
             facebookUrl={facebookUrl}

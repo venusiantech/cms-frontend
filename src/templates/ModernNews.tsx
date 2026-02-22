@@ -40,6 +40,8 @@ interface ModernNewsProps {
     facebookUrl?: string | null;
     twitterUrl?: string | null;
     googleAnalyticsId?: string | null;
+    websiteLogo?: string | null;
+    logoDisplayMode?: string | null;
   };
   domain: {
     name: string;
@@ -211,7 +213,9 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
       <div className="min-h-screen bg-gray-50">
         {/* Header - Always visible, no skeleton */}
         <Header 
-          domain={domain} 
+          domain={domain}
+          logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
           onContactClick={website.contactFormEnabled ? () => setShowContactForm(true) : undefined} 
         />
 
@@ -577,7 +581,7 @@ function FullArticleView({ blog, domain, website }: { blog: Blog; domain: { name
   );
 }
 
-function Header({ domain, onContactClick }: { domain: { name: string }; onContactClick?: () => void }) {
+function Header({ domain, logoUrl, logoDisplayMode = 'logo_only', onContactClick }: { domain: { name: string }; logoUrl?: string | null; logoDisplayMode?: string | null; onContactClick?: () => void }) {
   const domainName = domain.name.split('.')[0].toUpperCase();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -648,26 +652,48 @@ function Header({ domain, onContactClick }: { domain: { name: string }; onContac
         }}
       >
         <div className="flex justify-center">
-          <a 
+          <a
             href="/"
-            className="text-center cursor-pointer group"
+            className="cursor-pointer group flex flex-col items-center"
           >
-            <h1 
-              className="font-serif font-bold text-gray-900 group-hover:text-blue-600 transition-all duration-500 ease-in-out"
-              style={{
-                fontSize: isScrolled ? '1.5rem' : '2.5rem',
-                lineHeight: isScrolled ? '2rem' : '1',
-              }}
-            >
-              {domainName}
-            </h1>
-            <div 
-              className="bg-gradient-to-r from-blue-600 to-red-600 group-hover:from-blue-700 group-hover:to-red-700 transition-all duration-500 ease-in-out"
-              style={{
-                height: isScrolled ? '2px' : '3px',
-                marginTop: isScrolled ? '0.25rem' : '0.375rem',
-              }}
-            ></div>
+            <div className="flex items-center gap-3">
+              {/* Logo image */}
+              {logoUrl && logoDisplayMode !== 'text_only' && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={logoUrl}
+                  alt={domainName}
+                  className="object-contain transition-all duration-500 ease-in-out"
+                  style={{
+                    maxHeight: isScrolled ? '36px' : '60px',
+                    width: 'auto',
+                    maxWidth: '260px',
+                  }}
+                />
+              )}
+              {/* Text */}
+              {(logoDisplayMode === 'text_only' || logoDisplayMode === 'both' || !logoUrl) && (
+                <h1
+                  className="font-serif font-bold text-gray-900 group-hover:text-blue-600 transition-all duration-500 ease-in-out"
+                  style={{
+                    fontSize: isScrolled ? '1.5rem' : '2.5rem',
+                    lineHeight: isScrolled ? '2rem' : '1',
+                  }}
+                >
+                  {domainName}
+                </h1>
+              )}
+            </div>
+            {/* Underline bar — only when text is visible */}
+            {(logoDisplayMode === 'text_only' || logoDisplayMode === 'both' || !logoUrl) && (
+              <div
+                className="bg-gradient-to-r from-blue-600 to-red-600 group-hover:from-blue-700 group-hover:to-red-700 transition-all duration-500 ease-in-out w-full"
+                style={{
+                  height: isScrolled ? '2px' : '3px',
+                  marginTop: isScrolled ? '0.25rem' : '0.375rem',
+                }}
+              />
+            )}
           </a>
         </div>
       </div>

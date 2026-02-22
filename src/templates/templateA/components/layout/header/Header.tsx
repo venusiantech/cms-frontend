@@ -6,6 +6,8 @@ import Image from 'next/image';
 interface HeaderProps {
   scroll?: boolean;
   siteName?: string;
+  logoUrl?: string | null;
+  logoDisplayMode?: string | null;
   assetsPath?: string;
   instagramUrl?: string | null;
   facebookUrl?: string | null;
@@ -13,7 +15,7 @@ interface HeaderProps {
   onContactClick?: () => void; // Optional contact click handler
 }
 
-export default function Header({ scroll, siteName = 'Site', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: HeaderProps) {
+export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplayMode = 'logo_only', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: HeaderProps) {
   const [isSearch, setIsSearch] = useState<number | null>(null);
 
   const handleSearch = (key: number) => {
@@ -32,8 +34,20 @@ export default function Header({ scroll, siteName = 'Site', assetsPath = '/templ
         <div className="container">
           <div className="align-items-center w-100">
             <h1 className="logo float-start navbar-brand">
-              <Link href="/" className="logo">
-                {siteName}
+              <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                {logoUrl && logoDisplayMode !== 'text_only' && (
+                  <Image
+                    src={logoUrl}
+                    alt={siteName}
+                    width={160}
+                    height={50}
+                    unoptimized
+                    style={{ objectFit: 'contain', maxHeight: '50px', width: 'auto' }}
+                  />
+                )}
+                {(logoDisplayMode === 'text_only' || logoDisplayMode === 'both' || !logoUrl) && (
+                  <span>{siteName}</span>
+                )}
               </Link>
             </h1>
             <div className="header-right float-end w-50">

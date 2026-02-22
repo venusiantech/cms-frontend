@@ -26,6 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
     const keywords = siteData.website.metaKeywords || `${siteName}, blog, news, articles`;
     const author = siteData.website.metaAuthor || siteName;
 
+    const favicon = siteData.website.websiteLogo;
+
     return {
       title,
       description,
@@ -33,6 +35,12 @@ export async function generateMetadata(): Promise<Metadata> {
       authors: [{ name: author }],
       creator: author,
       publisher: author,
+      ...(favicon && {
+        icons: {
+          icon: favicon,
+          apple: favicon,
+        },
+      }),
       openGraph: {
         title,
         description,

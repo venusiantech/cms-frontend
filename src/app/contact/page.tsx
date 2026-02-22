@@ -19,9 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
     const domainName = siteData.domain.name.split('.')[0];
     const siteName = domainName.charAt(0).toUpperCase() + domainName.slice(1);
     
+    const favicon = siteData.website.websiteLogo;
+
     return {
       title: `Contact Us - ${siteName}`,
       description: `Get in touch with ${siteName}. We'd love to hear from you.`,
+      ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
         title: `Contact Us - ${siteName}`,
         description: `Get in touch with ${siteName}. We'd love to hear from you.`,

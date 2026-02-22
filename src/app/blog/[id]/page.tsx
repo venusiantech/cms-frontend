@@ -52,10 +52,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const domainName = siteData.domain.name.split('.')[0];
     const siteName = domainName.charAt(0).toUpperCase() + domainName.slice(1);
+    const favicon = siteData.website.websiteLogo;
 
     return {
       title: `${article.title} - ${siteName}`,
       description: article.preview || article.content?.substring(0, 160),
+      ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
         title: article.title,
         description: article.preview || article.content?.substring(0, 160),

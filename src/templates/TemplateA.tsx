@@ -45,6 +45,8 @@ interface TemplateAProps {
     contactEmail?: string | null;
     contactPhone?: string | null;
     googleAnalyticsId?: string | null;
+    websiteLogo?: string | null;
+    logoDisplayMode?: string | null;
   };
   domain: { name: string };
   articleId?: string; // For direct article page rendering
@@ -343,6 +345,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
         <Layout
           classLisst="home"
           siteName={siteDisplay}
+          logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
           assetsPath={ASSETS}
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
@@ -365,7 +369,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       return (
         <Layout 
           classLisst="single" 
-          siteName={siteDisplay} 
+          siteName={siteDisplay}
+          logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
           assetsPath={ASSETS}
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
@@ -389,7 +395,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       return (
         <Layout 
           classLisst="single" 
-          siteName={siteDisplay} 
+          siteName={siteDisplay}
+          logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
           assetsPath={ASSETS}
           instagramUrl={website.instagramUrl}
           facebookUrl={website.facebookUrl}
@@ -413,7 +421,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
     return (
       <Layout 
         classLisst="home" 
-        siteName={siteDisplay} 
+        siteName={siteDisplay}
+        logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
         assetsPath={ASSETS}
         instagramUrl={website.instagramUrl}
         facebookUrl={website.facebookUrl}

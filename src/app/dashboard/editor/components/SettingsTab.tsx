@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save, BarChart3 } from 'lucide-react';
+import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save, BarChart3, ImageIcon, Trash2, Upload } from 'lucide-react';
 import { websitesAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
@@ -13,10 +13,20 @@ interface SettingsTabProps {
   queryClient: any;
 }
 
-type SettingCategory = 'templates' | 'ads' | 'contact' | 'social' | 'metadata' | 'analytics' | null;
+type SettingCategory = 'templates' | 'ads' | 'contact' | 'social' | 'metadata' | 'analytics' | 'logo' | null;
 
 export default function SettingsTab({ domain, domainId, queryClient }: SettingsTabProps) {
   const [selectedCategory, setSelectedCategory] = useState<SettingCategory>(null);
+
+  // Logo state
+  const [logoPreview, setLogoPreview] = useState<string | null>(domain.website.websiteLogo || null);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const [isDeletingLogo, setIsDeletingLogo] = useState(false);
+  const [logoDisplayMode, setLogoDisplayMode] = useState<'logo_only' | 'text_only' | 'both'>(
+    domain.website.logoDisplayMode || 'logo_only'
+  );
+  const [isSavingMode, setIsSavingMode] = useState(false);
+  const logoInputRef = useRef<HTMLInputElement>(null);
   const [selectedTemplate, setSelectedTemplate] = useState(domain.website.templateKey);
   const [isUpdatingTemplate, setIsUpdatingTemplate] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
@@ -45,7 +55,44 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState(domain.website.googleAnalyticsId || '');
   const [isUpdatingAnalytics, setIsUpdatingAnalytics] = useState(false);
 
+  const handleLogoUpload = async (file: File) => {
+    if (!file) return;
+    setIsUploadingLogo(true);
+    try {
+      const res = await websitesAPI.uploadLogo(domain.website.id, file);
+      const newUrl = res.data.websiteLogo;
+      setLogoPreview(newUrl);
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      toast.success('Logo uploaded successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to upload logo');
+    } finally {
+      setIsUploadingLogo(false);
+    }
+  };
+
+  const handleLogoDelete = async () => {
+    setIsDeletingLogo(true);
+    try {
+      await websitesAPI.deleteLogo(domain.website.id);
+      setLogoPreview(null);
+      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+      toast.success('Logo removed successfully');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to remove logo');
+    } finally {
+      setIsDeletingLogo(false);
+    }
+  };
+
   const settingCategories = [
+    {
+      id: 'logo' as SettingCategory,
+      name: 'Logo',
+      description: 'Upload your website logo',
+      icon: ImageIcon,
+      color: 'bg-gray-100 text-[#111827]',
+    },
     {
       id: 'templates' as SettingCategory,
       name: 'Templates',
@@ -199,6 +246,146 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
       </button>
 
       <div className="">
+        {/* Logo Upload */}
+        {selectedCategory === 'logo' && (
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Website Logo</h3>
+              <p className="text-sm text-gray-600">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5">
+              {/* Current logo preview */}
+              {logoPreview ? (
+                <div className="flex flex-col items-center gap-4">
+                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 w-full flex items-center justify-center" style={{ minHeight: '120px' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={logoPreview}
+                      alt="Website logo"
+                      className="max-h-24 max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="flex gap-3 w-full">
+                    <button
+                      onClick={() => logoInputRef.current?.click()}
+                      disabled={isUploadingLogo}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50"
+                    >
+                      {isUploadingLogo ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                      Replace Logo
+                    </button>
+                    <button
+                      onClick={handleLogoDelete}
+                      disabled={isDeletingLogo}
+                      className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium disabled:opacity-50"
+                    >
+                      {isDeletingLogo ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  onClick={() => logoInputRef.current?.click()}
+                  className="border-2 border-dashed border-gray-300 rounded-xl p-10 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-gray-500 hover:bg-gray-50 transition-all"
+                >
+                  {isUploadingLogo ? (
+                    <>
+                      <Loader2 size={32} className="animate-spin text-gray-400" />
+                      <p className="text-sm text-gray-500">Uploading...</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center">
+                        <ImageIcon size={24} className="text-gray-400" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-semibold text-gray-700">Click to upload logo</p>
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Hidden file input */}
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    handleLogoUpload(file);
+                    e.target.value = '';
+                  }
+                }}
+              />
+
+              {/* Display mode radio buttons */}
+              <div className="border-t border-gray-200 pt-4">
+                <p className="text-sm font-semibold text-gray-900 mb-3">Header Display</p>
+                <div className="space-y-2">
+                  {([
+                    { value: 'logo_only', label: 'Logo only', desc: 'Show only the logo image' },
+                    { value: 'text_only', label: 'Text only', desc: 'Show only the site name text' },
+                    { value: 'both',      label: 'Both',      desc: 'Show logo and site name together' },
+                  ] as const).map((opt) => (
+                    <label
+                      key={opt.value}
+                      className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                        logoDisplayMode === opt.value
+                          ? 'border-gray-900 bg-gray-50'
+                          : 'border-gray-200 hover:border-gray-400'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="logoDisplayMode"
+                        value={opt.value}
+                        checked={logoDisplayMode === opt.value}
+                        onChange={() => setLogoDisplayMode(opt.value)}
+                        className="mt-0.5 accent-gray-900"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{opt.label}</p>
+                        <p className="text-xs text-gray-500">{opt.desc}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+                <button
+                  onClick={async () => {
+                    setIsSavingMode(true);
+                    try {
+                      await websitesAPI.updateLogoDisplayMode(domain.website.id, logoDisplayMode);
+                      queryClient.invalidateQueries({ queryKey: ['domain', domainId] });
+                      toast.success('Display mode updated!');
+                    } catch (error: any) {
+                      toast.error(error.response?.data?.message || 'Failed to update display mode');
+                    } finally {
+                      setIsSavingMode(false);
+                    }
+                  }}
+                  disabled={isSavingMode}
+                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSavingMode ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                  {isSavingMode ? 'Saving...' : 'Save Display Mode'}
+                </button>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs text-blue-800">
+                  💡 <strong>Tip:</strong> Use a transparent PNG or SVG for the best results. Recommended dimensions: at least 200px wide, up to 400px.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Template Selection */}
         {selectedCategory === 'templates' && (
           <>

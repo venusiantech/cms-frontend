@@ -18,6 +18,8 @@ interface SiteData {
     instagramUrl?: string | null;
     facebookUrl?: string | null;
     twitterUrl?: string | null;
+    websiteLogo?: string | null;
+    logoDisplayMode?: string | null;
   };
   pages: Array<{
     id: string;
