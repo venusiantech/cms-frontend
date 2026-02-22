@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, ExternalLink, Clock, Copy, Rocket, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
+import { CheckCircle2, ExternalLink, Clock, Copy, Rocket, AlertCircle, Loader2, RefreshCw, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI } from '@/lib/api';
@@ -22,6 +22,7 @@ const getSiteUrl = (subdomain: string) => {
 export default function DeploymentTab({ domain }: DeploymentTabProps) {
   const queryClient = useQueryClient();
   const [isDeploying, setIsDeploying] = useState(false);
+  const [dnsCheckResult, setDnsCheckResult] = useState<{ status: string; autoDeployed?: boolean } | null>(null);
 
   const deployWorkersMutation = useMutation({
     mutationFn: () => domainsAPI.deployWorkers(domain.id),
@@ -41,6 +42,23 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
     onError: (error: any) => {
       setIsDeploying(false);
       toast.error(error.response?.data?.message || 'Failed to deploy DNS records', { id: 'deploy-workers' });
+    },
+  });
+
+  const checkDnsMutation = useMutation({
+    mutationFn: () => domainsAPI.checkDnsStatus(domain.id),
+    onSuccess: (response) => {
+      const { nameServersStatus, autoDeployed } = response.data;
+      setDnsCheckResult({ status: nameServersStatus, autoDeployed });
+      if (nameServersStatus === 'active') {
+        toast.success(autoDeployed ? 'DNS is active! Workers auto-deployed 🎉' : 'DNS is active and pointing correctly ✅');
+      } else {
+        toast('DNS not yet active. Changes can take 24-48 hours to propagate.', { icon: '⏳' });
+      }
+      queryClient.invalidateQueries({ queryKey: ['domain', domain.id] });
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Failed to check DNS status');
     },
   });
 
@@ -151,8 +169,29 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   </p>
                 </div>
 
-                {/* Deploy Worker Domains Button - Only show when DNS is active */}
-                {domain.nameServersStatus === 'active' && (
+                {/* Check DNS button - always visible when nameservers exist */}
+                <div className="mt-3">
+                  <button
+                    onClick={() => checkDnsMutation.mutate()}
+                    disabled={checkDnsMutation.isPending}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {checkDnsMutation.isPending ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : (
+                      <Search size={12} />
+                    )}
+                    {checkDnsMutation.isPending ? 'Checking...' : 'Check DNS Status'}
+                  </button>
+                  {dnsCheckResult && (
+                    <p className={`text-xs mt-1.5 font-medium ${dnsCheckResult.status === 'active' ? 'text-green-600' : 'text-yellow-600'}`}>
+                      {dnsCheckResult.status === 'active' ? '🟢 DNS is pointing correctly ' : '⏳ DNS not yet active'}
+                    </p>
+                  )}
+                </div>
+
+                {/* Deploy Worker Domains Button - Show when workers not yet deployed */}
+                {!domain.workersDeployed && (
                   <div className="mt-4 pt-4 border-t border-gray-200">
                     <button
                       onClick={() => deployWorkersMutation.mutate()}
@@ -164,6 +203,16 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                     </button>
                     <p className="text-xs text-gray-500 mt-2 text-center">
                       Configures both {domain.domainName} and www.{domain.domainName}
+                    </p>
+                  </div>
+                )}
+
+                {/* Deployed indicator */}
+                {domain.workersDeployed && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-green-600 flex-shrink-0" />
+                    <p className="text-xs text-green-700 font-medium">
+                      DNS records are configured and pointing to your website
                     </p>
                   </div>
                 )}
