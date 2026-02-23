@@ -41,7 +41,7 @@ export default function LandingPage() {
                                         alt="Fastofy Logo"
                                         className="w-18 h-20"
                                     />
-                                    <span className="text-2xl font-bold tracking-tight">
+                                    <span className="text-2xl tracking-tight">
                                         <span className="text-white">FASTOFY</span>
                                     </span>
                                 </div>
