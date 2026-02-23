@@ -6,7 +6,7 @@ import { Providers } from '@/components/providers/Providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Jaal CMS',
+  title: 'FASTOFY',
   description: 'Multi-tenant domain CMS with AI-generated content',
 };
 

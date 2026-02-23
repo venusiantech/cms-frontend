@@ -964,8 +964,7 @@ export default function LandingPage() {
                             </div>
                             <div className="mt-12 border-t border-[rgba(255,255,255,0.1)] pt-8">
                                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                                    <p className="text-sm text-[rgb(161,161,170)]">© 2024 FASTOFY.com. All rights reserved.</p>
-                                    <p className="text-sm text-[rgb(161,161,170)]">Made with 💚 for domain investors worldwide</p>
+                                    <p className="text-sm text-[rgb(161,161,170)]">© {new Date().getFullYear()} FASTOFY.com. All rights reserved.</p>
                                 </div>
                             </div>
                         </div>

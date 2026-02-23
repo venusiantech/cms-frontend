@@ -99,7 +99,7 @@ export default function DashboardLayout({
                 alt="Fastofy Logo"
                 className="w-18 h-20"
               />
-              <span className="text-2xl font-bold tracking-tight">
+              <span className="text-2xl font- tracking-tight">
                 <span className="text-black">FASTOFY</span>
               </span>
             </div>

@@ -110,7 +110,7 @@ export default async function PublicSitePage() {
       <LandingPage />
       // <div className="min-h-screen flex items-center justify-center bg-gray-100">
       //   <div className="text-center">
-      //     <h1 className="text-4xl font-bold mb-4">Jaal CMS</h1>
+      //     <h1 className="text-4xl font-bold mb-4">FASTOFY</h1>
       //     <p className="text-gray-600 mb-8">Multi-tenant website management</p>
       //     <a href="/dashboard" className="btn-primary">
       //       Go to Dashboard
