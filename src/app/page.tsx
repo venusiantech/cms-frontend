@@ -59,8 +59,8 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: 'Website',
-      description: 'Discover amazing content',
+      title: 'Fastofy',
+      description: 'Multi-tenant domain CMS with AI-generated content',
     };
   }
 }
