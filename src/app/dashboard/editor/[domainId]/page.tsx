@@ -17,7 +17,7 @@ function getSiteUrl(subdomain: string): string {
   const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
   
   if (isProduction) {
-    return `https://${subdomain}.jaal.com`;
+    return `https://${subdomain}.fastofy.com`;
   }
   return `http://${subdomain}.local:3000`;
 }
@@ -29,7 +29,7 @@ function getDisplaySubdomain(subdomain: string): string {
   const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
   
   if (isProduction) {
-    return `${subdomain}.jaal.com`;
+    return `${subdomain}.fastofy.com`;
   }
   return `${subdomain}.local`;
 }

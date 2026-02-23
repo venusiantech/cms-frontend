@@ -19,7 +19,7 @@ export default function DashboardLayout({
   const { isAuthenticated, logout, user } = useAuthStore();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+
   // Check if we're on the editor page (no padding needed)
   const isEditorPage = pathname?.includes('/dashboard/editor/');
 
@@ -92,15 +92,17 @@ export default function DashboardLayout({
       <nav className="bg-white border-b border-gray-100">
         <div className="px-4 sm:px-8 lg:px-16 xl:px-24 h-16 sm:h-20 flex items-center justify-between">
           {/* Left: Logo */}
-          <Link href="/dashboard" className="flex items-center group">
-            <Image 
-              src="/templateA/assets/images/jaal.png" 
-              alt="Jaal Logo" 
-              width={220}
-              height={80}
-              priority
-              className="h-24 sm:h-32 w-auto group-hover:scale-105 transition-transform duration-200"
-            />
+          <Link href="/" className="flex items-center group">
+            <div className="flex items-center">
+              <img
+                src="/logo/fastofy.png"
+                alt="Fastofy Logo"
+                className="w-18 h-20"
+              />
+              <span className="text-2xl font-bold tracking-tight">
+                <span className="text-black">FASTOFY</span>
+              </span>
+            </div>
           </Link>
 
           {/* Right: User Avatar & Menu */}
@@ -118,8 +120,8 @@ export default function DashboardLayout({
             {/* Dropdown Menu */}
             {showUserMenu && (
               <>
-                <div 
-                  className="fixed inset-0 z-40" 
+                <div
+                  className="fixed inset-0 z-40"
                   onClick={() => setShowUserMenu(false)}
                 />
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50 animate-in fade-in zoom-in duration-200">
