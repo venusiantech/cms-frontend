@@ -13,6 +13,20 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = headersList.get('host') || '';
   const domain = host.split(':')[0];
 
+  // Determine if this is the main platform domain (not a user subdomain)
+  const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
+  const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
+
+  const isPlatformDomain =
+    domain === 'localhost' ||
+    domain.startsWith('127.0.0.1') ||
+    platformDomains.includes(domain) || // Exact match only
+    domain === 'cms.local';
+
+  const isSubdomainOfPlatform = platformDomains.some(
+    (pd) => domain !== pd && domain.endsWith('.' + pd)
+  );
+
   try {
     const response = await publicAPI.getSiteByDomain(domain);
     const siteData = response.data;
@@ -27,7 +41,12 @@ export async function generateMetadata(): Promise<Metadata> {
     const keywords = siteData.website.metaKeywords || `${siteName}, blog, news, articles`;
     const author = siteData.website.metaAuthor || siteName;
 
-    const favicon = siteData.website.websiteLogo;
+    // For main platform domains (e.g. fastofy.com), always use the default favicon.
+    // For user sites (subdomains), use their custom website logo as favicon if available.
+    const favicon =
+      isPlatformDomain && !isSubdomainOfPlatform
+        ? '/logo/favicon.ico'
+        : siteData.website.websiteLogo;
 
     return {
       title,
@@ -58,9 +77,18 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     };
   } catch (error) {
+    // On error, still ensure the main platform domain uses the default favicon
+    const isMainPlatformDomain = isPlatformDomain && !isSubdomainOfPlatform;
+
     return {
       title: 'Fastofy',
       description: 'Multi-tenant domain CMS with AI-generated content',
+      ...(isMainPlatformDomain && {
+        icons: {
+          icon: '/logo/favicon.ico',
+          apple: '/logo/favicon.ico',
+        },
+      }),
     };
   }
 }

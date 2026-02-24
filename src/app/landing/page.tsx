@@ -11,8 +11,42 @@ const NAV_LINKS = [
     { id: "contact", label: "Contact" },
 ] as const;
 
+const FAQ_ITEMS = [
+    {
+        question: "What exactly do I get for free?",
+        answer:
+            "You get a complete professional website for one domain including: custom design, AI-generated content (5-7 pages), SEO optimization, mobile responsiveness, SSL security, and 1 year of hosting - completely free. No credit card required to start.",
+    },
+    {
+        question: "How long does it take to set up my website?",
+        answer:
+            "Most websites are ready in 5-10 minutes. Our AI analyzes your domain, generates relevant content, creates a professional design, and sets up hosting automatically. You can review and customize before going live.",
+    },
+    {
+        question: "Do I need technical skills or coding knowledge?",
+        answer:
+            "Not at all! FASTOFY is designed for everyone. Just sign up with your email, add your domain name, and we handle everything else. No coding, no design skills, no technical knowledge needed.",
+    },
+    {
+        question: "Can I customize my website after it's created?",
+        answer:
+            "Yes! You can edit content, change colors, upload images, and modify layouts through our easy-to-use dashboard. Make it truly yours with simple point-and-click customization.",
+    },
+    {
+        question: "What happens after the first year of free hosting?",
+        answer:
+            "After your first year, you can continue with our affordable hosting plans starting at $9.99/month, or you can export your website and host it anywhere you like. You always own your content and design.",
+    },
+    {
+        question: "Can I use FASTOFY for any type of website?",
+        answer:
+            "Yes! FASTOFY works great for business websites, portfolios, blogs, landing pages, personal websites, e-commerce showcases, and more. Our AI adapts the design and content to match your domain's purpose.",
+    },
+] as const;
+
 export default function LandingPage() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
     const handleNavClick = (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
         e.preventDefault();
@@ -158,10 +192,9 @@ export default function LandingPage() {
                     </section>
                     <section id="about" className="bg-[rgb(26,28,30)] py-20">
                         <div className="container mx-auto px-6">
-                            <div className="max-w-4xl">
-                                <h2 className="mb-6 text-4xl font-bold md:text-4xl">About</h2>
-                                <p className="mb-8 text-lg leading-relaxed text-[rgb(218,218,218)]">We believe everyone with a domain deserves a professional website. Whether you're a small business owner, freelancer, blogger, entrepreneur, or domain investor - FASTOFY makes it effortless to launch a fully functional website in minutes.</p>
-                                <p className="text-lg leading-relaxed text-[rgb(218,218,218)]">Using AI and automation, we create beautiful, SEO-optimized websites with relevant content tailored to your domain. No technical skills required. Just sign up, and your website is live with powerful features like live chat, lead generation, drip content, and monetization tools built right in.</p>
+                            <div className="mb-16 max-w-6xl mx-auto text-center">
+                                <h2 className="mb-4 text-4xl font-bold md:text-5xl">About</h2>
+                                <p className="mb-8 text-lg leading-relaxed text-[rgb(218,218,218)]">FASTOFY turns any domain into a professional, SEO-ready website in minutes—powered by AI, zero tech skills needed, with built-in chat, leads, content, and monetization.</p>
                             </div>
                             <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
                                 <div className="rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
@@ -760,45 +793,56 @@ export default function LandingPage() {
                         <div className="container mx-auto px-6">
                             <div className="mb-16 text-center">
                                 <h2 className="mb-4 text-4xl font-bold md:text-5xl">Frequently Asked Questions</h2>
-                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Everything you need to know about FASTOFY.com</p>
+                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">
+                                    Everything you need to know about FASTOFY.com
+                                </p>
                             </div>
                             <div className="mx-auto max-w-3xl space-y-4">
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">What exactly do I get for free?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">You get a complete professional website for one domain including: custom design, AI-generated content (5-7 pages), SEO optimization, mobile responsiveness, SSL security, and 1 year of hosting - completely free. No credit card required to start.</div></div>
-                                </div>
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">How long does it take to set up my website?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">Most websites are ready in 5-10 minutes. Our AI analyzes your domain, generates relevant content, creates a professional design, and sets up hosting automatically. You can review and customize before going live.</div></div>
-                                </div>
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">Do I need technical skills or coding knowledge?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">Not at all! FASTOFY is designed for everyone. Just sign up with your email, add your domain name, and we handle everything else. No coding, no design skills, no technical knowledge needed.</div></div>
-                                </div>
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">Can I customize my website after it's created?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">Yes! You can edit content, change colors, upload images, and modify layouts through our easy-to-use dashboard. Make it truly yours with simple point-and-click customization.</div></div>
-                                </div>
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">What happens after the first year of free hosting?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">After your first year, you can continue with our affordable hosting plans starting at $9.99/month, or you can export your website and host it anywhere you like. You always own your content and design.</div></div>
-                                </div>
-                                <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
-                                    <button className="flex w-full items-center justify-between p-6 text-left">
-                                        <span className="pr-4 text-lg font-semibold">Can I use FASTOFY for any type of website?</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                                    </button>
-                                    <div className="max-h-0 overflow-hidden transition-all duration-300"><div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">Yes! FASTOFY works great for business websites, portfolios, blogs, landing pages, personal websites, e-commerce showcases, and more. Our AI adapts the design and content to match your domain's purpose.</div></div>
-                                </div>
+                                {FAQ_ITEMS.map((item, index) => {
+                                    const isOpen = openFaqIndex === index;
+                                    return (
+                                        <div
+                                            key={item.question}
+                                            className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:border-[rgb(218,255,1)]"
+                                        >
+                                            <button
+                                                type="button"
+                                                className="flex w-full items-center justify-between p-6 text-left"
+                                                onClick={() =>
+                                                    setOpenFaqIndex((prev) => (prev === index ? null : index))
+                                                }
+                                            >
+                                                <span className="pr-4 text-lg font-semibold">{item.question}</span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className={`lucide lucide-chevron-down flex-shrink-0 text-[rgb(218,255,1)] transition-transform duration-300 ${
+                                                        isOpen ? "rotate-180" : ""
+                                                    }`}
+                                                    aria-hidden="true"
+                                                >
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </button>
+                                            <div
+                                                className={`overflow-hidden transition-all duration-300 ${
+                                                    isOpen ? "max-h-64" : "max-h-0"
+                                                }`}
+                                            >
+                                                <div className="px-6 pb-6 leading-relaxed text-[rgb(218,218,218)]">
+                                                    {item.answer}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </section>
