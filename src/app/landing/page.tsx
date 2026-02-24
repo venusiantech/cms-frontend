@@ -362,20 +362,7 @@ export default function LandingPage() {
                                         </svg>
                                     </div>
                                     <h3 className="mb-3 text-xl font-semibold">Dynamic Content System</h3>
-                                    <p className="text-[rgb(161,161,170)]">Your website adapts and grows with dynamic content management, making updates and changes effortless.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-calendar text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M8 2v4"></path>
-                                            <path d="M16 2v4"></path>
-                                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                                            <path d="M3 10h18"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Drip Content for SEO</h3>
-                                    <p className="text-[rgb(161,161,170)]">Automated content scheduling releases fresh articles over time, signaling to search engines that your site is active for faster ranking.</p>
+                                    <p className="text-[rgb(161,161,170)]">Automatically generate high-quality content using high-traffic, relevant keywords. Scheduled updates keep search engines engaged, helping your website rank faster — all managed effortlessly.</p>
                                 </div>
                                 <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
                                     <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
@@ -402,18 +389,6 @@ export default function LandingPage() {
                                 <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
                                     <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                                     <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-shopping-bag text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-                                            <path d="M3 6h18"></path>
-                                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Live Chat Integration</h3>
-                                    <p className="text-[rgb(161,161,170)]">Built-in live chat widget to engage visitors in real-time, answer questions, and convert browsers into customers.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chart-column text-[rgb(218,255,1)]" aria-hidden="true">
                                             <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
                                             <path d="M18 17V9"></path>
@@ -421,8 +396,8 @@ export default function LandingPage() {
                                             <path d="M8 17v-3"></path>
                                         </svg>
                                     </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Lead Generation Forms</h3>
-                                    <p className="text-[rgb(161,161,170)]">Capture visitor information with customizable forms, popups, and CTAs designed to maximize conversion rates.</p>
+                                    <h3 className="mb-3 text-xl font-semibold">Customer Engagement</h3>
+                                    <p className="text-[rgb(161,161,170)]">Engage visitors instantly with a built-in live chat widget that answers questions in real time and turns browsers into customers. Capture leads effortlessly using customizable forms and high-converting popups.</p>
                                 </div>
                                 <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
                                     <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
@@ -432,20 +407,8 @@ export default function LandingPage() {
                                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                         </svg>
                                     </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Google AdSense Ready</h3>
-                                    <p className="text-[rgb(161,161,170)]">Pre-configured ad placements for Google AdSense integration. Start monetizing your traffic immediately.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-shopping-bag text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-                                            <path d="M3 6h18"></path>
-                                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Amazon Associates Support</h3>
-                                    <p className="text-[rgb(161,161,170)]">Seamlessly integrate Amazon affiliate links and product showcases to generate additional passive income streams.</p>
+                                    <h3 className="mb-3 text-xl font-semibold">Ad Networks & Monetization</h3>
+                                    <p className="text-[rgb(161,161,170)]">Seamlessly integrate Amazon affiliate links and product showcases while leveraging pre-configured Google AdSense placements to generate additional passive income streams.</p>
                                 </div>
                                 <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
                                     <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
