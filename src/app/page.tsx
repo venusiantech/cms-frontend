@@ -92,7 +92,7 @@ export default async function PublicSitePage() {
   const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
 
   // Check if this is the main platform domain (not a subdomain)
-  // Example: jaal.com is platform, but music-byi6.jaal.com is a user site
+  // Example: fastofy.com is platform, but music-byi6.fastofy.com is a user site
   const isPlatformDomain = 
     domain === 'localhost' || 
     domain.startsWith('127.0.0.1') ||
@@ -204,7 +204,7 @@ export default async function PublicSitePage() {
           {/* Footer */}
           <div className="text-center mt-6">
             <p className="text-slate-500 text-sm">
-              Powered by <span className="font-semibold">JAAL</span>
+              Powered by <span className="font-semibold">Fastofy</span>
             </p>
           </div>
         </div>

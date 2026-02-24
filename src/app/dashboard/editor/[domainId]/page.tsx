@@ -14,7 +14,7 @@ import { BlogsTab, LeadsTab, DeploymentTab, SettingsTab, TabButton } from '../co
 function getSiteUrl(subdomain: string): string {
   // Use environment variable instead of window check to avoid hydration mismatch
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('fastofy.com');
   
   if (isProduction) {
     return `https://${subdomain}.fastofy.com`;
@@ -26,7 +26,7 @@ function getSiteUrl(subdomain: string): string {
 function getDisplaySubdomain(subdomain: string): string {
   // Use environment variable instead of window check to avoid hydration mismatch
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('fastofy.com');
   
   if (isProduction) {
     return `${subdomain}.fastofy.com`;

@@ -12,11 +12,11 @@ interface DeploymentTabProps {
 
 // Helper functions (copied from parent)
 const getDisplaySubdomain = (subdomain: string) => {
-  return `${subdomain}.jaal.com`;
+  return `${subdomain}.fastofy.com`;
 };
 
 const getSiteUrl = (subdomain: string) => {
-  return `https://${subdomain}.jaal.com`;
+  return `https://${subdomain}.fastofy.com`;
 };
 
 export default function DeploymentTab({ domain }: DeploymentTabProps) {

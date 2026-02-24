@@ -13,10 +13,10 @@ import CustomLoader from '@/components/CustomLoader';
 function getSiteUrl(subdomain: string): string {
   // Use environment variable instead of window check to avoid hydration mismatch
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('jaal.com');
+  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('fastofy.com');
   
   if (isProduction) {
-    return `https://${subdomain}.jaal.com`;
+    return `https://${subdomain}.fastofy.com`;
   }
   return `http://${subdomain}.local:3000`;
 }

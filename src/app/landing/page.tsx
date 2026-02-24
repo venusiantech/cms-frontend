@@ -467,7 +467,7 @@ export default function LandingPage() {
                         <div className="container mx-auto px-6">
                             <div className="mb-16 text-center">
                                 <h2 className="mb-4 text-4xl font-bold md:text-5xl">Sample Success Stories</h2>
-                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Real domains powered by Jaal.com generating real revenue</p>
+                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Real domains powered by Fastofy.com generating real revenue</p>
                             </div>
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                                 <div className="overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
@@ -553,7 +553,7 @@ export default function LandingPage() {
                         <div className="container mx-auto px-6">
                             <div className="mb-12 text-center">
                                 <h2 className="mb-4 text-4xl font-bold md:text-5xl">See It In Action</h2>
-                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Watch how Jaal.com transforms idle domains in minutes</p>
+                                <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Watch how Fastofy.com transforms idle domains in minutes</p>
                             </div>
                             <div className="mx-auto max-w-5xl">
                                 <div className="group flex aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] transition-all duration-300 hover:border-[rgb(218,255,1)]">
