@@ -44,6 +44,86 @@ const FAQ_ITEMS = [
     },
 ] as const;
 
+// Reusable icon SVGs (Lucide-style, 28x28)
+const ICON_GLOBE = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe text-[rgb(218,255,1)]" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" />
+    </svg>
+);
+const ICON_TRENDING_UP = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trending-up text-[rgb(218,255,1)]" aria-hidden="true">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" />
+    </svg>
+);
+const ICON_CHART = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chart-column text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" />
+    </svg>
+);
+const ICON_LINK = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-link text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+);
+const ICON_SPARKLES = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+        <path d="M20 3v4" /><path d="M22 5h-4" /><path d="M4 17v2" /><path d="M5 18H3" />
+    </svg>
+);
+const ICON_ROCKET = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rocket text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+    </svg>
+);
+const ICON_COINS = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-coins text-[rgb(218,255,1)]" aria-hidden="true">
+        <circle cx="8" cy="8" r="6" /><path d="M18.09 10.37A6 6 0 1 1 10.34 18" /><path d="M7 6h1v4" /><path d="m16.71 13.88.7.71-2.82 2.82" />
+    </svg>
+);
+const ICON_CALENDAR = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" />
+    </svg>
+);
+const ICON_DOLLAR = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-dollar-sign text-[rgb(218,255,1)]" aria-hidden="true">
+        <line x1="12" x2="12" y1="2" y2="22" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    </svg>
+);
+const ICON_ARROW_RIGHT = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right text-[rgb(218,255,1)]" aria-hidden="true">
+        <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+    </svg>
+);
+
+const ABOUT_CARDS = [
+    { title: "Small Businesses", description: "Get your business online instantly with a professional website that showcases your products and services.", icon: ICON_GLOBE },
+    { title: "Entrepreneurs & Freelancers", description: "Build your personal brand or launch your startup with a website that looks professional from day one.", icon: ICON_TRENDING_UP },
+    { title: "Domain Owners", description: "Activate your unused domains with content-rich websites that build value and generate opportunities.", icon: ICON_CHART },
+] as const;
+
+const HOW_IT_WORKS_STEPS = [
+    { step: 1, title: "Sign Up & Connect Domain", description: "Create your account and add your domain. Point your DNS and we'll handle the technical setup.", icon: ICON_LINK },
+    { step: 2, title: "AI Designs Your Website", description: "Our AI analyzes your domain and creates a professional website with relevant, engaging content.", icon: ICON_SPARKLES },
+    { step: 3, title: "Review & Customize", description: "Preview your website, make any adjustments, and customize it to match your vision.", icon: ICON_ROCKET },
+    { step: 4, title: "Go Live Instantly", description: "Publish with one click. Your professional website is live and ready to attract visitors.", icon: ICON_COINS },
+] as const;
+
+const FEATURE_CARDS = [
+    { title: "AI-Powered Design", description: "Get a professionally designed website tailored to your domain's purpose with beautiful layouts and modern styling.", icon: ICON_CALENDAR },
+    { title: "One-Click Launch", description: "Launch your complete website with a single click. No complex setup, no technical hurdles - just instant deployment.", icon: ICON_ROCKET },
+    { title: "Dynamic Content System", description: "Automatically generate high-quality content using high-traffic, relevant keywords. Scheduled updates keep search engines engaged, helping your website rank faster — all managed effortlessly.", icon: ICON_TRENDING_UP },
+    { title: "Advanced OnPage SEO", description: "Every page includes optimized meta tags, keywords, headings, alt texts, and schema markup for maximum search visibility.", icon: ICON_TRENDING_UP },
+    { title: "Smart Backlinking", description: "Automatic internal linking structure plus strategic external backlinks to boost domain authority and SEO performance.", icon: ICON_LINK },
+    { title: "Customer Engagement", description: "Engage visitors instantly with a built-in live chat widget that answers questions in real time and turns browsers into customers. Capture leads effortlessly using customizable forms and high-converting popups.", icon: ICON_CHART },
+    { title: "Ad Networks & Monetization", description: "Seamlessly integrate Amazon affiliate links and product showcases while leveraging pre-configured Google AdSense placements to generate additional passive income streams.", icon: ICON_DOLLAR },
+    { title: "Traffic Analytics Dashboard", description: "Comprehensive analytics showing visitor behavior, traffic sources, popular pages, and conversion metrics in real-time.", icon: ICON_CHART },
+    { title: "Mobile Responsive Design", description: "All websites automatically adapt to any screen size - desktop, tablet, and mobile for perfect viewing everywhere.", icon: ICON_GLOBE },
+] as const;
+
 export default function LandingPage() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -197,39 +277,17 @@ export default function LandingPage() {
                                 <p className="mb-8 text-lg leading-relaxed text-[rgb(218,218,218)]">FASTOFY turns any domain into a professional, SEO-ready website in minutes—powered by AI, zero tech skills needed, with built-in chat, leads, content, and monetization.</p>
                             </div>
                             <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-                                <div className="rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-globe text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                                            <path d="M2 12h20"></path>
-                                        </svg>
+                                {ABOUT_CARDS.map((card) => (
+                                    <div key={card.title} className="rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
+                                        <div className="mb-4 flex items-center">
+                                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)] mr-4">
+                                                {card.icon}
+                                            </div>
+                                            <h3 className="text-xl font-semibold">{card.title}</h3>
+                                        </div>
+                                        <p className="text-[rgb(161,161,170)]">{card.description}</p>
                                     </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Small Businesses</h3>
-                                    <p className="text-[rgb(161,161,170)]">Get your business online instantly with a professional website that showcases your products and services.</p>
-                                </div>
-                                <div className="rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-trending-up text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                                            <polyline points="16 7 22 7 22 13"></polyline>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Entrepreneurs &amp; Freelancers</h3>
-                                    <p className="text-[rgb(161,161,170)]">Build your personal brand or launch your startup with a website that looks professional from day one.</p>
-                                </div>
-                                <div className="rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chart-column text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
-                                            <path d="M18 17V9"></path>
-                                            <path d="M13 17V5"></path>
-                                            <path d="M8 17v-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Domain Owners</h3>
-                                    <p className="text-[rgb(161,161,170)]">Activate your unused domains with content-rich websites that build value and generate opportunities.</p>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </section>
@@ -240,83 +298,25 @@ export default function LandingPage() {
                                 <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">From domain to live website in 4 simple steps</p>
                             </div>
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-                                <div className="relative">
-                                    <div className="h-full rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                        <div className="absolute -top-4 -left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(218,255,1)] text-xl font-bold text-[rgb(17,17,19)]">1</div>
-                                        <div className="mt-4 mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-link text-[rgb(218,255,1)]" aria-hidden="true">
-                                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                                            </svg>
+                                {HOW_IT_WORKS_STEPS.map((item, index) => (
+                                    <div key={item.step} className="relative">
+                                        <div className="h-full rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
+                                            <div className="absolute -top-4 -left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(218,255,1)] text-xl font-bold text-[rgb(17,17,19)]">{item.step}</div>
+                                            <div className="mt-4 mb-4 flex items-center gap-4">
+                                                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
+                                                    {item.icon}
+                                                </div>
+                                                <h3 className="text-md font-semibold">{item.title}</h3>
+                                            </div>
+                                            <p className="text-[rgb(161,161,170)]">{item.description}</p>
                                         </div>
-                                        <h3 className="mb-3 text-xl font-semibold">Sign Up &amp; Connect Domain</h3>
-                                        <p className="text-[rgb(161,161,170)]">Create your account and add your domain. Point your DNS and we'll handle the technical setup.</p>
+                                        {index < HOW_IT_WORKS_STEPS.length - 1 && (
+                                            <div className="absolute top-1/2 -right-4 hidden -translate-y-1/2 transform lg:block">
+                                                {ICON_ARROW_RIGHT}
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="absolute top-1/2 -right-4 hidden -translate-y-1/2 transform lg:block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-arrow-right text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M5 12h14"></path>
-                                            <path d="m12 5 7 7-7 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <div className="h-full rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                        <div className="absolute -top-4 -left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(218,255,1)] text-xl font-bold text-[rgb(17,17,19)]">2</div>
-                                        <div className="mt-4 mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-sparkles text-[rgb(218,255,1)]" aria-hidden="true">
-                                                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
-                                                <path d="M20 3v4"></path>
-                                                <path d="M22 5h-4"></path>
-                                                <path d="M4 17v2"></path>
-                                                <path d="M5 18H3"></path>
-                                            </svg>
-                                        </div>
-                                        <h3 className="mb-3 text-xl font-semibold">AI Designs Your Website</h3>
-                                        <p className="text-[rgb(161,161,170)]">Our AI analyzes your domain and creates a professional website with relevant, engaging content.</p>
-                                    </div>
-                                    <div className="absolute top-1/2 -right-4 hidden -translate-y-1/2 transform lg:block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-arrow-right text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M5 12h14"></path>
-                                            <path d="m12 5 7 7-7 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <div className="h-full rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                        <div className="absolute -top-4 -left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(218,255,1)] text-xl font-bold text-[rgb(17,17,19)]">3</div>
-                                        <div className="mt-4 mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-rocket text-[rgb(218,255,1)]" aria-hidden="true">
-                                                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-                                                <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-                                                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-                                                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-                                            </svg>
-                                        </div>
-                                        <h3 className="mb-3 text-xl font-semibold">Review &amp; Customize</h3>
-                                        <p className="text-[rgb(161,161,170)]">Preview your website, make any adjustments, and customize it to match your vision.</p>
-                                    </div>
-                                    <div className="absolute top-1/2 -right-4 hidden -translate-y-1/2 transform lg:block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-arrow-right text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M5 12h14"></path>
-                                            <path d="m12 5 7 7-7 7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <div className="h-full rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(26,28,30)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                        <div className="absolute -top-4 -left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[rgb(218,255,1)] text-xl font-bold text-[rgb(17,17,19)]">4</div>
-                                        <div className="mt-4 mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-coins text-[rgb(218,255,1)]" aria-hidden="true">
-                                                <circle cx="8" cy="8" r="6"></circle>
-                                                <path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path>
-                                                <path d="M7 6h1v4"></path>
-                                                <path d="m16.71 13.88.7.71-2.82 2.82"></path>
-                                            </svg>
-                                        </div>
-                                        <h3 className="mb-3 text-xl font-semibold">Go Live Instantly</h3>
-                                        <p className="text-[rgb(161,161,170)]">Publish with one click. Your professional website is live and ready to attract visitors.</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </section>
@@ -327,114 +327,18 @@ export default function LandingPage() {
                                 <p className="mx-auto max-w-2xl text-lg text-[rgb(218,218,218)]">Everything you need for a professional online presence</p>
                             </div>
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M8 2v4"></path>
-                                            <path d="M16 2v4"></path>
-                                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                                            <path d="M3 10h18"></path>
-                                        </svg>
+                                {FEATURE_CARDS.map((card) => (
+                                    <div key={card.title} className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
+                                        <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                        <div className="mb-4 flex items-center gap-4">
+                                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
+                                                {card.icon}
+                                            </div>
+                                            <h3 className="text-xl font-semibold">{card.title}</h3>
+                                        </div>
+                                        <p className="text-[rgb(161,161,170)]">{card.description}</p>
                                     </div>
-                                    <h3 className="mb-3 text-xl font-semibold">AI-Powered Design</h3>
-                                    <p className="text-[rgb(161,161,170)]">Get a professionally designed website tailored to your domain's purpose with beautiful layouts and modern styling.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-rocket text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-                                            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-                                            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-                                            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">One-Click Launch</h3>
-                                    <p className="text-[rgb(161,161,170)]">Launch your complete website with a single click. No complex setup, no technical hurdles - just instant deployment.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-trending-up text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                                            <polyline points="16 7 22 7 22 13"></polyline>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Dynamic Content System</h3>
-                                    <p className="text-[rgb(161,161,170)]">Automatically generate high-quality content using high-traffic, relevant keywords. Scheduled updates keep search engines engaged, helping your website rank faster — all managed effortlessly.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-trending-up text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                                            <polyline points="16 7 22 7 22 13"></polyline>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Advanced OnPage SEO</h3>
-                                    <p className="text-[rgb(161,161,170)]">Every page includes optimized meta tags, keywords, headings, alt texts, and schema markup for maximum search visibility.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-link text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Smart Backlinking</h3>
-                                    <p className="text-[rgb(161,161,170)]">Automatic internal linking structure plus strategic external backlinks to boost domain authority and SEO performance.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chart-column text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
-                                            <path d="M18 17V9"></path>
-                                            <path d="M13 17V5"></path>
-                                            <path d="M8 17v-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Customer Engagement</h3>
-                                    <p className="text-[rgb(161,161,170)]">Engage visitors instantly with a built-in live chat widget that answers questions in real time and turns browsers into customers. Capture leads effortlessly using customizable forms and high-converting popups.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-dollar-sign text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <line x1="12" x2="12" y1="2" y2="22"></line>
-                                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Ad Networks & Monetization</h3>
-                                    <p className="text-[rgb(161,161,170)]">Seamlessly integrate Amazon affiliate links and product showcases while leveraging pre-configured Google AdSense placements to generate additional passive income streams.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-chart-column text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
-                                            <path d="M18 17V9"></path>
-                                            <path d="M13 17V5"></path>
-                                            <path d="M8 17v-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Traffic Analytics Dashboard</h3>
-                                    <p className="text-[rgb(161,161,170)]">Comprehensive analytics showing visitor behavior, traffic sources, popular pages, and conversion metrics in real-time.</p>
-                                </div>
-                                <div className="group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[rgb(218,255,1)]">
-                                    <div className="absolute top-0 right-0 left-0 h-0.5 bg-[rgb(218,255,1)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[rgba(218,255,1,0.1)]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" className="lucide lucide-globe text-[rgb(218,255,1)]" aria-hidden="true">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                                            <path d="M2 12h20"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 className="mb-3 text-xl font-semibold">Mobile Responsive Design</h3>
-                                    <p className="text-[rgb(161,161,170)]">All websites automatically adapt to any screen size - desktop, tablet, and mobile for perfect viewing everywhere.</p>
-                                </div>
+                                ))}
                             </div>
                             <div className="mt-16 rounded-2xl border border-[rgba(255,255,255,0.1)] bg-[rgb(17,17,19)] p-12">
                                 <h3 className="mb-8 text-center text-2xl font-bold">Plus Many More Features</h3>
