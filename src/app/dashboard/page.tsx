@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI, websitesAPI } from '@/lib/api';
-import { Plus, Globe, Trash2, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Info, Server, RefreshCw, AlertCircle, Loader2 } from 'lucide-react';
+import { Trash2, Globe, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Server, RefreshCw, AlertCircle, Loader2, Search, LayoutGrid, List, ChevronDown, MoreHorizontal, SlidersHorizontal } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useJobStatus } from '@/hooks/useJobStatus';
@@ -14,7 +14,7 @@ function getSiteUrl(subdomain: string): string {
   // Use environment variable instead of window check to avoid hydration mismatch
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
   const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('fastofy.com');
-  
+
   if (isProduction) {
     return `https://${subdomain}.fastofy.com`;
   }
@@ -56,17 +56,17 @@ export default function DashboardPage() {
         try {
           const response = await domainsAPI.checkDnsStatus(domain.id);
           const newStatus = response.data.nameServersStatus;
-          
+
           if (newStatus === 'active') {
             console.log(`✅ DNS became active for ${domain.domainName}`);
-            
+
             // Show toast notification
             if (response.data.autoDeployed && response.data.deploymentSuccess) {
               toast.success(`${domain.domainName}: DNS active! Worker domains deployed! 🚀`, { duration: 5000 });
             } else {
               toast.success(`${domain.domainName}: DNS is now active! 🎉`, { duration: 4000 });
             }
-            
+
             // Invalidate queries to update UI
             queryClient.invalidateQueries({ queryKey: ['domains'] });
           }
@@ -90,37 +90,45 @@ export default function DashboardPage() {
   }, [domains, queryClient]);
 
   return (
-    <div className="relative">
+    <div className="px-4 lg:px-8">
       {/* Full-Screen Loading Overlay - ONLY for operations (not initial load) */}
       {isGlobalLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Blur Backdrop */}
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-md"></div>
-          
-          {/* Loader */}
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
           <div className="relative z-10">
             <CustomLoader />
           </div>
         </div>
       )}
 
-      {/* Header */}
-      <div className="mb-6 sm:mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-medium text-gray-900">Domains</h1>
+
+      {/* Section heading */}
+      <div className="mb-4">
+        <h1 className="text-xl font-semibold text-neutral-100">Domains</h1>
+      </div>
+
+      {/* Vercel-style top bar: search + controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="relative flex-1 max-w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
+            <input
+              type="text"
+              placeholder="Search domains..."
+              className="w-full h-12 pl-9 pr-4 bg-neutral-900 border border-neutral-700 rounded-md text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600"
+              readOnly
+              aria-label="Search domains"
+            />
           </div>
           <button
             onClick={() => setShowAddDomain(true)}
-            className="group w-8 h-8 sm:w-9 sm:h-9 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md flex-shrink-0"
+            className="h-12 px-4 bg-white text-black hover:bg-neutral-200 rounded-md text-sm font-light flex items-center gap-2 transition-colors flex-shrink-0"
             title="Add Domain"
           >
-            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-200" />
+            Add New...
+            <ChevronDown size={14} />
           </button>
         </div>
-        <p className="text-gray-600 text-sm">
-          {domains?.length || 0} {domains?.length === 1 ? 'domain' : 'domains'} • Manage your websites
-        </p>
       </div>
 
       {/* Initial Loading State - Inline */}
@@ -128,7 +136,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="flex flex-col items-center gap-4">
             <CustomLoader />
-            <p className="text-sm text-gray-500">Loading your domains...</p>
+            <p className="text-sm text-neutral-500">Loading your domains...</p>
           </div>
         </div>
       ) : domains && domains.length > 0 ? (
@@ -150,19 +158,19 @@ export default function DashboardPage() {
       ) : (
         /* Empty State */
         <div className="flex flex-col items-center justify-center py-20 px-4">
-          <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-            <Globe size={36} className="text-gray-400" />
+          <div className="w-20 h-20 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 border border-neutral-700">
+            <Globe size={36} className="text-neutral-500" />
           </div>
-          <h3 className="text-2xl font-medium text-gray-900 mb-2">No domains yet</h3>
-          <p className="text-gray-600 mb-8 text-center max-w-md text-sm">
+          <h3 className="text-2xl font-light text-neutral-100 mb-2">No domains yet</h3>
+          <p className="text-neutral-400 mb-8 text-center max-w-md text-sm">
             Get started by adding your first domain and create a beautiful AI-powered website in minutes
           </p>
           <button
             onClick={() => setShowAddDomain(true)}
-            className="px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+            className="px-6 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md text-sm font-light flex items-center gap-2 transition-colors"
           >
             <Sparkles size={18} />
-            <span className="font-medium">Add Your First Domain</span>
+            Add Your First Domain
           </button>
         </div>
       )}
@@ -272,7 +280,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
   // Function to check DNS status
   const checkDnsStatus = async () => {
     if (!domain.nameServers || domain.nameServers.length === 0) return;
-    
+
     setIsCheckingDns(true);
     try {
       const response = await domainsAPI.checkDnsStatus(domain.id);
@@ -280,19 +288,19 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
       const autoDeployed = response.data.autoDeployed;
       const deploymentSuccess = response.data.deploymentSuccess;
       const deploymentError = response.data.deploymentError;
-      
+
       setDnsStatus(newStatus);
-      
+
       // Update query cache
       queryClient.invalidateQueries({ queryKey: ['domains'] });
-      
+
       // If status is active, stop polling
       if (newStatus === 'active') {
         if (pollingIntervalRef.current) {
           clearInterval(pollingIntervalRef.current);
           pollingIntervalRef.current = null;
         }
-        
+
         // Show appropriate message based on auto-deployment
         if (autoDeployed) {
           if (deploymentSuccess) {
@@ -319,7 +327,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
     if (showDnsModal && dnsStatus !== 'active' && domain.nameServers && domain.nameServers.length > 0) {
       // Initial check
       checkDnsStatus();
-      
+
       // Set up polling every 3 seconds
       pollingIntervalRef.current = setInterval(() => {
         checkDnsStatus();
@@ -341,119 +349,119 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
   }, [domain.nameServersStatus]);
 
   return (
-    <div 
-      className="group bg-white border border-gray-200 hover:border-gray-300 rounded-xl p-4 sm:p-6 transition-all duration-200 hover:shadow-lg"
+    <div
+      className="group bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 rounded-lg p-4 sm:p-5 transition-all duration-200"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4 sm:mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Globe size={20} className="text-gray-700 sm:w-6 sm:h-6" />
+      {/* Card header: icon + name row, top-right icons */}
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0 border border-neutral-700">
+            <Globe size={20} className="text-neutral-400" />
           </div>
-          <div className="min-w-0">
-            <h3 className="font-medium text-base sm:text-lg text-gray-900 mb-1 truncate">{domain.domainName}</h3>
-            <div className="flex items-center gap-2 flex-wrap">
-              {isGenerating ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                  <div className="w-2 h-2 bg-gray-700 rounded-full animate-pulse"></div>
-                  Generating website
-                </span>
-              ) : (
-                <span
-                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border ${
-                    domain.status === 'ACTIVE'
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+          <div className="min-w-0 flex-1">
+            <h3 className="text-md font-light text-neutral-100 truncate">{domain.domainName}</h3>
+            {domain.website?.subdomain && (
+              <p className="text-sm font-light text-neutral-500 truncate mt-0.5">{getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}</p>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 flex-shrink-">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              if (confirm(`Delete "${domain.domainName}"? This cannot be undone.`)) {
+                deleteMutation.mutate();
+              }
+            }}
+            className="text-neutral-300 hover:text-neutral-300 hover:bg-neutral-800 p-1.5 rounded transition-colors"
+            title="Delete domain"
+          >
+            <MoreHorizontal size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Repo/tag row + status badges */}
+      <div className="space-y-2 mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 flex-wrap">
+          {isGenerating ? (
+            <span className="inline-flex items-center gap-1.5 text-xs font-light text-neutral-400">
+              <div className="w-2 h-2 bg-neutral-500 rounded-full animate-pulse" />
+              Generating website
+            </span>
+          ) : (
+            <>
+              <span
+                className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded ${domain.status === 'ACTIVE'
+                  ? 'bg-emerald-500/20 text-emerald-400'
+                  : 'bg-amber-500/20 text-amber-400'
                   }`}
-                >
-                  {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
-                  {domain.status}
-                </span>
-              )}
-              
-              {/* DNS Status Badge - Show next to domain status */}
+              >
+                {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                {domain.status}
+              </span>
               {domain.nameServers && domain.nameServers.length > 0 ? (
                 <button
                   onClick={() => setShowDnsModal(true)}
-                  className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity ${
-                    dnsStatus === 'active'
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded cursor-pointer hover:opacity-90 ${dnsStatus === 'active'
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : 'bg-amber-500/20 text-amber-400'
+                    }`}
                   title="Click to view DNS configuration"
                 >
-                  {dnsStatus === 'active' ? (
-                    <>
-                      <CheckCircle size={12} />
-                      DNS Active
-                    </>
-                  ) : (
-                    <>
-                      <Clock size={12} />
-                      DNS Pending
-                    </>
-                  )}
+                  {dnsStatus === 'active' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                  {dnsStatus === 'active' ? 'DNS Active' : 'DNS Pending'}
                 </button>
               ) : (
                 <button
                   onClick={() => retryCloudfareMutation.mutate()}
                   disabled={retryCloudfareMutation.isPending}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full border bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Click to create nameserver records"
                 >
-                  {retryCloudfareMutation.isPending ? (
-                    <>
-                      <Loader2 size={12} className="animate-spin" />
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle size={12} />
-                      Setup Nameservers
-                    </>
-                  )}
+                  {retryCloudfareMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <AlertCircle size={12} />}
+                  {retryCloudfareMutation.isPending ? 'Creating...' : 'Setup Nameservers'}
                 </button>
               )}
-            </div>
-          </div>
+            </>
+          )}
         </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            if (confirm(`Delete "${domain.domainName}"? This cannot be undone.`)) {
-              deleteMutation.mutate();
-            }
-          }}
-          className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg transition-all duration-200"
-          title="Delete domain"
-        >
-          <Trash2 size={16} />
-        </button>
+        {/* <div className="flex items-center gap-2 mb-4">
+          {domain.website?.pages?.length ? (
+            <>
+              <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-xs font-light">
+                <CheckCircle size={12} className="mr-1" />
+                Live
+              </span>
+            </>
+          ) : isGenerating ? (
+            <>
+              <span className="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded text-xs font-light animate-pulse">
+                <Loader2 size={12} className="mr-1 animate-spin" />
+                Generating...
+              </span>
+              <span className="text-xs text-neutral-400">Please wait</span>
+            </>
+          ) : (
+            <>
+              <span className="inline-flex items-center gap-1 bg-neutral-700 text-neutral-400 px-2 py-0.5 rounded text-xs font-light">
+                <AlertCircle size={12} className="mr-1" />
+                No website yet
+              </span>
+            </>
+          )}
+        </div> */}
       </div>
 
       {domain.website && domain.website.pages && domain.website.pages.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
-          {/* Info Grid */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-3">
-            <div className="bg-gray-50 rounded-lg p-2.5 sm:p-3">
-              <p className="text-xs text-gray-500 mb-1 font-medium">Subdomain</p>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">{domain.website.subdomain}</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-2.5 sm:p-3">
-              <p className="text-xs text-gray-500 mb-1 font-medium">Website Status</p>
-              <p className="text-xs sm:text-sm font-semibold text-green-600 flex items-center gap-1.5">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                Live
-              </p>
-            </div>
-          </div>
 
           {/* Actions */}
           <div className="flex gap-3">
             <Link
               href={`/dashboard/editor/${domain.id}`}
-              className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium group/btn"
+              className="flex-1 px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-md transition-colors flex items-center justify-center gap-2 text-sm group/btn"
             >
               <span>Manage</span>
               <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-200" />
@@ -462,7 +470,7 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
               href={getSiteUrl(domain.website.subdomain)}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center border border-gray-200 hover:border-gray-300"
+              className="px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
               title="View site"
             >
               <ExternalLink size={18} />
@@ -471,181 +479,112 @@ function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any)
         </div>
       ) : isGenerating ? (
         // Show animated loader with rotating messages
-        <GeneratingWebsiteAnimation 
-          progress={progress} 
+        <GeneratingWebsiteAnimation
+          progress={progress}
           isCompleted={isCompleted}
         />
       ) : (
-        <div className="space-y-3">
-          {/* DNS Info Button - Show if nameservers exist */}
-          {domain.nameServers && domain.nameServers.length > 0 ? (
-            <button
-              onClick={() => setShowDnsModal(true)}
-              className={`w-full bg-white hover:bg-gray-50 rounded-lg p-3 transition-all duration-200 flex items-center justify-between border-2 ${
-                dnsStatus === 'active'
-                  ? 'border-green-500'
-                  : 'border-yellow-500'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Server size={16} className="text-gray-700" />
-                </div>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-gray-900">DNS Configuration</p>
-                  <p className="text-xs text-gray-600">Click to view nameservers</p>
-                </div>
-              </div>
-              <ArrowRight size={16} className="text-gray-400" />
-            </button>
-          ) : (
-            <button
-              onClick={() => retryCloudfareMutation.mutate()}
-              disabled={retryCloudfareMutation.isPending}
-              className="w-full bg-orange-50 hover:bg-orange-100 rounded-lg p-3 transition-all duration-200 flex items-center justify-between border-2 border-orange-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <AlertCircle size={16} className="text-orange-700" />
-                </div>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-orange-900">
-                    {retryCloudfareMutation.isPending ? 'Creating Nameservers...' : 'Nameservers Not Setup'}
-                  </p>
-                  <p className="text-xs text-orange-700">Click to create DNS records</p>
-                </div>
-              </div>
-              {retryCloudfareMutation.isPending ? (
-                <Loader2 size={16} className="text-orange-700 animate-spin" />
-              ) : (
-                <RefreshCw size={16} className="text-orange-700" />
-              )}
-            </button>
-          )}
-
+        <div className="space-y-4">
           <button
             onClick={() => onGenerateWebsite(setGenerationJobId)}
-            className="w-full px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium border-2 border-gray-900 hover:border-gray-800"
+            className="w-full px-3 py-2 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-2"
           >
-            <Sparkles size={16} />
+            <Sparkles size={14} />
             Generate Website
           </button>
         </div>
       )}
 
-      {/* DNS Modal */}
+      {/* DNS Modal - dark */}
       {showDnsModal && domain.nameServers && domain.nameServers.length > 0 && (
-        <div 
-          className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4"
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4"
           onClick={() => setShowDnsModal(false)}
         >
-          <div 
-            className="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-200"
+          <div
+            className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-50 rounded-xl flex items-center justify-center shadow-sm">
-                  <Server size={24} className="text-gray-700" />
+                <div className="w-12 h-12 bg-neutral-800 rounded-xl flex items-center justify-center border border-neutral-700">
+                  <Server size={24} className="text-neutral-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">DNS Configuration</h3>
-                  <p className="text-sm text-gray-500 mt-0.5">Configure your domain nameservers</p>
+                  <h3 className="text-xl font-semibold text-neutral-100">DNS Configuration</h3>
+                  <p className="text-sm text-neutral-500 mt-0.5">Configure your domain nameservers</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowDnsModal(false)}
-                className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-all"
+                className="text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 p-2 rounded-lg transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
 
-            {/* Content */}
             <div className="space-y-5">
-              {/* Domain Info */}
-              <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4">
-                <p className="text-sm text-gray-600">
-                  Point your domain to these nameservers
-                </p>
-                <p className="text-base font-semibold text-gray-900 mt-1">{domain.domainName}</p>
+              <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
+                <p className="text-sm text-neutral-400">Point your domain to these nameservers</p>
+                <p className="text-base font-semibold text-neutral-100 mt-1">{domain.domainName}</p>
               </div>
 
-              {/* Nameservers */}
               <div className="space-y-3">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nameservers</p>
+                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nameservers</p>
                 {domain.nameServers.map((ns: string, idx: number) => (
-                  <div 
-                    key={idx} 
-                    className="group relative bg-white border-2 border-gray-200 hover:border-gray-300 rounded-xl px-4 py-3.5 transition-all duration-200"
+                  <div
+                    key={idx}
+                    className="group relative bg-neutral-800 border border-neutral-700 hover:border-neutral-600 rounded-lg px-4 py-3.5 transition-colors"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono text-sm text-gray-900 flex-1">{ns}</span>
+                      <span className="font-mono text-sm text-neutral-200 flex-1">{ns}</span>
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(ns);
                           toast.success('Copied to clipboard!');
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-900 hover:text-white rounded-lg transition-all duration-200"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-neutral-300 bg-neutral-700 hover:bg-neutral-600 rounded-md transition-colors"
                       >
-                        <span>Copy</span>
+                        Copy
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Status */}
               {domain.nameServersStatus && (
-                <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4">
+                <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${
-                        domain.nameServersStatus === 'active' ? 'bg-green-500' : 'bg-yellow-500'
-                      }`}></div>
-                      <p className="text-sm font-semibold text-gray-900">Status</p>
+                      <div className={`w-2 h-2 rounded-full ${domain.nameServersStatus === 'active' ? 'bg-emerald-500' : 'bg-amber-500'
+                        }`} />
+                      <p className="text-sm font-semibold text-neutral-200">Status</p>
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${
-                      domain.nameServersStatus === 'active' 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {domain.nameServersStatus === 'active' ? (
-                        <>
-                          <CheckCircle size={12} />
-                          Active
-                        </>
-                      ) : (
-                        <>
-                          <Clock size={12} />
-                          Pending
-                        </>
-                      )}
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded ${domain.nameServersStatus === 'active'
+                      ? 'bg-emerald-500/20 text-emerald-400'
+                      : 'bg-amber-500/20 text-amber-400'
+                      }`}>
+                      {domain.nameServersStatus === 'active' ? <><CheckCircle size={12} /> Active</> : <><Clock size={12} /> Pending</>}
                     </span>
                   </div>
                 </div>
               )}
 
-              {/* Tip */}
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                    i
-                  </div>
+                  <div className="flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">i</div>
                   <div>
-                    <p className="text-xs font-semibold text-blue-900 mb-1">Next Steps</p>
-                    <p className="text-xs text-blue-800 leading-relaxed">
+                    <p className="text-xs font-semibold text-blue-300 mb-1">Next Steps</p>
+                    <p className="text-xs text-blue-200/80 leading-relaxed">
                       Update these nameservers at your domain registrar (e.g., GoDaddy, Namecheap). Changes may take up to 24-48 hours to propagate.
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Action Button */}
               <button
                 onClick={() => setShowDnsModal(false)}
-                className="w-full px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                className="w-full px-4 py-3 bg-white hover:bg-neutral-200 text-black text-sm font-semibold rounded-lg transition-colors"
               >
                 Got it
               </button>
@@ -667,15 +606,15 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
       setValidationError('Domain name is required');
       return false;
     }
-    
+
     // Check for valid domain format with TLD
     const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
-    
+
     if (!domainRegex.test(domain)) {
       setValidationError('Invalid domain format. Must include a valid extension (e.g., example.com)');
       return false;
     }
-    
+
     setValidationError('');
     return true;
   };
@@ -705,52 +644,45 @@ function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
   });
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl p-5 sm:p-6 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-200">
-        <h2 className="text-xl sm:text-2xl font-medium text-gray-900 mb-2">Add Domain</h2>
-        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Enter your complete domain name with extension</p>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5 sm:p-6 max-w-md w-full shadow-2xl">
+        <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Add Domain</h2>
+        <p className="text-neutral-400 text-sm mb-4 sm:mb-6 font-light">Enter the domain you want to add to your project.</p>
         <div className="mb-4 sm:mb-6">
           <input
             type="text"
             value={domainName}
             onChange={(e) => {
               setDomainName(e.target.value);
-              setValidationError(''); // Clear error on input
+              setValidationError('');
             }}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSubmit();
-              }
+              if (e.key === 'Enter') handleSubmit();
             }}
             placeholder="example.com"
-            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-              validationError 
-                ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-                : 'border-gray-200 focus:ring-gray-900 focus:border-transparent'
-            }`}
+            className={`w-full px-4 py-2.5 bg-neutral-800 border rounded-md text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
+              }`}
             autoFocus
           />
           {validationError && (
-            <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
+            <p className="text-xs text-red-400 mt-2 flex items-center gap-1">
               <AlertCircle size={12} />
               {validationError}
             </p>
           )}
-          <p className="text-xs text-gray-500 mt-2">
-            Examples: chocolate.com, myblog.net, shop.io
-          </p>
+          <p className="text-xs text-neutral-500 mt-2">Examples: chocolate.com, myblog.net, shop.io</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <button 
-            onClick={onClose} 
-            className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 font-medium border border-gray-200"
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={mutation.isPending || !domainName}
-            className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md font-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {mutation.isPending ? 'Adding...' : 'Add Domain'}
           </button>
@@ -776,7 +708,7 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
 
   // Update domain with selected meaning and user description
   const updateMutation = useMutation({
-    mutationFn: (data: { selectedMeaning?: string; userDescription?: string }) => 
+    mutationFn: (data: { selectedMeaning?: string; userDescription?: string }) =>
       domainsAPI.update(domainId, data),
     onMutate: () => {
       setGlobalLoading(true);
@@ -794,18 +726,18 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
 
   const handleContinue = () => {
     const updateData: any = {};
-    
+
     // Add selected meaning if any
     if (selectedMeanings.length > 0) {
       const combinedContext = selectedMeanings.map(({ key }) => key).join(', ');
       updateData.selectedMeaning = combinedContext;
     }
-    
+
     // Add user description if provided
     if (userDescription.trim()) {
       updateData.userDescription = userDescription.trim();
     }
-    
+
     // If we have data to save, update it
     if (Object.keys(updateData).length > 0) {
       console.log('📝 Saving context:', updateData);
@@ -818,11 +750,11 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl p-8 max-w-md w-full shadow-2xl">
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-8 max-w-md w-full shadow-2xl">
           <div className="flex flex-col items-center gap-4">
             <CustomLoader />
-            <p className="text-sm text-gray-600">Let'e get you ready with our recommended contexts...</p>
+            <p className="text-sm text-neutral-400">Let's get you ready with our recommended contexts...</p>
           </div>
         </div>
       </div>
@@ -831,22 +763,22 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
 
   if (error) {
     return (
-      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl">
-          <h2 className="text-xl font-medium text-gray-900 mb-4">Could not find meanings</h2>
-          <p className="text-gray-600 text-sm mb-6">
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 max-w-md w-full shadow-2xl">
+          <h2 className="text-xl font-light text-neutral-100 mb-4">Could not find meanings</h2>
+          <p className="text-neutral-400 text-sm mb-6">
             We couldn't find different meanings for your domain. You can continue without context selection.
           </p>
           <div className="flex gap-3">
-            <button 
-              onClick={onClose} 
-              className="flex-1 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 font-medium border border-gray-200"
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleContinue}
-              className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 font-medium"
+              className="flex-1 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md font-light transition-colors"
             >
               Continue
             </button>
@@ -862,7 +794,7 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
 
   const handleMeaningToggle = (meaning: string, exampleSentence: string) => {
     const isSelected = selectedMeanings.some(m => m.key === meaning);
-    
+
     if (isSelected) {
       // Remove if already selected
       setSelectedMeanings(prev => prev.filter(m => m.key !== meaning));
@@ -877,51 +809,47 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 max-h-[95vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[95vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-bold text-neutral-100">
               {hasMeanings ? 'Choose Your Domain Context' : 'Describe Your Domain'}
             </h2>
-            <p className="text-gray-600 text-xs sm:text-sm mt-1">
-              {hasMeanings 
+            <p className="text-neutral-400 text-xs sm:text-sm mt-1">
+              {hasMeanings
                 ? `"${synonymsData?.word}" can mean different things`
                 : 'Help AI understand your website better'}
             </p>
           </div>
           {selectedMeanings.length > 0 && (
-            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full font-bold whitespace-nowrap bg-gray-900 text-white">
+            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-bold whitespace-nowrap bg-neutral-700 text-neutral-100">
               {selectedMeanings.length}/{MAX_SELECTIONS}
             </div>
           )}
         </div>
 
-        {/* User Description Input */}
         <div className="mb-4 sm:mb-6">
-          <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
-            Describe your domain <span className="text-gray-400 font-normal">(Optional)</span>
+          <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2">
+            Describe your domain <span className="text-neutral-500 font-normal">(Optional)</span>
           </label>
           <textarea
             value={userDescription}
             onChange={(e) => setUserDescription(e.target.value)}
             placeholder="E.g., A blog about chocolate recipes and baking tips..."
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all duration-200 resize-none text-xs sm:text-sm"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors"
             rows={3}
             maxLength={500}
           />
-          <p className="text-xs text-gray-500 mt-1.5">
-            {userDescription.length}/500 characters
-          </p>
+          <p className="text-xs text-neutral-500 mt-1.5">{userDescription.length}/500 characters</p>
         </div>
 
-        {/* Meanings as Chips */}
         {hasMeanings && (
           <div className="mb-4 sm:mb-6">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3">
+            <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2 sm:mb-3">
               Select contexts (up to {MAX_SELECTIONS}) or skip
             </label>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-gray-50 rounded-xl border-2 border-gray-100 min-h-[120px] relative">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-neutral-800/50 rounded-lg border border-neutral-700 min-h-[120px] relative">
               {meaningEntries.map(([meaning, exampleSentence]: [string, any]) => {
                 const isSelected = selectedMeanings.some(m => m.key === meaning);
                 const isDisabled = selectedMeanings.length >= MAX_SELECTIONS && !isSelected;
@@ -930,66 +858,58 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
                     <button
                       onClick={() => handleMeaningToggle(meaning, exampleSentence)}
                       disabled={isDisabled}
-                      className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border-2 transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${
-                        isSelected
-                          ? 'bg-gray-900 border-gray-900 text-white scale-105'
-                          : isDisabled
-                          ? 'bg-white border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-                          : 'bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:scale-105 hover:shadow-md'
-                      }`}
+                      className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${isSelected
+                        ? 'bg-white border-white text-black scale-105'
+                        : isDisabled
+                          ? 'bg-neutral-800 border-neutral-700 text-neutral-500 cursor-not-allowed opacity-50'
+                          : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
+                        }`}
                     >
                       {isSelected && '✓ '}
                       {meaning}
                     </button>
-                    {/* Tooltip with peer-hover */}
-                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-2xl min-w-max max-w-[280px]">
+                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl min-w-max max-w-[280px] border border-neutral-600">
                       <div className="italic normal-case text-center leading-relaxed">"{exampleSentence}"</div>
-                      {/* Arrow */}
                       <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
-                        <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-gray-900"></div>
+                        <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
                       </div>
                     </div>
                   </div>
                 );
               })}
-              
-              {/* Skip Option */}
               <div className="relative">
                 <button
                   onClick={() => setSelectedMeanings([])}
-                  className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border-2 transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${
-                    selectedMeanings.length === 0
-                      ? 'bg-gray-900 border-gray-900 text-white scale-105'
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-400 hover:scale-105 hover:shadow-md'
-                  }`}
+                  className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${selectedMeanings.length === 0
+                    ? 'bg-white border-white text-black scale-105'
+                    : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
+                    }`}
                 >
                   {selectedMeanings.length === 0 && '✓ '}
                   SKIP & LET AI DECIDE
                 </button>
-                {/* Tooltip with peer-hover */}
-                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-2xl whitespace-nowrap">
+                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl whitespace-nowrap border border-neutral-600">
                   <div className="normal-case">Let AI decide based on general knowledge</div>
-                  {/* Arrow */}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
-                    <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-gray-900"></div>
+                    <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
                   </div>
                 </div>
               </div>
             </div>
             {selectedMeanings.length > 0 && (
               <div className="mt-2 sm:mt-3">
-                <p className="text-[10px] sm:text-xs font-medium text-gray-600 mb-1.5 sm:mb-2">Selected contexts:</p>
+                <p className="text-[10px] sm:text-xs font-light text-neutral-500 mb-1.5 sm:mb-2">Selected contexts:</p>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {selectedMeanings.map(({ key, context }) => (
                     <div
                       key={key}
                       title={`"${context}"`}
-                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-900 text-white rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-gray-800 transition-colors"
+                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-neutral-700 text-neutral-100 rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-neutral-600 transition-colors"
                     >
                       {key}
                       <button
                         onClick={() => handleMeaningToggle(key, context)}
-                        className="hover:bg-gray-700 rounded-full p-0.5"
+                        className="hover:bg-neutral-500 rounded-full p-0.5"
                       >
                         <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       </button>
@@ -1001,23 +921,21 @@ function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading 
           </div>
         )}
 
-        {/* Helper Tip */}
-        <div className="text-[10px] sm:text-xs text-center text-gray-500  border border-blue-200 rounded-xl p-2 sm:p-3 mb-4 sm:mb-6">
+        <div className="text-[10px] sm:text-xs text-center text-neutral-500 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-neutral-800/30">
           💡 This context helps AI generate more relevant and personalized content for your website
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-200">
-          <button 
-            onClick={onClose} 
-            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border-2 border-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-semibold hover:bg-gray-50 transition-colors"
+        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-neutral-700">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border border-neutral-600 text-neutral-300 rounded-lg text-sm sm:text-base font-semibold hover:bg-neutral-800 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleContinue}
             disabled={updateMutation.isPending}
-            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600 text-white rounded-xl text-sm sm:text-base font-semibold transition-all disabled:opacity-50 shadow-lg"
+            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm sm:text-base font-semibold transition-colors disabled:opacity-50"
           >
             {updateMutation.isPending ? 'Saving...' : `Continue ${selectedMeanings.length > 0 ? `(${selectedMeanings.length})` : ''}`}
           </button>
@@ -1043,7 +961,7 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
       const newJobId = response.data.jobId;
       console.log('✅ Job started with ID:', newJobId);
       toast.success('Website generation started! 🚀');
-      
+
       // Pass job ID to parent and close modal immediately
       onJobStarted(newJobId);
     },
@@ -1053,28 +971,22 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
   });
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
-      <div className="bg-white rounded-xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-200 relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
+      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         <div className="mb-4 sm:mb-5">
-          <h2 className="text-xl sm:text-2xl font-medium text-gray-900 mb-2">Generate Website</h2>
-          {/* <p className="text-gray-600 text-sm">
-            Choose a template and create a website with AI-powered content
-          </p> */}
+          <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Generate Website</h2>
         </div>
 
-        {/* Template selection */}
         <div className="mb-4 sm:mb-5">
-          <p className="text-xs sm:text-sm font-semibold text-gray-900 mb-3 sm:mb-4">Choose template</p>
-          {/* <p className="text-xs text-gray-500 mb-3">Click a card to select. Use the expand icon to preview full size.</p> */}
+          <p className="text-xs sm:text-sm font-semibold text-neutral-200 mb-3 sm:mb-4">Choose template</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {TEMPLATE_OPTIONS.map((opt) => (
               <div
                 key={opt.key}
-                className={`relative rounded-xl border-2 overflow-hidden transition-all duration-200 flex flex-col ${
-                  selectedTemplateKey === opt.key
-                    ? 'border-gray-900 ring-2 ring-gray-900 ring-offset-2'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                className={`relative rounded-lg border overflow-hidden transition-all duration-200 flex flex-col ${selectedTemplateKey === opt.key
+                  ? 'border-white ring-2 ring-white ring-offset-2 ring-offset-neutral-900'
+                  : 'border-neutral-700 hover:border-neutral-600'
+                  }`}
               >
                 <button
                   type="button"
@@ -1082,20 +994,20 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                   disabled={mutation.isPending}
                   className="text-left disabled:opacity-60 disabled:cursor-not-allowed flex flex-col flex-1 min-w-0"
                 >
-                  <div className="w-full h-36 sm:h-44 bg-gray-100 flex-shrink-0 relative">
+                  <div className="w-full h-36 sm:h-44 bg-neutral-800 flex-shrink-0 relative">
                     <img
                       src={opt.image}
                       alt={opt.label}
                       className="w-full h-full object-cover object-top"
                     />
                     {selectedTemplateKey === opt.key && (
-                      <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 bg-gray-900 rounded-full flex items-center justify-center">
-                        <CheckCircle size={12} className="text-white sm:w-[14px] sm:h-[14px]" />
+                      <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full flex items-center justify-center">
+                        <CheckCircle size={12} className="text-black sm:w-[14px] sm:h-[14px]" />
                       </div>
                     )}
                   </div>
-                  <div className="p-2.5 sm:p-3 bg-white border-t border-gray-100 flex-shrink-0 flex items-center justify-between gap-2">
-                    <span className="text-xs sm:text-sm font-medium text-gray-900">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
+                  <div className="p-2.5 sm:p-3 bg-neutral-800 border-t border-neutral-700 flex-shrink-0 flex items-center justify-between gap-2">
+                    <span className="text-xs sm:text-sm font-light text-neutral-100">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
                   </div>
                 </button>
                 <button
@@ -1106,52 +1018,51 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                     setEnlargedTemplateKey(opt.key);
                   }}
                   disabled={mutation.isPending}
-                  className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/90 hover:bg-white border border-gray-200 flex items-center justify-center shadow-sm transition-colors disabled:opacity-50"
+                  className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 flex items-center justify-center transition-colors disabled:opacity-50"
                   title="Preview full size"
                 >
-                  <Maximize2 size={14} className="text-gray-700 sm:w-4 sm:h-4" />
+                  <Maximize2 size={14} className="text-neutral-300 sm:w-4 sm:h-4" />
                 </button>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Enlarged preview lightbox */}
         {enlargedTemplateKey && (() => {
           const opt = TEMPLATE_OPTIONS.find((o) => o.key === enlargedTemplateKey);
           if (!opt) return null;
           return (
             <div
-              className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-black/70"
+              className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-black/80"
               onClick={() => setEnlargedTemplateKey(null)}
             >
               <div
-                className="relative bg-white rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
+                className="relative bg-neutral-900 border border-neutral-700 rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-gray-200 bg-gray-50">
-                  <span className="font-medium text-sm sm:text-base text-gray-900">{opt.label}</span>
+                <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-neutral-700 bg-neutral-800">
+                  <span className="font-light text-sm sm:text-base text-neutral-100">{opt.label}</span>
                   <button
                     type="button"
                     onClick={() => setEnlargedTemplateKey(null)}
-                    className="p-1.5 sm:p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="p-1.5 sm:p-2 rounded-lg hover:bg-neutral-700 transition-colors"
                     aria-label="Close preview"
                   >
-                    <X size={18} className="text-gray-600 sm:w-5 sm:h-5" />
+                    <X size={18} className="text-neutral-400 sm:w-5 sm:h-5" />
                   </button>
                 </div>
-                <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-gray-100">
+                <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-neutral-800">
                   <img
                     src={opt.image}
                     alt={opt.label}
                     className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg"
                   />
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-gray-200 bg-white">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-neutral-700 bg-neutral-900">
                   <button
                     type="button"
                     onClick={() => setEnlargedTemplateKey(null)}
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-gray-200 text-gray-700 text-xs sm:text-sm font-medium hover:bg-gray-50"
+                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-neutral-600 text-neutral-300 text-xs sm:text-sm font-light hover:bg-neutral-800"
                   >
                     Back
                   </button>
@@ -1161,7 +1072,7 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                       setSelectedTemplateKey(opt.key);
                       setEnlargedTemplateKey(null);
                     }}
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-gray-900 text-white text-xs sm:text-sm font-medium hover:bg-gray-800"
+                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-white text-black text-xs sm:text-sm font-light hover:bg-neutral-200"
                   >
                     Use this template
                   </button>
@@ -1197,9 +1108,8 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
         </div> */}
 
         {/* Contact Form Toggle */}
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
           <label className="flex items-start gap-2.5 sm:gap-3 cursor-pointer">
-            {/* Toggle Switch */}
             <span className="relative inline-block w-10 sm:w-11 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
               <input
                 type="checkbox"
@@ -1208,45 +1118,32 @@ function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoadin
                 disabled={mutation.isPending}
                 className="absolute w-0 h-0 opacity-0 peer"
               />
-              <span
-                className={`
-                  block rounded-full bg-gray-200 peer-checked:bg-gray-900 h-6 transition-colors duration-200
-                `}
-              ></span>
-              <span
-                className={`
-                  absolute left-0 top-0 h-6 w-6 bg-white border border-gray-200 rounded-full shadow-sm
-                  transition-transform duration-200 ease-in-out
-                  peer-checked:translate-x-[18px] sm:peer-checked:translate-x-5
-                `}
-                style={{
-                  boxShadow: "0 1px 2px rgba(16,21,43,0.04)"
-                }}
-              ></span>
+              <span className="block rounded-full bg-neutral-600 peer-checked:bg-white h-6 transition-colors duration-200" />
+              <span className="absolute left-0 top-0 h-6 w-6 bg-neutral-200 border border-neutral-500 rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-[18px] sm:peer-checked:translate-x-5 peer-checked:bg-white peer-checked:border-neutral-400" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="font-medium text-gray-900 text-xs sm:text-sm mb-1">Enable Contact Form</p>
-              <p className="text-xs text-gray-600">Allow visitors to contact you through your website</p>
+              <p className="font-light text-neutral-100 text-xs sm:text-sm mb-1">Enable Contact Form</p>
+              <p className="text-xs text-neutral-400">Allow visitors to contact you through your website</p>
             </div>
           </label>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             disabled={mutation.isPending}
-            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
-            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-medium flex items-center justify-center gap-2"
+            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-light flex items-center justify-center gap-2 transition-colors"
           >
             {mutation.isPending ? (
               <>
-                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-neutral-400/30 border-t-neutral-600 rounded-full animate-spin" />
                 Starting...
               </>
             ) : (
@@ -1288,7 +1185,7 @@ function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress: numbe
 
     const messageInterval = setInterval(() => {
       setIsFlipping(true);
-      
+
       setTimeout(() => {
         setCurrentMessageIndex((prev) => (prev + 1) % generatingMessages.length);
         setIsFlipping(false);
@@ -1298,34 +1195,23 @@ function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress: numbe
     return () => clearInterval(messageInterval);
   }, [isCompleted, generatingMessages.length]);
 
-  const currentMessage = currentMessageIndex === -1 
-    ? finalMessage 
+  const currentMessage = currentMessageIndex === -1
+    ? finalMessage
     : generatingMessages[currentMessageIndex];
 
   return (
-    <div className="bg-white border-2 border-gray-200 rounded-xl p-6">
-      <div className="flex items-center gap-6">
-        {/* Left side - Animated Loader */}
-        <div className="flex-shrink-0">
+    <div className="bg-neutral-800/60 border border-neutral-700 rounded-lg">
+      <div className="flex items-center">
+        <div className="flex-shrink-0 scale-50">
           <CustomLoader />
         </div>
-
-        {/* Right side - Animated Messages */}
-        <div className="flex-1 min-h-[56px] flex items-center overflow-hidden">
+        <div className="overflow-hidden">
           <div
-            className={`w-full transition-all duration-500 ${
-              isFlipping 
-                ? 'opacity-0 -translate-y-4' 
-                : 'opacity-100 translate-y-0'
-            }`}
+            className={`w-full transition-all duration-500 ${isFlipping ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'
+              }`}
           >
-            <p className="text-base font-medium text-gray-900 leading-relaxed">
-              {currentMessage}
-            </p>
             {!isCompleted && (
-              <p className="text-xs text-gray-500 mt-1">
-                {progress}% complete
-              </p>
+              <p className="text-xs text-neutral-500">{progress}% {currentMessage}</p>
             )}
           </div>
         </div>
