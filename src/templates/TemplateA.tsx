@@ -446,28 +446,21 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   return (
     <>
-      {/* Google tag (gtag.js) */}
-      {website.googleAnalyticsId && (
-        <>
-          <Script
-            async
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${website.googleAnalyticsId}`}
-          />
-          <Script 
-            id="gtag-init"
-            strategy="afterInteractive"
-          >
-            {`
+      {/* Google Analytics — platform GA always runs; user GA runs additionally if configured */}
+      <Script
+        async
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-VBK9FM3J4M"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
-  gtag('config', '${website.googleAnalyticsId}');
-            `}
-          </Script>
-        </>
-      )}
+  gtag('config', 'G-VBK9FM3J4M');
+  ${website.googleAnalyticsId ? `gtag('config', '${website.googleAnalyticsId}');` : ''}
+        `}
+      </Script>
 
       <div className="template-content">
         {renderContent()}
