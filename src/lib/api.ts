@@ -38,6 +38,8 @@ export const domainsAPI = {
   checkDnsStatus: (id: string) => api.get(`/domains/${id}/dns-status`),
   deployWorkers: (id: string) => api.post(`/domains/${id}/deploy-workers`),
   retryCloudflare: (id: string) => api.post(`/domains/${id}/retry-cloudflare`),
+  /** GET /domains/search?q=... — empty q returns 400 */
+  search: (q: string) => api.get('/domains/search', { params: { q } }),
 };
 
 export const websitesAPI = {
@@ -126,12 +128,3 @@ export const publicAPI = {
   submitContactForm: (data: { domain: string; name: string; email: string; company?: string; message: string }) =>
     api.post('/public/contact', data),
 };
-
-export const aiPromptsAPI = {
-  getAll: (templateKey?: string) =>
-    api.get('/ai-prompts', { params: { templateKey } }),
-  create: (data: any) => api.post('/ai-prompts', data),
-  update: (id: string, data: any) => api.put(`/ai-prompts/${id}`, data),
-  delete: (id: string) => api.delete(`/ai-prompts/${id}`),
-};
-

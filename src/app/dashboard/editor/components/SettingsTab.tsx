@@ -91,49 +91,49 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
       name: 'Logo',
       description: 'Upload your website logo',
       icon: ImageIcon,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'templates' as SettingCategory,
       name: 'Templates',
       description: 'Choose website design',
       icon: Layout,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'metadata' as SettingCategory,
       name: 'Metadata',
       description: 'SEO & social sharing',
       icon: Globe,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'ads' as SettingCategory,
       name: 'Ads Settings',
       description: 'Manage advertisements',
       icon: Megaphone,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'contact' as SettingCategory,
       name: 'Contact Form',
       description: 'Toggle contact form',
       icon: MessageSquare,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'social' as SettingCategory,
       name: 'Social Media',
       description: 'Add social links',
       icon: Share2,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
     {
       id: 'analytics' as SettingCategory,
       name: 'Analytics',
       description: 'Google Analytics tracking',
       icon: BarChart3,
-      color: 'bg-gray-100 text-[#111827]',
+      color: 'bg-neutral-800 text-neutral-100',
     },
   ];
 
@@ -218,13 +218,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-[#111827] transition-all duration-200 text-center group"
+                className="bg-neutral-900 border-2 border-neutral-700 rounded-xl p-6 hover:shadow-lg hover:border-neutral-600 transition-all duration-200 text-center group"
               >
                 <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
                   <Icon size={32} />
                 </div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">{category.name}</h3>
-                <p className="text-sm text-gray-600">{category.description}</p>
+                <h3 className="font-semibold text-neutral-100 text-lg mb-2">{category.name}</h3>
+                <p className="text-sm text-neutral-400">{category.description}</p>
               </button>
             );
           })}
@@ -239,7 +239,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
       {/* Back Button */}
       <button
         onClick={() => setSelectedCategory(null)}
-        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        className="flex items-center gap-2 text-neutral-400 hover:text-neutral-100 transition-colors"
       >
         <ArrowLeft size={20} />
         <span className="font-medium">Back to Settings</span>
@@ -250,15 +250,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'logo' && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Website Logo</h3>
-              <p className="text-sm text-gray-600">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
+              <h3 className="text-lg font-semibold text-neutral-100 mb-1">Website Logo</h3>
+              <p className="text-sm text-neutral-400">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5 space-y-5">
               {/* Current logo preview */}
               {logoPreview ? (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 w-full flex items-center justify-center" style={{ minHeight: '120px' }}>
+                  <div className="border border-neutral-700 rounded-lg p-4 bg-neutral-800 w-full flex items-center justify-center" style={{ minHeight: '120px' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={logoPreview}
@@ -270,7 +270,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <button
                       onClick={() => logoInputRef.current?.click()}
                       disabled={isUploadingLogo}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-lg hover:bg-neutral-800 transition-colors text-sm font-medium disabled:opacity-50"
                     >
                       {isUploadingLogo ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
                       Replace Logo
@@ -278,7 +278,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <button
                       onClick={handleLogoDelete}
                       disabled={isDeletingLogo}
-                      className="flex items-center gap-2 px-4 py-2.5 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2.5 border border-red-700/50 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm font-medium disabled:opacity-50"
                     >
                       {isDeletingLogo ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                       Remove
@@ -288,21 +288,21 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               ) : (
                 <div
                   onClick={() => logoInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-300 rounded-xl p-10 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-gray-500 hover:bg-gray-50 transition-all"
+                  className="border-2 border-dashed border-neutral-600 rounded-xl p-10 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-neutral-500 hover:bg-neutral-800 transition-all"
                 >
                   {isUploadingLogo ? (
                     <>
-                      <Loader2 size={32} className="animate-spin text-gray-400" />
-                      <p className="text-sm text-gray-500">Uploading...</p>
+                      <Loader2 size={32} className="animate-spin text-neutral-400" />
+                      <p className="text-sm text-neutral-500">Uploading...</p>
                     </>
                   ) : (
                     <>
-                      <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center">
-                        <ImageIcon size={24} className="text-gray-400" />
+                      <div className="w-14 h-14 bg-neutral-800 rounded-full flex items-center justify-center">
+                        <ImageIcon size={24} className="text-neutral-400" />
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-semibold text-gray-700">Click to upload logo</p>
-                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
+                        <p className="text-sm font-semibold text-neutral-300">Click to upload logo</p>
+                        <p className="text-xs text-neutral-500 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
                       </div>
                     </>
                   )}
@@ -325,8 +325,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               />
 
               {/* Display mode radio buttons */}
-              <div className="border-t border-gray-200 pt-4">
-                <p className="text-sm font-semibold text-gray-900 mb-3">Header Display</p>
+              <div className="border-t border-neutral-700 pt-4">
+                <p className="text-sm font-semibold text-neutral-100 mb-3">Header Display</p>
                 <div className="space-y-2">
                   {([
                     { value: 'logo_only', label: 'Logo only', desc: 'Show only the logo image' },
@@ -337,8 +337,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                       key={opt.value}
                       className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                         logoDisplayMode === opt.value
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-400'
+                          ? 'border-neutral-400 bg-neutral-800'
+                          : 'border-neutral-700 hover:border-neutral-500'
                       }`}
                     >
                       <input
@@ -347,11 +347,11 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         value={opt.value}
                         checked={logoDisplayMode === opt.value}
                         onChange={() => setLogoDisplayMode(opt.value)}
-                        className="mt-0.5 accent-gray-900"
+                        className="mt-0.5 accent-neutral-400"
                       />
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{opt.label}</p>
-                        <p className="text-xs text-gray-500">{opt.desc}</p>
+                        <p className="text-sm font-medium text-neutral-100">{opt.label}</p>
+                        <p className="text-xs text-neutral-500">{opt.desc}</p>
                       </div>
                     </label>
                   ))}
@@ -370,15 +370,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     }
                   }}
                   disabled={isSavingMode}
-                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSavingMode ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   {isSavingMode ? 'Saving...' : 'Save Display Mode'}
                 </button>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-xs text-blue-800">
+              <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3">
+                <p className="text-xs text-blue-200">
                   💡 <strong>Tip:</strong> Use a transparent PNG or SVG for the best results. Recommended dimensions: at least 200px wide, up to 400px.
                 </p>
               </div>
@@ -389,9 +389,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {/* Template Selection */}
         {selectedCategory === 'templates' && (
           <>
-            <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-5">
               <div className="mb-4">
-                <p className="font-semibold text-gray-900 mb-1">Website Template</p>
+                <p className="font-semibold text-neutral-100 mb-1">Website Template</p>
               </div>
 
               {isLoadingTemplates ? (
@@ -406,12 +406,12 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     onClick={() => handleTemplateClick(template)}
                     className={`group relative border-2 rounded-lg overflow-hidden transition-all duration-200 ${
                       selectedTemplate === template.key
-                        ? 'border-gray-900 ring-2 ring-gray-900'
-                        : 'border-gray-200 hover:border-gray-400'
+                        ? 'border-neutral-400 ring-2 ring-neutral-400'
+                        : 'border-neutral-700 hover:border-neutral-500'
                     }`}
                   >
                     {/* Preview Image */}
-                    <div className="aspect-video bg-gray-100 relative">
+                    <div className="aspect-video bg-neutral-800 relative">
                       <img
                         src={template.previewImage}
                         alt={template.name}
@@ -421,7 +421,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         }}
                       />
                       {selectedTemplate === template.key && (
-                        <div className="absolute top-2 right-2 px-2 py-1 bg-gray-900 text-white text-xs font-medium rounded">
+                        <div className="absolute top-2 right-2 px-2 py-1 bg-neutral-600 text-neutral-100 text-xs font-medium rounded">
                           Active
                         </div>
                       )}
@@ -434,8 +434,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     </div>
                     
                     {/* Template Name */}
-                    <div className="p-3 bg-white">
-                      <h4 className="font-medium text-gray-900 text-sm text-center">{template.name}</h4>
+                    <div className="p-3 bg-neutral-800">
+                      <h4 className="font-medium text-neutral-100 text-sm text-center">{template.name}</h4>
                     </div>
                   </button>
                 ))}
@@ -446,11 +446,11 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             {/* Template Details Modal */}
             {showTemplateModal && selectedTemplateDetails && (
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-200">
-            <div className="bg-white rounded-xl max-w-7xl w-full shadow-2xl animate-in zoom-in duration-200 overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="bg-neutral-900 rounded-xl border border-neutral-700 max-w-7xl w-full shadow-2xl animate-in zoom-in duration-200 overflow-hidden max-h-[90vh] flex flex-col">
               {/* Modal Header */}
-              <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-white border-b border-gray-100">
+              <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-neutral-900 border-b border-neutral-700">
                 <div>
-                  <h3 className="text-lg sm:text-2xl font-semibold text-gray-900">{selectedTemplateDetails.name}</h3>
+                  <h3 className="text-lg sm:text-2xl font-semibold text-neutral-100">{selectedTemplateDetails.name}</h3>
                   {selectedTemplate === selectedTemplateDetails.key && (
                     <span className="inline-flex items-center gap-1.5 text-xs text-green-600 mt-1 font-medium">
                       <CheckCircle2 size={14} />
@@ -460,18 +460,18 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
                 <button
                   onClick={() => setShowTemplateModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-neutral-800 rounded-full transition-colors"
                 >
-                  <X size={22} className="text-gray-400" />
+                  <X size={22} className="text-neutral-400" />
                 </button>
               </div>
 
               {/* Modal Content - Side by Side Layout on desktop, stacked on mobile */}
               <div className="flex flex-col lg:flex-row overflow-auto" style={{ minHeight: '400px', maxHeight: '650px' }}>
                 {/* Left: Preview Image + Other Templates */}
-                <div className="flex-1 bg-gray-50 p-4 sm:p-6 flex flex-col gap-3">
+                <div className="flex-1 bg-neutral-800 p-4 sm:p-6 flex flex-col gap-3">
                   {/* Main Preview - Takes most space */}
-                  <div className="rounded-lg overflow-hidden bg-white shadow-sm" style={{ minHeight: '300px', height: 'calc(100% - 100px)' }}>
+                  <div className="rounded-lg overflow-hidden bg-neutral-800 shadow-sm" style={{ minHeight: '300px', height: 'calc(100% - 100px)' }}>
                     <img
                       src={selectedTemplateDetails.previewImage}
                       alt={selectedTemplateDetails.name}
@@ -491,7 +491,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                           <button
                             key={template.key}
                             onClick={() => setSelectedTemplateDetails(template)}
-                            className="rounded-md overflow-hidden border-2 border-gray-200 hover:border-gray-900 transition-all duration-200 bg-white hover:shadow-md flex-shrink-0"
+                            className="rounded-md overflow-hidden border-2 border-neutral-700 hover:border-neutral-400 transition-all duration-200 bg-neutral-800 hover:shadow-md flex-shrink-0"
                             style={{ width: '120px' }}
                           >
                             <div style={{ height: '60px' }}>
@@ -504,8 +504,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                                 }}
                               />
                             </div>
-                            <div className="px-2 py-1 bg-white">
-                              <p className="text-xs font-medium text-gray-900 text-center truncate">{template.name}</p>
+                            <div className="px-2 py-1 bg-neutral-800">
+                              <p className="text-xs font-medium text-neutral-100 text-center truncate">{template.name}</p>
                             </div>
                           </button>
                         ))}
@@ -514,24 +514,24 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Right: Template Details */}
-                <div className="w-full lg:w-96 flex flex-col bg-white">
+                <div className="w-full lg:w-96 flex flex-col bg-neutral-900">
                   <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
                     {/* Description */}
                     <div>
-                      <h4 className="text-base font-semibold text-gray-900 mb-3">About This Template</h4>
-                      <p className="text-sm text-gray-600 leading-relaxed">{selectedTemplateDetails.description}</p>
+                      <h4 className="text-base font-semibold text-neutral-100 mb-3">About This Template</h4>
+                      <p className="text-sm text-neutral-400 leading-relaxed">{selectedTemplateDetails.description}</p>
                     </div>
 
                     {/* Features */}
                     <div>
-                      <h4 className="text-base font-semibold text-gray-900 mb-4">Features</h4>
+                      <h4 className="text-base font-semibold text-neutral-100 mb-4">Features</h4>
                       <div className="space-y-3">
                         {selectedTemplateDetails.features.map((feature: string, i: number) => (
                           <div key={i} className="flex items-start gap-3">
                             <div className="mt-0.5">
                               <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
                             </div>
-                            <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
+                            <span className="text-sm text-neutral-300 leading-relaxed">{feature}</span>
                           </div>
                         ))}
                       </div>
@@ -539,14 +539,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   </div>
 
                   {/* Footer Buttons */}
-                  <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-t border-gray-100 bg-gray-50">
+                  <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-t border-neutral-700 bg-neutral-800">
                     <button
                       onClick={handleTemplateSelect}
                       disabled={isUpdatingTemplate || selectedTemplate === selectedTemplateDetails.key}
                       className={`w-full px-6 py-3 rounded-lg transition-all duration-200 font-medium shadow-sm ${
                         selectedTemplate === selectedTemplateDetails.key
                           ? 'bg-green-500 text-white cursor-not-allowed'
-                          : 'bg-gray-900 hover:bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed'
+                          : 'bg-white hover:bg-neutral-200 text-black disabled:opacity-50 disabled:cursor-not-allowed'
                       }`}
                     >
                       {isUpdatingTemplate ? (
@@ -574,7 +574,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Ads Setting */}
         {selectedCategory === 'ads' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
             <div className="flex items-start justify-between">
               <label className="flex items-start gap-3 cursor-pointer flex-1">
               <input
@@ -592,19 +592,19 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     toast.error(error.response?.data?.message || 'Failed to update ads settings');
                   }
                 }}
-                className="w-5 h-5 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900"
+                className="w-5 h-5 text-neutral-100 rounded mt-0.5 focus:ring-2 focus:ring-neutral-500"
               />
               <div>
-                <p className="font-semibold text-gray-900 mb-1">Enable Ads</p>
-                <p className="text-sm text-gray-600">Show advertisements on your website</p>
+                <p className="font-semibold text-neutral-100 mb-1">Enable Ads</p>
+                <p className="text-sm text-neutral-400">Show advertisements on your website</p>
               </div>
               </label>
               {domain.website.adsApproved ? (
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                <span className="px-3 py-1 bg-green-900/50 text-green-300 rounded-full text-xs font-medium border border-green-700/50">
                   Approved
                 </span>
               ) : (
-                <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium">
+                <span className="px-3 py-1 bg-yellow-900/50 text-yellow-300 rounded-full text-xs font-medium border border-yellow-700/50">
                   Pending
                 </span>
               )}
@@ -616,7 +616,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'contact' && (
           <div className="space-y-6">
             {/* Toggle Contact Form */}
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -633,27 +633,27 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                       toast.error(error.response?.data?.message || 'Failed to update contact form settings');
                     }
                   }}
-                  className="w-5 h-5 text-gray-900 rounded mt-0.5 focus:ring-2 focus:ring-gray-900"
+                  className="w-5 h-5 text-neutral-100 rounded mt-0.5 focus:ring-2 focus:ring-neutral-500"
                 />
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1">Enable Contact Form</p>
-                  <p className="text-sm text-gray-600">Show "Contact Us" link in your website</p>
+                  <p className="font-semibold text-neutral-100 mb-1">Enable Contact Form</p>
+                  <p className="text-sm text-neutral-400">Show "Contact Us" link in your website</p>
                 </div>
               </label>
             </div>
 
             {/* Contact Information */}
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
               <div className="mb-4">
-                <p className="font-semibold text-gray-900 mb-1">Contact Information</p>
-                <p className="text-sm text-gray-600">Add your contact details to display on your website</p>
+                <p className="font-semibold text-neutral-100 mb-1">Contact Information</p>
+                <p className="text-sm text-neutral-400">Add your contact details to display on your website</p>
               </div>
 
               <div className="space-y-4">
                 {/* Contact Email */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Mail size={18} className="text-gray-600" />
+                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                    <Mail size={18} className="text-neutral-400" />
                     Email Address
                   </label>
                   <input
@@ -661,14 +661,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
                     placeholder="contact@example.com"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                 </div>
 
                 {/* Contact Phone */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Phone size={18} className="text-gray-600" />
+                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                    <Phone size={18} className="text-neutral-400" />
                     Phone Number
                   </label>
                   <input
@@ -676,7 +676,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
                     placeholder="+1 (555) 123-4567"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                 </div>
               </div>
@@ -699,7 +699,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   }
                 }}
                 disabled={isUpdatingContact}
-                className="w-full mt-4 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full mt-4 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isUpdatingContact ? (
                   <>
@@ -719,16 +719,16 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Social Media Links */}
         {selectedCategory === 'social' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
+          <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
             <div className="mb-4">
-              <p className="font-semibold text-gray-900 mb-1">Social Media Links</p>
-              <p className="text-sm text-gray-600">Add your social media profiles to appear in your website footer</p>
+              <p className="font-semibold text-neutral-100 mb-1">Social Media Links</p>
+              <p className="text-sm text-neutral-400">Add your social media profiles to appear in your website footer</p>
             </div>
 
             <div className="space-y-4">
               {/* Instagram */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
                   <Instagram size={18} className="text-pink-500" />
                   Instagram
                 </label>
@@ -737,13 +737,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={instagramUrl}
                   onChange={(e) => setInstagramUrl(e.target.value)}
                   placeholder="https://instagram.com/yourprofile"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
               {/* Facebook */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
                   <Facebook size={18} className="text-blue-600" />
                   Facebook
                 </label>
@@ -752,13 +752,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={facebookUrl}
                   onChange={(e) => setFacebookUrl(e.target.value)}
                   placeholder="https://facebook.com/yourpage"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
               {/* Twitter */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
                   <Twitter size={18} className="text-sky-500" />
                   Twitter / X
                 </label>
@@ -767,7 +767,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={twitterUrl}
                   onChange={(e) => setTwitterUrl(e.target.value)}
                   placeholder="https://twitter.com/yourhandle"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -775,7 +775,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <button
                 onClick={handleSocialMediaUpdate}
                 disabled={isUpdatingSocial}
-                className="w-full px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isUpdatingSocial ? (
                   <span className="flex items-center justify-center gap-2">
@@ -794,15 +794,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'metadata' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">SEO & Social Sharing Settings</h3>
-              <p className="text-sm text-gray-600">Optimize your website for search engines and social media platforms</p>
+              <h3 className="text-lg font-semibold text-neutral-100 mb-1">SEO & Social Sharing Settings</h3>
+              <p className="text-sm text-neutral-400">Optimize your website for search engines and social media platforms</p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
               <div className="space-y-5">
                 {/* Meta Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     SEO Title *
                   </label>
                   <input
@@ -810,14 +810,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaTitle}
                     onChange={(e) => setMetaTitle(e.target.value)}
                     placeholder={`${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)} - Your Source for Quality Content`}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                   <div className="flex items-center justify-between mt-1.5">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-neutral-500">
                       Appears in search results and browser tabs (50-60 characters recommended)
                     </p>
                     <span className={`text-xs font-medium ${
-                      metaTitle.length > 60 ? 'text-red-600' : 'text-gray-500'
+                      metaTitle.length > 60 ? 'text-red-600' : 'text-neutral-500'
                     }`}>
                       {metaTitle.length}/60
                     </span>
@@ -826,7 +826,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     SEO Description *
                   </label>
                   <textarea
@@ -834,14 +834,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     onChange={(e) => setMetaDescription(e.target.value)}
                     placeholder="Discover amazing content. Your trusted source for news, insights, and updates."
                     rows={3}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                   <div className="flex items-center justify-between mt-1.5">
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-neutral-500">
                       Brief description shown in search results and social media
                     </p>
                     <span className={`text-xs font-medium ${
-                      metaDescription.length > 160 ? 'text-red-600' : 'text-gray-500'
+                      metaDescription.length > 160 ? 'text-red-600' : 'text-neutral-500'
                     }`}>
                       {metaDescription.length}/160
                     </span>
@@ -850,7 +850,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Image */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     Preview Image URL *
                   </label>
                   <input
@@ -858,16 +858,16 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaImage}
                     onChange={(e) => setMetaImage(e.target.value)}
                     placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-gray-500 mt-1.5">
+                  <p className="text-xs text-neutral-500 mt-1.5">
                     Image shown in social media previews (1200x630px recommended for best results)
                   </p>
                 </div>
 
                 {/* Meta Keywords */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     SEO Keywords
                   </label>
                   <input
@@ -875,16 +875,16 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaKeywords}
                     onChange={(e) => setMetaKeywords(e.target.value)}
                     placeholder="keyword1, keyword2, keyword3"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-gray-500 mt-1.5">
+                  <p className="text-xs text-neutral-500 mt-1.5">
                     Comma-separated keywords that describe your website content (helps with SEO)
                   </p>
                 </div>
 
                 {/* Meta Author */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-300 mb-2">
                     Author / Owner Name
                   </label>
                   <input
@@ -892,18 +892,18 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaAuthor}
                     onChange={(e) => setMetaAuthor(e.target.value)}
                     placeholder="Your Name or Company Name"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-gray-500 mt-1.5">
+                  <p className="text-xs text-neutral-500 mt-1.5">
                     Website owner or author name (appears in search results and metadata)
                   </p>
                 </div>
 
                 {/* Social Media Preview Card */}
                 {(metaTitle || metaDescription || metaImage) && (
-                  <div className="pt-4 border-t border-gray-200">
-                    <p className="text-xs font-medium text-gray-700 mb-3">How it will look when shared:</p>
-                    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                  <div className="pt-4 border-t border-neutral-700">
+                    <p className="text-xs font-medium text-neutral-300 mb-3">How it will look when shared:</p>
+                    <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800 shadow-sm">
                       {metaImage && (
                         <img
                           src={metaImage}
@@ -915,11 +915,11 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         />
                       )}
                       <div className="p-4">
-                        <p className="text-xs text-gray-500 mb-1">{domain.domainName}</p>
-                        <h4 className="font-semibold text-gray-900 mb-1 line-clamp-2">
+                        <p className="text-xs text-neutral-500 mb-1">{domain.domainName}</p>
+                        <h4 className="font-semibold text-neutral-100 mb-1 line-clamp-2">
                           {metaTitle || `${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)}`}
                         </h4>
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="text-sm text-neutral-400 line-clamp-2">
                           {metaDescription || 'Discover amazing content'}
                         </p>
                       </div>
@@ -932,7 +932,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   <button
                     onClick={handleMetadataUpdate}
                     disabled={isUpdatingMetadata}
-                    className="w-full sm:w-auto px-8 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm shadow-sm"
+                    className="w-full sm:w-auto px-8 py-3 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm shadow-sm"
                   >
                     {isUpdatingMetadata ? (
                       <span className="flex items-center justify-center gap-2">
@@ -948,26 +948,26 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             </div>
 
             {/* SEO Tips */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-              <h4 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
+            <div className="bg-blue-900/20 border border-blue-700/50 rounded-xl p-5">
+              <h4 className="text-sm font-semibold text-blue-200 mb-3 flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 SEO Best Practices
               </h4>
-              <ul className="space-y-2 text-sm text-blue-800">
+              <ul className="space-y-2 text-sm text-blue-200/90">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span><strong>Title:</strong> Keep it under 60 characters, include main keywords</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span><strong>Description:</strong> 150-160 characters, compelling and descriptive</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span><strong>Image:</strong> Use high-quality images (1200x630px for social media)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span className="text-blue-400 mt-0.5">•</span>
                   <span><strong>Keywords:</strong> Choose 5-10 relevant keywords that match your content</span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -983,15 +983,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'analytics' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Google Analytics Tracking</h3>
-              <p className="text-sm text-gray-600">Add Google Analytics to track your website visitors and behavior</p>
+              <h3 className="text-lg font-semibold text-neutral-100 mb-1">Google Analytics Tracking</h3>
+              <p className="text-sm text-neutral-400">Add Google Analytics to track your website visitors and behavior</p>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
               <div className="space-y-5">
                 {/* Google Analytics ID */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
                     <BarChart3 size={18} className="text-orange-500" />
                     Google Analytics Measurement ID
                   </label>
@@ -1000,22 +1000,22 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={googleAnalyticsId}
                     onChange={(e) => setGoogleAnalyticsId(e.target.value)}
                     placeholder="G-XXXXXXXXXX"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm font-mono"
+                    className="w-full px-4 py-2.5 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm font-mono"
                   />
-                  <p className="text-xs text-gray-500 mt-1.5">
+                  <p className="text-xs text-neutral-500 mt-1.5">
                     Enter your Google Analytics 4 (GA4) measurement ID (format: G-XXXXXXXXXX)
                   </p>
                 </div>
 
                 {/* Current Status */}
                 {googleAnalyticsId && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 size={20} className="text-green-400 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-semibold text-green-900">Google Analytics Enabled</p>
-                        <p className="text-xs text-green-700 mt-1">
-                          Tracking ID: <code className="bg-green-100 px-2 py-0.5 rounded font-mono">{googleAnalyticsId}</code>
+                        <p className="text-sm font-semibold text-green-200">Google Analytics Enabled</p>
+                        <p className="text-xs text-green-300/90 mt-1">
+                          Tracking ID: <code className="bg-neutral-800 px-2 py-0.5 rounded font-mono text-neutral-200">{googleAnalyticsId}</code>
                         </p>
                       </div>
                     </div>
@@ -1039,7 +1039,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     }
                   }}
                   disabled={isUpdatingAnalytics}
-                  className="w-full px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isUpdatingAnalytics ? (
                     <>

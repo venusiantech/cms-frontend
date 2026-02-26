@@ -128,25 +128,25 @@ export default function GenerateContentModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', duration: 0.5 }}
-              className="relative bg-white rounded-2xl shadow-2xl max-w-5xl w-full p-10"
+              className="relative bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-700 max-w-5xl w-full p-10"
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-gradient-to-br from-gray-900 to-gray-700 rounded-xl shadow-md">
+                  <div className="p-3 bg-gradient-to-br from-neutral-700 to-neutral-800 rounded-xl shadow-md">
                     <Sparkles size={26} className="text-white" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold text-gray-900">Generate Content</h2>
-                    <p className="text-sm text-gray-500 mt-0.5">Powered by AI</p>
+                    <h2 className="text-3xl font-bold text-neutral-100">Generate Content</h2>
+                    <p className="text-sm text-neutral-500 mt-0.5">Powered by AI</p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
                   disabled={isGenerating}
-                  className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2.5 hover:bg-neutral-800 rounded-lg transition-colors disabled:opacity-50"
                 >
-                  <X size={22} className="text-gray-500" />
+                  <X size={22} className="text-neutral-400" />
                 </button>
               </div>
 
@@ -155,29 +155,29 @@ export default function GenerateContentModal({
                 {/* LEFT COLUMN - Prompt & Keywords */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-5">Context & Keywords</h3>
+                    <h3 className="text-lg font-bold text-neutral-100 mb-5">Context & Keywords</h3>
                     
                     {/* Domain Description */}
                     <div className="mb-5">
-                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                      <label className="block text-sm font-medium text-neutral-300 mb-2.5">
                         Domain Description
                       </label>
                       <textarea
                         value={userDescription}
                         onChange={(e) => setUserDescription(e.target.value)}
                         placeholder="Describe what your domain is about..."
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all duration-200 resize-none text-sm placeholder:text-gray-400"
+                        className="w-full px-4 py-3 bg-neutral-800 border-2 border-neutral-600 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 resize-none text-sm"
                         rows={5}
                         maxLength={500}
                       />
-                      <p className="text-xs text-gray-400 mt-2">
+                      <p className="text-xs text-neutral-500 mt-2">
                         {userDescription.length}/500 characters
                       </p>
                     </div>
 
                     {/* Keywords Input */}
                     <div className="mb-5">
-                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                      <label className="block text-sm font-medium text-neutral-300 mb-2.5">
                         Keywords
                       </label>
                       <div className="flex gap-2">
@@ -187,24 +187,24 @@ export default function GenerateContentModal({
                           onChange={(e) => setKeywords(e.target.value)}
                           onKeyDown={handleKeyDown}
                           placeholder="Add keywords..."
-                          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all placeholder:text-gray-400"
+                          className="flex-1 px-4 py-3 bg-neutral-800 border-2 border-neutral-600 rounded-xl text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all placeholder:text-neutral-500"
                         />
                         <button
                           onClick={handleAddKeyword}
                           disabled={!keywords.trim()}
-                          className="px-5 py-3 bg-gray-900 text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-5 py-3 bg-white text-black rounded-xl font-medium text-sm hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Add
                         </button>
                       </div>
-                      <p className="text-xs text-gray-400 mt-2">
+                      <p className="text-xs text-neutral-500 mt-2">
                         Press Enter or click Add to save keywords
                       </p>
                       
                       {/* Display Saved Keywords as Chips */}
                       {savedKeywords.length > 0 && (
                         <div className="mt-4">
-                          <div className="flex flex-wrap gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                          <div className="flex flex-wrap gap-2 p-3 bg-neutral-800 rounded-xl border border-neutral-600">
                             <AnimatePresence mode="popLayout">
                               {savedKeywords.map((keyword) => (
                                 <motion.div
@@ -212,12 +212,12 @@ export default function GenerateContentModal({
                                   initial={{ opacity: 0, scale: 0.8 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   exit={{ opacity: 0, scale: 0.8 }}
-                                  className="px-3 py-1.5 bg-gray-900 text-white rounded-full text-xs font-bold uppercase flex items-center gap-1.5 hover:bg-gray-800 transition-colors"
+                                  className="px-3 py-1.5 bg-neutral-600 text-neutral-100 rounded-full text-xs font-bold uppercase flex items-center gap-1.5 hover:bg-neutral-500 transition-colors"
                                 >
                                   {keyword}
                                   <button
                                     onClick={() => handleRemoveKeyword(keyword)}
-                                    className="hover:bg-gray-700 rounded-full p-0.5"
+                                    className="hover:bg-neutral-400 rounded-full p-0.5"
                                   >
                                     <X size={12} />
                                   </button>
@@ -235,7 +235,7 @@ export default function GenerateContentModal({
                       whileTap={{ scale: 0.98 }}
                       onClick={handleSaveContext}
                       disabled={isSaving || !hasChanges}
-                      className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-white hover:bg-neutral-200 text-black rounded-xl font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {isSaving ? (
                         <>
@@ -255,21 +255,21 @@ export default function GenerateContentModal({
                 {/* RIGHT COLUMN - Content Generation */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-5">Content Generation</h3>
+                    <h3 className="text-lg font-bold text-neutral-100 mb-5">Content Generation</h3>
                     
                     {/* Content Type Selection */}
                     <div className="mb-8">
-                      <label className="block text-sm font-medium text-gray-700 mb-2.5">
+                      <label className="block text-sm font-medium text-neutral-300 mb-2.5">
                         Content Type
                       </label>
-                      <div className="p-4 rounded-xl border-2 border-gray-900 bg-gray-50/50 flex items-center justify-between gap-3">
+                      <div className="p-4 rounded-xl border-2 border-neutral-600 bg-neutral-800/50 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2.5 rounded-lg bg-gray-900">
+                          <div className="p-2.5 rounded-lg bg-neutral-600">
                             <FileText size={22} className="text-white" />
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">Blog Posts</div>
-                            <div className="text-xs text-gray-500">AI-generated articles with images</div>
+                            <div className="font-semibold text-neutral-100">Blog Posts</div>
+                            <div className="text-xs text-neutral-500">AI-generated articles with images</div>
                           </div>
                         </div>
                         <input
@@ -282,7 +282,7 @@ export default function GenerateContentModal({
                             setQuantity(Math.max(1, Math.min(20, val)));
                           }}
                           disabled={isGenerating}
-                          className="w-20 px-3 py-2 border-2 border-gray-200 rounded-lg text-center text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900 disabled:opacity-50"
+                          className="w-20 px-3 py-2 bg-neutral-800 border-2 border-neutral-600 rounded-lg text-center text-sm font-semibold text-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -294,7 +294,7 @@ export default function GenerateContentModal({
                         whileTap={{ scale: 0.98 }}
                         onClick={onClose}
                         disabled={isGenerating}
-                        className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
+                        className="flex-1 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-xl font-medium text-sm hover:bg-neutral-800 transition-colors disabled:opacity-50"
                       >
                         Cancel
                       </motion.button>
@@ -303,7 +303,7 @@ export default function GenerateContentModal({
                         whileTap={{ scale: 0.98 }}
                         onClick={handleGenerate}
                         disabled={isGenerating}
-                        className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                        className="flex-1 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-xl font-medium text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                       >
                         {isGenerating ? (
                           <>

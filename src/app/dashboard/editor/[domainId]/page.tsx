@@ -272,10 +272,10 @@ export default function EditorPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Invalid domain ID</p>
+          <p className="text-neutral-500 mb-4">Invalid domain ID</p>
           <button
             onClick={() => router.push('/dashboard')}
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="px-4 py-2 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors"
           >
             ← Back to Dashboard
           </button>
@@ -289,7 +289,7 @@ export default function EditorPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
           <CustomLoader />
-          <p className="text-sm text-gray-500">Loading website...</p>
+          <p className="text-sm text-neutral-500">Loading website...</p>
         </div>
       </div>
     );
@@ -298,8 +298,8 @@ export default function EditorPage() {
   if (!domain || !domain.website) {
     return (
       <div className="text-center py-20">
-        <p className="text-gray-500 mb-4">Website not found</p>
-        <button onClick={() => router.push('/dashboard')} className="text-gray-900 hover:underline">
+        <p className="text-neutral-500 mb-4">Website not found</p>
+        <button onClick={() => router.push('/dashboard')} className="text-neutral-300 hover:text-white hover:underline">
           ← Back to dashboard
         </button>
       </div>
@@ -330,27 +330,27 @@ export default function EditorPage() {
     });
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-black">
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-5">
+      <div className="bg-black border-b border-neutral-800 px-4 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-5">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
             >
-              <ArrowLeft size={18} className="text-gray-600" />
+              <ArrowLeft size={18} className="text-neutral-400" />
             </button>
             <div>
-              <h1 className="text-lg sm:text-xl font-medium text-gray-900 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
-              <p className="text-xs text-gray-500 mt-0.5">{blogs.length} blogs • Active</p>
+              <h1 className="text-lg sm:text-xl font-medium text-neutral-100 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
+              <p className="text-xs text-neutral-500 mt-0.5">{blogs.length} blogs • Active</p>
             </div>
           </div>
           <a
             href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-2 sm:px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 flex items-center gap-2 text-xs sm:text-sm font-medium"
+            className="px-3 py-2 sm:px-4 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center gap-2 text-xs sm:text-sm font-medium"
           >
             <ExternalLink size={16} />
             <span className="hidden sm:inline">View Site</span>
@@ -362,9 +362,9 @@ export default function EditorPage() {
       {/* Main Content - Split View */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left: Website Preview - Hidden on mobile */}
-        <div className="hidden lg:block lg:w-1/2 border-r border-gray-200 bg-gray-100 p-6 overflow-auto">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <div className="bg-gray-800 px-4 py-3 flex items-center justify-between gap-3">
+        <div className="hidden lg:block lg:w-1/2 border-r border-neutral-800 bg-neutral-950 p-6 overflow-auto">
+          <div className="bg-neutral-900 rounded-xl overflow-hidden border border-neutral-700">
+            <div className="bg-neutral-800 px-4 py-3 flex items-center justify-between gap-3">
               {/* Left: MacBook buttons */}
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -374,29 +374,19 @@ export default function EditorPage() {
               
               {/* Center: URL bar */}
               <div className="flex-1 flex justify-center">
-                <div className="bg-gray-700 rounded px-3 py-1 text-xs text-gray-300 font-mono">
+                <div className="bg-neutral-700 rounded px-3 py-1 text-xs text-neutral-300 font-mono">
                   {getDisplaySubdomain(domain.website.subdomain)}
                 </div>
               </div>
               
               {/* Right: Domain name with logo + Open Site button */}
               <div className="flex items-center gap-3">
-                {/* Domain display with logo */}
-                {/* <div className="flex items-center gap-2 bg-gray-700 rounded px-3 py-1">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                    {domain.domainName.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="text-xs text-gray-300 font-medium">
-                    {domain.domainName}
-                  </span>
-                </div> */}
-                
                 {/* Open Site button */}
                 <a
                   href={getSiteUrl(domain.website.subdomain)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 border border-gray-200 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors"
+                  className="flex items-center gap-1.5 border border-neutral-600 hover:bg-neutral-600 text-neutral-200 px-3 py-1.5 rounded text-xs font-medium transition-colors"
                   title="Open site in new tab"
                 >
                   <ExternalLink size={14} />
@@ -413,9 +403,9 @@ export default function EditorPage() {
         </div>
 
         {/* Right: Tabs & Content */}
-        <div className="w-full lg:w-1/2 flex flex-col bg-white min-h-0">
+        <div className="w-full lg:w-1/2 flex flex-col bg-black min-h-0">
           {/* Tabs */}
-          <div className="flex-shrink-0 border-b border-gray-200 px-4 sm:px-8 pt-4 sm:pt-6 overflow-x-auto">
+          <div className="flex-shrink-0 border-b border-neutral-800 px-4 sm:px-8 pt-4 sm:pt-6 overflow-x-auto">
             <div className="flex gap-4 sm:gap-6 min-w-max">
               <TabButton
                 active={activeTab === 'blogs'}
@@ -449,7 +439,7 @@ export default function EditorPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+          <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 bg-black">
             {activeTab === 'blogs' && (
               <BlogsTab
                 blogs={blogs}
@@ -475,21 +465,21 @@ export default function EditorPage() {
 
       {/* Edit Blog Modal */}
       {editingBlog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in duration-200 flex flex-col">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-neutral-900 rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl border border-neutral-700 animate-in zoom-in duration-200 flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex-shrink-0">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-700 flex-shrink-0">
               <div className="min-w-0 flex-1">
-                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 truncate">Edit Blog</h3>
-                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-neutral-100 truncate">Edit Blog</h3>
+                <p className="text-xs sm:text-sm text-neutral-500 mt-0.5">
                   {editingBlog.isHero ? 'Hero Blog' : `Blog #${blogs.indexOf(editingBlog) + 1}`}
                 </p>
               </div>
               <button
                 onClick={() => setEditingBlog(null)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0 ml-2"
+                className="p-2 hover:bg-neutral-800 rounded-lg transition-colors flex-shrink-0 ml-2"
               >
-                <X size={18} className="text-gray-500 sm:w-5 sm:h-5" />
+                <X size={18} className="text-neutral-400 sm:w-5 sm:h-5" />
               </button>
             </div>
 
@@ -498,38 +488,38 @@ export default function EditorPage() {
               <div className="space-y-4 sm:space-y-6">
                 {/* Edit Title */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-1.5 sm:mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-neutral-200 mb-1.5 sm:mb-2">
                     Blog Title
                   </label>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter blog title..."
                   />
                 </div>
 
                 {/* Edit Content */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-900 mb-1.5 sm:mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-neutral-200 mb-1.5 sm:mb-2">
                     Blog Content
                   </label>
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                     rows={8}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
                     placeholder="Enter blog content (supports Markdown)..."
                   />
-                  <p className="text-xs text-gray-500 mt-1.5 sm:mt-2">
+                  <p className="text-xs text-neutral-500 mt-1.5 sm:mt-2">
                     💡 Tip: You can use Markdown formatting (e.g., # for headings, ** for bold)
                   </p>
                 </div>
 
                 {/* Regenerate Options */}
-                <div className="border-t border-gray-200 pt-4 sm:pt-6">
-                  <h4 className="text-xs sm:text-sm font-semibold text-gray-900 mb-3 sm:mb-4">
+                <div className="border-t border-neutral-700 pt-4 sm:pt-6">
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 mb-3 sm:mb-4">
                     Or Regenerate with AI
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
@@ -539,7 +529,7 @@ export default function EditorPage() {
                         setEditingBlog(null);
                       }}
                       disabled={regenerateTitleMutation.isPending}
-                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-900/40 hover:bg-blue-900/60 text-blue-300 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 border border-blue-800/50"
                     >
                       <Type size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Title</span>
@@ -551,7 +541,7 @@ export default function EditorPage() {
                         setEditingBlog(null);
                       }}
                       disabled={regenerateContentMutation.isPending}
-                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-green-900/40 hover:bg-green-900/60 text-green-300 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 border border-green-800/50"
                     >
                       <FileText size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Content</span>
@@ -563,7 +553,7 @@ export default function EditorPage() {
                         setEditingBlog(null);
                       }}
                       disabled={regenerateImageMutation.isPending}
-                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="px-3 py-2.5 sm:px-4 sm:py-3 bg-purple-900/40 hover:bg-purple-900/60 text-purple-300 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 border border-purple-800/50"
                     >
                       <ImageIcon size={14} className="sm:w-4 sm:h-4" />
                       <span>Regenerate Image</span>
@@ -575,7 +565,7 @@ export default function EditorPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-neutral-700 bg-neutral-800/50 flex-shrink-0">
               {/* Delete Button (left side) */}
               {!editingBlog.isHero ? (
                 <button
@@ -586,7 +576,7 @@ export default function EditorPage() {
                     }
                   }}
                   disabled={deleteSectionMutation.isPending}
-                  className="px-3 py-2 sm:px-4 sm:py-2.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 bg-red-900/40 hover:bg-red-900/60 text-red-300 rounded-lg text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2 border border-red-800/50"
                 >
                   <Trash2 size={14} className="sm:w-4 sm:h-4" />
                   <span>Delete Blog</span>
@@ -599,7 +589,7 @@ export default function EditorPage() {
               <button
                 onClick={handleSaveEdit}
                 disabled={updateContentMutation.isPending}
-                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Save size={16} className="sm:w-[18px] sm:h-[18px]" />
                 {updateContentMutation.isPending ? 'Saving...' : 'Save Changes'}

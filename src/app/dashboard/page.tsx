@@ -1,25 +1,19 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { domainsAPI, websitesAPI } from '@/lib/api';
-import { Trash2, Globe, ExternalLink, CheckCircle, Clock, Sparkles, ArrowRight, Maximize2, X, Server, RefreshCw, AlertCircle, Loader2, Search, LayoutGrid, List, ChevronDown, MoreHorizontal, SlidersHorizontal } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { domainsAPI } from '@/lib/dashboard';
+import { Globe, Search, Sparkles, ChevronDown } from 'lucide-react';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
-import { useJobStatus } from '@/hooks/useJobStatus';
 import CustomLoader from '@/components/CustomLoader';
+import {
+  DomainCard,
+  AddDomainModal,
+  SynonymSelectionModal,
+  GenerateWebsiteModal,
+} from '@/components/dashboard';
 
-// Helper to get the correct site URL based on environment
-function getSiteUrl(subdomain: string): string {
-  // Use environment variable instead of window check to avoid hydration mismatch
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  const isProduction = apiUrl.includes('railway.app') || apiUrl.includes('fastofy.com');
-
-  if (isProduction) {
-    return `https://${subdomain}.fastofy.com`;
-  }
-  return `http://${subdomain}.local:3000`;
-}
+const SEARCH_DEBOUNCE_MS = 600;
 
 export default function DashboardPage() {
   const queryClient = useQueryClient();
@@ -27,12 +21,22 @@ export default function DashboardPage() {
   const [showSynonymSelection, setShowSynonymSelection] = useState<string | null>(null);
   const [showGenerateWebsite, setShowGenerateWebsite] = useState<{ domainId: string; setJobId: any } | null>(null);
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  // Fetch domains
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchInput.trim()), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
   const { data: domains, isLoading } = useQuery({
-    queryKey: ['domains'],
+    queryKey: ['domains', debouncedSearch],
     queryFn: async () => {
-      const response = await domainsAPI.getAll();
+      if (!debouncedSearch) {
+        const response = await domainsAPI.getAll();
+        return response.data;
+      }
+      const response = await domainsAPI.search(debouncedSearch);
       return response.data;
     },
   });
@@ -41,7 +45,6 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!domains || domains.length === 0) return;
 
-    // Find all domains with pending DNS status
     const pendingDomains = domains.filter(
       (domain: any) => domain.nameServersStatus === 'pending' && domain.nameServers && domain.nameServers.length > 0
     );
@@ -50,7 +53,6 @@ export default function DashboardPage() {
 
     console.log(`🔄 Starting DNS status polling for ${pendingDomains.length} pending domain(s)`);
 
-    // Check DNS status for all pending domains
     const checkAllPendingDns = async () => {
       for (const domain of pendingDomains) {
         try {
@@ -60,14 +62,12 @@ export default function DashboardPage() {
           if (newStatus === 'active') {
             console.log(`✅ DNS became active for ${domain.domainName}`);
 
-            // Show toast notification
             if (response.data.autoDeployed && response.data.deploymentSuccess) {
               toast.success(`${domain.domainName}: DNS active! Worker domains deployed! 🚀`, { duration: 5000 });
             } else {
               toast.success(`${domain.domainName}: DNS is now active! 🎉`, { duration: 4000 });
             }
 
-            // Invalidate queries to update UI
             queryClient.invalidateQueries({ queryKey: ['domains'] });
           }
         } catch (error) {
@@ -76,13 +76,10 @@ export default function DashboardPage() {
       }
     };
 
-    // Initial check
     checkAllPendingDns();
 
-    // Set up interval for polling every 15 seconds
     const intervalId = setInterval(checkAllPendingDns, 15000);
 
-    // Cleanup interval on unmount or when dependencies change
     return () => {
       console.log('🛑 Stopping DNS status polling');
       clearInterval(intervalId);
@@ -91,7 +88,6 @@ export default function DashboardPage() {
 
   return (
     <div className="px-4 lg:px-8">
-      {/* Full-Screen Loading Overlay - ONLY for operations (not initial load) */}
       {isGlobalLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
@@ -101,22 +97,20 @@ export default function DashboardPage() {
         </div>
       )}
 
-
-      {/* Section heading */}
       <div className="mb-4">
         <h1 className="text-xl font-semibold text-neutral-100">Domains</h1>
       </div>
 
-      {/* Vercel-style top bar: search + controls */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="relative flex-1 max-w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
             <input
               type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search domains..."
-              className="w-full h-12 pl-9 pr-4 bg-neutral-900 border border-neutral-700 rounded-md text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600"
-              readOnly
+              className="w-full h-12 pl-9 pr-4 bg-[#0a0a0a] border border-neutral-700 rounded-md text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600"
               aria-label="Search domains"
             />
           </div>
@@ -131,7 +125,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Initial Loading State - Inline */}
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="flex flex-col items-center gap-4">
@@ -140,7 +133,6 @@ export default function DashboardPage() {
           </div>
         </div>
       ) : domains && domains.length > 0 ? (
-        /* Domains Grid - 3 per row */
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {domains.map((domain: any, index: number) => (
             <DomainCard
@@ -148,7 +140,6 @@ export default function DashboardPage() {
               domain={domain}
               index={index}
               onGenerateWebsite={(setJobId: any) => {
-                // Store setJobId callback to pass to modal
                 setShowGenerateWebsite({ domainId: domain.id, setJobId });
               }}
               setGlobalLoading={setIsGlobalLoading}
@@ -156,7 +147,6 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : (
-        /* Empty State */
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-20 h-20 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 border border-neutral-700">
             <Globe size={36} className="text-neutral-500" />
@@ -175,21 +165,18 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Add Domain Modal */}
       {showAddDomain && (
         <AddDomainModal
           onClose={() => setShowAddDomain(false)}
           onSuccess={(domainId: string) => {
             queryClient.invalidateQueries({ queryKey: ['domains'] });
             setShowAddDomain(false);
-            // Show synonym selection after domain creation
             setShowSynonymSelection(domainId);
           }}
           setGlobalLoading={setIsGlobalLoading}
         />
       )}
 
-      {/* Synonym Selection Modal */}
       {showSynonymSelection && (
         <SynonymSelectionModal
           domainId={showSynonymSelection}
@@ -202,1020 +189,17 @@ export default function DashboardPage() {
         />
       )}
 
-      {/* Generate Website Modal */}
       {showGenerateWebsite && (
         <GenerateWebsiteModal
           domainId={showGenerateWebsite.domainId}
           onClose={() => setShowGenerateWebsite(null)}
           onJobStarted={(jobId: string) => {
-            // Pass job ID to the domain card and close modal
             showGenerateWebsite.setJobId(jobId);
             setShowGenerateWebsite(null);
           }}
           setGlobalLoading={setIsGlobalLoading}
         />
       )}
-    </div>
-  );
-}
-
-function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading }: any) {
-  const queryClient = useQueryClient();
-  const [generationJobId, setGenerationJobId] = useState<string | null>(null);
-  const [showDnsTooltip, setShowDnsTooltip] = useState(false);
-  const [showDnsModal, setShowDnsModal] = useState(false);
-  const [dnsStatus, setDnsStatus] = useState(domain.nameServersStatus);
-  const [isCheckingDns, setIsCheckingDns] = useState(false);
-  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Poll for job status if there's a job ID
-  const { status, progress, isCompleted, isFailed } = useJobStatus(
-    generationJobId,
-    (result) => {
-      // Job completed successfully
-      console.log('✅ Website generation completed:', result);
-      toast.success('Website generated successfully! 🎉', { duration: 4000 });
-      queryClient.invalidateQueries({ queryKey: ['domains'] });
-      setGenerationJobId(null);
-    },
-    (error) => {
-      // Job failed
-      console.error('❌ Website generation failed:', error);
-      toast.error(error || 'Failed to generate website');
-      setGenerationJobId(null);
-    }
-  );
-
-  const deleteMutation = useMutation({
-    mutationFn: () => domainsAPI.delete(domain.id),
-    onMutate: () => {
-      setGlobalLoading(true);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['domains'] });
-      toast.success(`Domain "${domain.domainName}" deleted successfully`);
-      setGlobalLoading(false);
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to delete domain');
-      setGlobalLoading(false);
-    },
-  });
-
-  const retryCloudfareMutation = useMutation({
-    mutationFn: () => domainsAPI.retryCloudflare(domain.id),
-    onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ['domains'] });
-      toast.success('Nameservers created successfully! 🎉');
-      setDnsStatus(response.data.nameServersStatus);
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to create nameservers');
-    },
-  });
-
-  // Check if this domain is generating
-  const isGenerating = !!generationJobId && !isCompleted && !isFailed;
-
-  // Function to check DNS status
-  const checkDnsStatus = async () => {
-    if (!domain.nameServers || domain.nameServers.length === 0) return;
-
-    setIsCheckingDns(true);
-    try {
-      const response = await domainsAPI.checkDnsStatus(domain.id);
-      const newStatus = response.data.nameServersStatus;
-      const autoDeployed = response.data.autoDeployed;
-      const deploymentSuccess = response.data.deploymentSuccess;
-      const deploymentError = response.data.deploymentError;
-
-      setDnsStatus(newStatus);
-
-      // Update query cache
-      queryClient.invalidateQueries({ queryKey: ['domains'] });
-
-      // If status is active, stop polling
-      if (newStatus === 'active') {
-        if (pollingIntervalRef.current) {
-          clearInterval(pollingIntervalRef.current);
-          pollingIntervalRef.current = null;
-        }
-
-        // Show appropriate message based on auto-deployment
-        if (autoDeployed) {
-          if (deploymentSuccess) {
-            toast.success('DNS is active! Worker domains and KV mappings deployed automatically! 🚀', { duration: 5000 });
-          } else {
-            toast.success('DNS is active! 🎉', { duration: 4000 });
-            if (deploymentError) {
-              toast.error(`Auto-deployment failed: ${deploymentError}`, { duration: 5000 });
-            }
-          }
-        } else {
-          toast.success('DNS is now active! 🎉');
-        }
-      }
-    } catch (error: any) {
-      console.error('Failed to check DNS status:', error);
-    } finally {
-      setIsCheckingDns(false);
-    }
-  };
-
-  // Auto-poll DNS status when modal is open
-  useEffect(() => {
-    if (showDnsModal && dnsStatus !== 'active' && domain.nameServers && domain.nameServers.length > 0) {
-      // Initial check
-      checkDnsStatus();
-
-      // Set up polling every 3 seconds
-      pollingIntervalRef.current = setInterval(() => {
-        checkDnsStatus();
-      }, 3000);
-    }
-
-    // Cleanup on unmount or modal close
-    return () => {
-      if (pollingIntervalRef.current) {
-        clearInterval(pollingIntervalRef.current);
-        pollingIntervalRef.current = null;
-      }
-    };
-  }, [showDnsModal, dnsStatus]);
-
-  // Update local status when domain prop changes
-  useEffect(() => {
-    setDnsStatus(domain.nameServersStatus);
-  }, [domain.nameServersStatus]);
-
-  return (
-    <div
-      className="group bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 rounded-lg p-4 sm:p-5 transition-all duration-200"
-      style={{ animationDelay: `${index * 50}ms` }}
-    >
-      {/* Card header: icon + name row, top-right icons */}
-      <div className="flex items-start justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0 border border-neutral-700">
-            <Globe size={20} className="text-neutral-400" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="text-md font-light text-neutral-100 truncate">{domain.domainName}</h3>
-            {domain.website?.subdomain && (
-              <p className="text-sm font-light text-neutral-500 truncate mt-0.5">{getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}</p>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-1 flex-shrink-">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              if (confirm(`Delete "${domain.domainName}"? This cannot be undone.`)) {
-                deleteMutation.mutate();
-              }
-            }}
-            className="text-neutral-300 hover:text-neutral-300 hover:bg-neutral-800 p-1.5 rounded transition-colors"
-            title="Delete domain"
-          >
-            <MoreHorizontal size={16} />
-          </button>
-        </div>
-      </div>
-
-      {/* Repo/tag row + status badges */}
-      <div className="space-y-2 mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 flex-wrap">
-          {isGenerating ? (
-            <span className="inline-flex items-center gap-1.5 text-xs font-light text-neutral-400">
-              <div className="w-2 h-2 bg-neutral-500 rounded-full animate-pulse" />
-              Generating website
-            </span>
-          ) : (
-            <>
-              <span
-                className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded ${domain.status === 'ACTIVE'
-                  ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'bg-amber-500/20 text-amber-400'
-                  }`}
-              >
-                {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
-                {domain.status}
-              </span>
-              {domain.nameServers && domain.nameServers.length > 0 ? (
-                <button
-                  onClick={() => setShowDnsModal(true)}
-                  className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded cursor-pointer hover:opacity-90 ${dnsStatus === 'active'
-                    ? 'bg-emerald-500/20 text-emerald-400'
-                    : 'bg-amber-500/20 text-amber-400'
-                    }`}
-                  title="Click to view DNS configuration"
-                >
-                  {dnsStatus === 'active' ? <CheckCircle size={12} /> : <Clock size={12} />}
-                  {dnsStatus === 'active' ? 'DNS Active' : 'DNS Pending'}
-                </button>
-              ) : (
-                <button
-                  onClick={() => retryCloudfareMutation.mutate()}
-                  disabled={retryCloudfareMutation.isPending}
-                  className="inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Click to create nameserver records"
-                >
-                  {retryCloudfareMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <AlertCircle size={12} />}
-                  {retryCloudfareMutation.isPending ? 'Creating...' : 'Setup Nameservers'}
-                </button>
-              )}
-            </>
-          )}
-        </div>
-        {/* <div className="flex items-center gap-2 mb-4">
-          {domain.website?.pages?.length ? (
-            <>
-              <span className="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded text-xs font-light">
-                <CheckCircle size={12} className="mr-1" />
-                Live
-              </span>
-            </>
-          ) : isGenerating ? (
-            <>
-              <span className="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded text-xs font-light animate-pulse">
-                <Loader2 size={12} className="mr-1 animate-spin" />
-                Generating...
-              </span>
-              <span className="text-xs text-neutral-400">Please wait</span>
-            </>
-          ) : (
-            <>
-              <span className="inline-flex items-center gap-1 bg-neutral-700 text-neutral-400 px-2 py-0.5 rounded text-xs font-light">
-                <AlertCircle size={12} className="mr-1" />
-                No website yet
-              </span>
-            </>
-          )}
-        </div> */}
-      </div>
-
-      {domain.website && domain.website.pages && domain.website.pages.length > 0 ? (
-        <div className="space-y-3 sm:space-y-4">
-
-          {/* Actions */}
-          <div className="flex gap-3">
-            <Link
-              href={`/dashboard/editor/${domain.id}`}
-              className="flex-1 px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-md transition-colors flex items-center justify-center gap-2 text-sm group/btn"
-            >
-              <span>Manage</span>
-              <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-200" />
-            </Link>
-            <a
-              href={getSiteUrl(domain.website.subdomain)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
-              title="View site"
-            >
-              <ExternalLink size={18} />
-            </a>
-          </div>
-        </div>
-      ) : isGenerating ? (
-        // Show animated loader with rotating messages
-        <GeneratingWebsiteAnimation
-          progress={progress}
-          isCompleted={isCompleted}
-        />
-      ) : (
-        <div className="space-y-4">
-          <button
-            onClick={() => onGenerateWebsite(setGenerationJobId)}
-            className="w-full px-3 py-2 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-2"
-          >
-            <Sparkles size={14} />
-            Generate Website
-          </button>
-        </div>
-      )}
-
-      {/* DNS Modal - dark */}
-      {showDnsModal && domain.nameServers && domain.nameServers.length > 0 && (
-        <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4"
-          onClick={() => setShowDnsModal(false)}
-        >
-          <div
-            className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-neutral-800 rounded-xl flex items-center justify-center border border-neutral-700">
-                  <Server size={24} className="text-neutral-400" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-neutral-100">DNS Configuration</h3>
-                  <p className="text-sm text-neutral-500 mt-0.5">Configure your domain nameservers</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowDnsModal(false)}
-                className="text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 p-2 rounded-lg transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="space-y-5">
-              <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
-                <p className="text-sm text-neutral-400">Point your domain to these nameservers</p>
-                <p className="text-base font-semibold text-neutral-100 mt-1">{domain.domainName}</p>
-              </div>
-
-              <div className="space-y-3">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nameservers</p>
-                {domain.nameServers.map((ns: string, idx: number) => (
-                  <div
-                    key={idx}
-                    className="group relative bg-neutral-800 border border-neutral-700 hover:border-neutral-600 rounded-lg px-4 py-3.5 transition-colors"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono text-sm text-neutral-200 flex-1">{ns}</span>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(ns);
-                          toast.success('Copied to clipboard!');
-                        }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-neutral-300 bg-neutral-700 hover:bg-neutral-600 rounded-md transition-colors"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {domain.nameServersStatus && (
-                <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${domain.nameServersStatus === 'active' ? 'bg-emerald-500' : 'bg-amber-500'
-                        }`} />
-                      <p className="text-sm font-semibold text-neutral-200">Status</p>
-                    </div>
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded ${domain.nameServersStatus === 'active'
-                      ? 'bg-emerald-500/20 text-emerald-400'
-                      : 'bg-amber-500/20 text-amber-400'
-                      }`}>
-                      {domain.nameServersStatus === 'active' ? <><CheckCircle size={12} /> Active</> : <><Clock size={12} /> Pending</>}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">i</div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-300 mb-1">Next Steps</p>
-                    <p className="text-xs text-blue-200/80 leading-relaxed">
-                      Update these nameservers at your domain registrar (e.g., GoDaddy, Namecheap). Changes may take up to 24-48 hours to propagate.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setShowDnsModal(false)}
-                className="w-full px-4 py-3 bg-white hover:bg-neutral-200 text-black text-sm font-semibold rounded-lg transition-colors"
-              >
-                Got it
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
-  const [domainName, setDomainName] = useState('');
-  const [validationError, setValidationError] = useState('');
-
-  // Validate domain format
-  const validateDomain = (domain: string): boolean => {
-    if (!domain.trim()) {
-      setValidationError('Domain name is required');
-      return false;
-    }
-
-    // Check for valid domain format with TLD
-    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
-
-    if (!domainRegex.test(domain)) {
-      setValidationError('Invalid domain format. Must include a valid extension (e.g., example.com)');
-      return false;
-    }
-
-    setValidationError('');
-    return true;
-  };
-
-  const handleSubmit = () => {
-    if (!validateDomain(domainName)) {
-      return;
-    }
-    mutation.mutate();
-  };
-
-  const mutation = useMutation({
-    mutationFn: () => domainsAPI.create(domainName),
-    onMutate: () => {
-      setGlobalLoading(true);
-    },
-    onSuccess: (response) => {
-      toast.success(`Domain "${domainName}" added successfully!`);
-      setGlobalLoading(false);
-      // Pass domain ID to show synonym selection
-      onSuccess(response.data.id);
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to add domain');
-      setGlobalLoading(false);
-    },
-  });
-
-  return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5 sm:p-6 max-w-md w-full shadow-2xl">
-        <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Add Domain</h2>
-        <p className="text-neutral-400 text-sm mb-4 sm:mb-6 font-light">Enter the domain you want to add to your project.</p>
-        <div className="mb-4 sm:mb-6">
-          <input
-            type="text"
-            value={domainName}
-            onChange={(e) => {
-              setDomainName(e.target.value);
-              setValidationError('');
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSubmit();
-            }}
-            placeholder="example.com"
-            className={`w-full px-4 py-2.5 bg-neutral-800 border rounded-md text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
-              }`}
-            autoFocus
-          />
-          {validationError && (
-            <p className="text-xs text-red-400 mt-2 flex items-center gap-1">
-              <AlertCircle size={12} />
-              {validationError}
-            </p>
-          )}
-          <p className="text-xs text-neutral-500 mt-2">Examples: chocolate.com, myblog.net, shop.io</p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={mutation.isPending || !domainName}
-            className="flex-1 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md font-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {mutation.isPending ? 'Adding...' : 'Add Domain'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalLoading }: any) {
-  const [selectedMeanings, setSelectedMeanings] = useState<Array<{ key: string; context: string }>>([]);
-  const [userDescription, setUserDescription] = useState('');
-  const MAX_SELECTIONS = 3;
-
-  // Fetch synonyms for the domain
-  const { data: synonymsData, isLoading, error } = useQuery({
-    queryKey: ['synonyms', domainId],
-    queryFn: async () => {
-      const response = await domainsAPI.getSynonyms(domainId);
-      return response.data;
-    },
-  });
-
-  // Update domain with selected meaning and user description
-  const updateMutation = useMutation({
-    mutationFn: (data: { selectedMeaning?: string; userDescription?: string }) =>
-      domainsAPI.update(domainId, data),
-    onMutate: () => {
-      setGlobalLoading(true);
-    },
-    onSuccess: () => {
-      toast.success('Domain context saved!');
-      setGlobalLoading(false);
-      onSuccess();
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to save context');
-      setGlobalLoading(false);
-    },
-  });
-
-  const handleContinue = () => {
-    const updateData: any = {};
-
-    // Add selected meaning if any
-    if (selectedMeanings.length > 0) {
-      const combinedContext = selectedMeanings.map(({ key }) => key).join(', ');
-      updateData.selectedMeaning = combinedContext;
-    }
-
-    // Add user description if provided
-    if (userDescription.trim()) {
-      updateData.userDescription = userDescription.trim();
-    }
-
-    // If we have data to save, update it
-    if (Object.keys(updateData).length > 0) {
-      console.log('📝 Saving context:', updateData);
-      updateMutation.mutate(updateData);
-    } else {
-      // Nothing to save, just continue
-      onSuccess();
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-8 max-w-md w-full shadow-2xl">
-          <div className="flex flex-col items-center gap-4">
-            <CustomLoader />
-            <p className="text-sm text-neutral-400">Let's get you ready with our recommended contexts...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 max-w-md w-full shadow-2xl">
-          <h2 className="text-xl font-light text-neutral-100 mb-4">Could not find meanings</h2>
-          <p className="text-neutral-400 text-sm mb-6">
-            We couldn't find different meanings for your domain. You can continue without context selection.
-          </p>
-          <div className="flex gap-3">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleContinue}
-              className="flex-1 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md font-light transition-colors"
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const meanings = synonymsData?.meanings || {};
-  const meaningEntries = Object.entries(meanings);
-  const hasMeanings = meaningEntries.length > 1; // Show selection only if multiple meanings exist
-
-  const handleMeaningToggle = (meaning: string, exampleSentence: string) => {
-    const isSelected = selectedMeanings.some(m => m.key === meaning);
-
-    if (isSelected) {
-      // Remove if already selected
-      setSelectedMeanings(prev => prev.filter(m => m.key !== meaning));
-    } else {
-      // Add if not at max limit
-      if (selectedMeanings.length < MAX_SELECTIONS) {
-        setSelectedMeanings(prev => [...prev, { key: meaning, context: exampleSentence }]);
-      } else {
-        toast.error(`You can select up to ${MAX_SELECTIONS} contexts only`);
-      }
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[95vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-neutral-100">
-              {hasMeanings ? 'Choose Your Domain Context' : 'Describe Your Domain'}
-            </h2>
-            <p className="text-neutral-400 text-xs sm:text-sm mt-1">
-              {hasMeanings
-                ? `"${synonymsData?.word}" can mean different things`
-                : 'Help AI understand your website better'}
-            </p>
-          </div>
-          {selectedMeanings.length > 0 && (
-            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-bold whitespace-nowrap bg-neutral-700 text-neutral-100">
-              {selectedMeanings.length}/{MAX_SELECTIONS}
-            </div>
-          )}
-        </div>
-
-        <div className="mb-4 sm:mb-6">
-          <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2">
-            Describe your domain <span className="text-neutral-500 font-normal">(Optional)</span>
-          </label>
-          <textarea
-            value={userDescription}
-            onChange={(e) => setUserDescription(e.target.value)}
-            placeholder="E.g., A blog about chocolate recipes and baking tips..."
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors"
-            rows={3}
-            maxLength={500}
-          />
-          <p className="text-xs text-neutral-500 mt-1.5">{userDescription.length}/500 characters</p>
-        </div>
-
-        {hasMeanings && (
-          <div className="mb-4 sm:mb-6">
-            <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2 sm:mb-3">
-              Select contexts (up to {MAX_SELECTIONS}) or skip
-            </label>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-neutral-800/50 rounded-lg border border-neutral-700 min-h-[120px] relative">
-              {meaningEntries.map(([meaning, exampleSentence]: [string, any]) => {
-                const isSelected = selectedMeanings.some(m => m.key === meaning);
-                const isDisabled = selectedMeanings.length >= MAX_SELECTIONS && !isSelected;
-                return (
-                  <div key={meaning} className="relative">
-                    <button
-                      onClick={() => handleMeaningToggle(meaning, exampleSentence)}
-                      disabled={isDisabled}
-                      className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${isSelected
-                        ? 'bg-white border-white text-black scale-105'
-                        : isDisabled
-                          ? 'bg-neutral-800 border-neutral-700 text-neutral-500 cursor-not-allowed opacity-50'
-                          : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
-                        }`}
-                    >
-                      {isSelected && '✓ '}
-                      {meaning}
-                    </button>
-                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl min-w-max max-w-[280px] border border-neutral-600">
-                      <div className="italic normal-case text-center leading-relaxed">"{exampleSentence}"</div>
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
-                        <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-              <div className="relative">
-                <button
-                  onClick={() => setSelectedMeanings([])}
-                  className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${selectedMeanings.length === 0
-                    ? 'bg-white border-white text-black scale-105'
-                    : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
-                    }`}
-                >
-                  {selectedMeanings.length === 0 && '✓ '}
-                  SKIP & LET AI DECIDE
-                </button>
-                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl whitespace-nowrap border border-neutral-600">
-                  <div className="normal-case">Let AI decide based on general knowledge</div>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
-                    <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {selectedMeanings.length > 0 && (
-              <div className="mt-2 sm:mt-3">
-                <p className="text-[10px] sm:text-xs font-light text-neutral-500 mb-1.5 sm:mb-2">Selected contexts:</p>
-                <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {selectedMeanings.map(({ key, context }) => (
-                    <div
-                      key={key}
-                      title={`"${context}"`}
-                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-neutral-700 text-neutral-100 rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-neutral-600 transition-colors"
-                    >
-                      {key}
-                      <button
-                        onClick={() => handleMeaningToggle(key, context)}
-                        className="hover:bg-neutral-500 rounded-full p-0.5"
-                      >
-                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        <div className="text-[10px] sm:text-xs text-center text-neutral-500 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-neutral-800/30">
-          💡 This context helps AI generate more relevant and personalized content for your website
-        </div>
-
-        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-neutral-700">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border border-neutral-600 text-neutral-300 rounded-lg text-sm sm:text-base font-semibold hover:bg-neutral-800 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleContinue}
-            disabled={updateMutation.isPending}
-            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm sm:text-base font-semibold transition-colors disabled:opacity-50"
-          >
-            {updateMutation.isPending ? 'Saving...' : `Continue ${selectedMeanings.length > 0 ? `(${selectedMeanings.length})` : ''}`}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const TEMPLATE_OPTIONS = [
-  { key: 'modernNews' as const, label: 'Modern News', image: '/templateA/assets/images/modernNews.png' },
-  { key: 'templateA' as const, label: 'Template A', image: '/templateA/assets/images/TemplateA.png' },
-];
-
-function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoading }: any) {
-  const [contactFormEnabled, setContactFormEnabled] = useState(true);
-  const [selectedTemplateKey, setSelectedTemplateKey] = useState<'modernNews' | 'templateA'>('modernNews');
-  const [enlargedTemplateKey, setEnlargedTemplateKey] = useState<'modernNews' | 'templateA' | null>(null);
-
-  const mutation = useMutation({
-    mutationFn: () => websitesAPI.generate(domainId, selectedTemplateKey, contactFormEnabled),
-    onSuccess: (response) => {
-      const newJobId = response.data.jobId;
-      console.log('✅ Job started with ID:', newJobId);
-      toast.success('Website generation started! 🚀');
-
-      // Pass job ID to parent and close modal immediately
-      onJobStarted(newJobId);
-    },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to start generation');
-    },
-  });
-
-  return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-        <div className="mb-4 sm:mb-5">
-          <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Generate Website</h2>
-        </div>
-
-        <div className="mb-4 sm:mb-5">
-          <p className="text-xs sm:text-sm font-semibold text-neutral-200 mb-3 sm:mb-4">Choose template</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {TEMPLATE_OPTIONS.map((opt) => (
-              <div
-                key={opt.key}
-                className={`relative rounded-lg border overflow-hidden transition-all duration-200 flex flex-col ${selectedTemplateKey === opt.key
-                  ? 'border-white ring-2 ring-white ring-offset-2 ring-offset-neutral-900'
-                  : 'border-neutral-700 hover:border-neutral-600'
-                  }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setSelectedTemplateKey(opt.key)}
-                  disabled={mutation.isPending}
-                  className="text-left disabled:opacity-60 disabled:cursor-not-allowed flex flex-col flex-1 min-w-0"
-                >
-                  <div className="w-full h-36 sm:h-44 bg-neutral-800 flex-shrink-0 relative">
-                    <img
-                      src={opt.image}
-                      alt={opt.label}
-                      className="w-full h-full object-cover object-top"
-                    />
-                    {selectedTemplateKey === opt.key && (
-                      <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full flex items-center justify-center">
-                        <CheckCircle size={12} className="text-black sm:w-[14px] sm:h-[14px]" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-2.5 sm:p-3 bg-neutral-800 border-t border-neutral-700 flex-shrink-0 flex items-center justify-between gap-2">
-                    <span className="text-xs sm:text-sm font-light text-neutral-100">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setEnlargedTemplateKey(opt.key);
-                  }}
-                  disabled={mutation.isPending}
-                  className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 flex items-center justify-center transition-colors disabled:opacity-50"
-                  title="Preview full size"
-                >
-                  <Maximize2 size={14} className="text-neutral-300 sm:w-4 sm:h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {enlargedTemplateKey && (() => {
-          const opt = TEMPLATE_OPTIONS.find((o) => o.key === enlargedTemplateKey);
-          if (!opt) return null;
-          return (
-            <div
-              className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-black/80"
-              onClick={() => setEnlargedTemplateKey(null)}
-            >
-              <div
-                className="relative bg-neutral-900 border border-neutral-700 rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-neutral-700 bg-neutral-800">
-                  <span className="font-light text-sm sm:text-base text-neutral-100">{opt.label}</span>
-                  <button
-                    type="button"
-                    onClick={() => setEnlargedTemplateKey(null)}
-                    className="p-1.5 sm:p-2 rounded-lg hover:bg-neutral-700 transition-colors"
-                    aria-label="Close preview"
-                  >
-                    <X size={18} className="text-neutral-400 sm:w-5 sm:h-5" />
-                  </button>
-                </div>
-                <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-neutral-800">
-                  <img
-                    src={opt.image}
-                    alt={opt.label}
-                    className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg"
-                  />
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-neutral-700 bg-neutral-900">
-                  <button
-                    type="button"
-                    onClick={() => setEnlargedTemplateKey(null)}
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-neutral-600 text-neutral-300 text-xs sm:text-sm font-light hover:bg-neutral-800"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedTemplateKey(opt.key);
-                      setEnlargedTemplateKey(null);
-                    }}
-                    className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-white text-black text-xs sm:text-sm font-light hover:bg-neutral-200"
-                  >
-                    Use this template
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-5">
-          <p className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Sparkles size={16} className="text-gray-700" />
-            What will be generated
-          </p>
-          <ul className="text-sm text-gray-600 space-y-2">
-            <li className="flex items-start gap-2">
-              <CheckCircle size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
-              <span>Home page with 3 AI-generated blog posts</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
-              <span>Professional news magazine layout</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
-              <span>SEO-optimized content & images</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
-              <span>Fully responsive design</span>
-            </li>
-          </ul>
-        </div> */}
-
-        {/* Contact Form Toggle */}
-        <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-          <label className="flex items-start gap-2.5 sm:gap-3 cursor-pointer">
-            <span className="relative inline-block w-10 sm:w-11 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
-              <input
-                type="checkbox"
-                checked={contactFormEnabled}
-                onChange={(e) => setContactFormEnabled(e.target.checked)}
-                disabled={mutation.isPending}
-                className="absolute w-0 h-0 opacity-0 peer"
-              />
-              <span className="block rounded-full bg-neutral-600 peer-checked:bg-white h-6 transition-colors duration-200" />
-              <span className="absolute left-0 top-0 h-6 w-6 bg-neutral-200 border border-neutral-500 rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-[18px] sm:peer-checked:translate-x-5 peer-checked:bg-white peer-checked:border-neutral-400" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="font-light text-neutral-100 text-xs sm:text-sm mb-1">Enable Contact Form</p>
-              <p className="text-xs text-neutral-400">Allow visitors to contact you through your website</p>
-            </div>
-          </label>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button
-            onClick={onClose}
-            disabled={mutation.isPending}
-            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => mutation.mutate()}
-            disabled={mutation.isPending}
-            className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-light flex items-center justify-center gap-2 transition-colors"
-          >
-            {mutation.isPending ? (
-              <>
-                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-neutral-400/30 border-t-neutral-600 rounded-full animate-spin" />
-                Starting...
-              </>
-            ) : (
-              <>
-                <Sparkles size={14} className="sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Generate Website</span>
-                <span className="xs:hidden">Generate</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress: number; isCompleted: boolean }) {
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const [isFlipping, setIsFlipping] = useState(false);
-
-  const generatingMessages = [
-    "Analyzing your domain context...",
-    "Generating blog titles with AI...",
-    "Creating compelling content...",
-    "Designing professional images...",
-    "Optimizing for search engines...",
-    "Building your home page...",
-    "Adding responsive styling...",
-    "Perfecting the layout...",
-  ];
-
-  const finalMessage = "Tidying up and hosting the site...";
-
-  useEffect(() => {
-    if (isCompleted) {
-      setCurrentMessageIndex(-1); // Special index for final message
-      return;
-    }
-
-    const messageInterval = setInterval(() => {
-      setIsFlipping(true);
-
-      setTimeout(() => {
-        setCurrentMessageIndex((prev) => (prev + 1) % generatingMessages.length);
-        setIsFlipping(false);
-      }, 300); // Half of the flip duration
-    }, 3000); // Change message every 3 seconds
-
-    return () => clearInterval(messageInterval);
-  }, [isCompleted, generatingMessages.length]);
-
-  const currentMessage = currentMessageIndex === -1
-    ? finalMessage
-    : generatingMessages[currentMessageIndex];
-
-  return (
-    <div className="bg-neutral-800/60 border border-neutral-700 rounded-lg">
-      <div className="flex items-center">
-        <div className="flex-shrink-0 scale-50">
-          <CustomLoader />
-        </div>
-        <div className="overflow-hidden">
-          <div
-            className={`w-full transition-all duration-500 ${isFlipping ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'
-              }`}
-          >
-            {!isCompleted && (
-              <p className="text-xs text-neutral-500">{progress}% {currentMessage}</p>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
