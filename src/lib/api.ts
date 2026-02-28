@@ -128,3 +128,15 @@ export const publicAPI = {
   submitContactForm: (data: { domain: string; name: string; email: string; company?: string; message: string }) =>
     api.post('/public/contact', data),
 };
+
+export const bulkUploadAPI = {
+  uploadCsv: (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post('/bulk-upload/domains', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  generateWebsites: (domainIds: string[]) =>
+    api.post('/bulk-upload/generate-websites', { domainIds }),
+};

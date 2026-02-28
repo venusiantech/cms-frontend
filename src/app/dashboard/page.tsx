@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI } from '@/lib/dashboard';
-import { Globe, Search, Sparkles, ChevronDown } from 'lucide-react';
+import { Globe, Search, Sparkles, ChevronDown, Upload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
 import {
@@ -11,7 +11,10 @@ import {
   AddDomainModal,
   SynonymSelectionModal,
   GenerateWebsiteModal,
+  CsvUploadModal,
+  CsvPreviewEditor,
 } from '@/components/dashboard';
+import type { UploadResult } from '@/components/dashboard';
 
 const SEARCH_DEBOUNCE_MS = 600;
 
@@ -23,6 +26,23 @@ export default function DashboardPage() {
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  // CSV bulk upload state
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showCsvUpload, setShowCsvUpload] = useState(false);
+  const [csvResult, setCsvResult] = useState<UploadResult | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchInput.trim()), SEARCH_DEBOUNCE_MS);
@@ -114,14 +134,34 @@ export default function DashboardPage() {
               aria-label="Search domains"
             />
           </div>
-          <button
-            onClick={() => setShowAddDomain(true)}
-            className="h-12 px-4 bg-white text-black hover:bg-neutral-200 rounded-md text-sm font-light flex items-center gap-2 transition-colors flex-shrink-0"
-            title="Add Domain"
-          >
-            Add New...
-            <ChevronDown size={14} />
-          </button>
+          {/* Add New dropdown */}
+          <div className="relative flex-shrink-0" ref={dropdownRef}>
+            <button
+              onClick={() => setShowDropdown((v) => !v)}
+              className="h-12 px-4 bg-white text-black hover:bg-neutral-200 rounded-md text-sm font-light flex items-center gap-2 transition-colors"
+            >
+              Add New...
+              <ChevronDown size={14} className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 mt-1.5 w-48 bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl z-20 py-1 overflow-hidden">
+                <button
+                  onClick={() => { setShowDropdown(false); setShowAddDomain(true); }}
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800 transition-colors text-left"
+                >
+                  <Globe size={14} className="text-neutral-500 flex-shrink-0" />
+                  Add a Domain
+                </button>
+                <button
+                  onClick={() => { setShowDropdown(false); setShowCsvUpload(true); }}
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800 transition-colors text-left"
+                >
+                  <Upload size={14} className="text-neutral-500 flex-shrink-0" />
+                  Upload CSV
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -198,6 +238,26 @@ export default function DashboardPage() {
             setShowGenerateWebsite(null);
           }}
           setGlobalLoading={setIsGlobalLoading}
+        />
+      )}
+
+      {showCsvUpload && (
+        <CsvUploadModal
+          onClose={() => setShowCsvUpload(false)}
+          onSuccess={(result) => {
+            setShowCsvUpload(false);
+            setCsvResult(result);
+          }}
+        />
+      )}
+
+      {csvResult && (
+        <CsvPreviewEditor
+          result={csvResult}
+          onClose={() => {
+            setCsvResult(null);
+            queryClient.invalidateQueries({ queryKey: ['domains'] });
+          }}
         />
       )}
     </div>
