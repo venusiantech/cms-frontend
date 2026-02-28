@@ -2,6 +2,7 @@
 
 import ModernNews from '@/templates/ModernNews';
 import TemplateA from '@/templates/TemplateA';
+import ArclightTemplate from '@/templates/Arclight/ArclightTemplate';
 
 interface SiteData {
   domain: {
@@ -75,6 +76,10 @@ export default function TemplateRenderer({ siteData, articleId, pageType = 'home
 
   if (website.templateKey === 'modernNews') {
     return <ModernNews {...templateProps} />;
+  }
+
+  if (website.templateKey === 'arclight') {
+    return <ArclightTemplate {...templateProps} />;
   }
 
   return <TemplateA {...templateProps} />;

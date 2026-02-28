@@ -3,12 +3,8 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
-import ButtonPlayMusicPlayer from '../../components/ButtonPlayMusicPlayer'
 import CategoryBadgeList from './CategoryBadgeList'
 import LocalDate from '../LocalDate'
-import PostCardCommentBtn from './PostCardCommentBtn'
-import PostCardLikeBtn from './PostCardLikeBtn'
-import PostCardSaveBtn from './PostCardSaveBtn'
 
 interface Props {
   className?: string
@@ -24,12 +20,7 @@ const Card9: FC<Props> = ({ className, ratio = 'aspect-3/4', post }) => {
     categories,
     author,
     date,
-    postType,
-    likeCount,
-    liked,
-    commentCount,
     readingTime,
-    bookmarked,
   } = post
 
   const renderMeta = () => {
@@ -66,18 +57,7 @@ const Card9: FC<Props> = ({ className, ratio = 'aspect-3/4', post }) => {
         />
       </Link>
 
-      {postType === 'audio' && (
-        <ButtonPlayMusicPlayer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/4" post={post} />
-      )}
-
-      <div className="absolute inset-x-0 top-0 flex flex-wrap gap-x-2 gap-y-1 p-3">
-        <PostCardLikeBtn likeCount={likeCount} liked={liked} />
-        <PostCardCommentBtn commentCount={commentCount} handle={handle} />
-        <PostCardSaveBtn className="ms-auto" bookmarked={bookmarked} />
-      </div>
-
       <div className="absolute inset-x-0 bottom-0 flex grow flex-col p-4">
-        <CategoryBadgeList categories={categories} />
         {renderMeta()}
       </div>
     </div>

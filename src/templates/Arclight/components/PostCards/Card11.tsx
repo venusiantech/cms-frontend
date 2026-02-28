@@ -43,12 +43,6 @@ const Card11: FC<Props> = ({ className, post, hiddenAuthor = false, ratio = 'asp
             {title}
           </Link>
         </h3>
-
-        <div className="mt-auto flex flex-wrap gap-x-2 gap-y-1">
-          <PostCardLikeBtn likeCount={likeCount} liked={liked} />
-          <PostCardCommentBtn commentCount={commentCount} handle={handle} />
-          <PostCardSaveBtn className="ms-auto" readingTime={readingTime} bookmarked={bookmarked} />
-        </div>
       </div>
     </div>
   )

@@ -6,15 +6,15 @@ import { ArrowRight } from 'lucide-react'
 import { FC, ReactNode, useState } from 'react'
 
 interface Props extends Pick<HeadingWithSubProps, 'subHeading' | 'dimHeading'> {
-  tabActive: string
+  tabActive?: string
   tabs: string[]
-  heading: ReactNode
+  heading?: ReactNode
   onChangeTab?: (item: string) => void
   rightButtonHref?: string
 }
 
 const SectionTabHeader: FC<Props> = ({
-  tabActive,
+  tabActive = 'Workplace',
   tabs,
   subHeading,
   dimHeading,
@@ -31,9 +31,11 @@ const SectionTabHeader: FC<Props> = ({
 
   return (
     <div className="section-tab-header relative mb-9 flex flex-col">
-      <Heading subHeading={subHeading} dimHeading={dimHeading}>
-        {heading}
-      </Heading>
+      {heading && (
+        <Heading subHeading={subHeading} dimHeading={dimHeading}>
+          {heading}
+        </Heading>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex grow flex-wrap gap-2">
           {tabs.map((tab) =>

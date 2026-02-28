@@ -16,9 +16,9 @@ const SectionMagazine2: FC<Props> = ({ posts, heading, className, subHeading, di
   return (
     <div className={clsx('section-magazine-2 relative', className)}>
       <SectionTabHeader
-        heading={heading}
-        subHeading={subHeading}
-        dimHeading={dimHeading}
+        // heading={heading}
+        // subHeading={subHeading}
+        // dimHeading={dimHeading}
         tabActive="Workplace"
         tabs={['Workplace', 'Design', 'Development', 'Photography']}
       />

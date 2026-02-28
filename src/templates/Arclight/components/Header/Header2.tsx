@@ -12,20 +12,17 @@ import NotifyDropdown from './NotifyDropdown'
 import SearchModal from './SearchModal'
 
 interface Props {
-  bottomBorder?: boolean
   className?: string
 }
 
-const Header2: FC<Props> = async ({ bottomBorder, className }) => {
+const Header2: FC<Props> = async ({ className }) => {
   const navigationMenu = await getNavigation()
   const featuredPosts = (await getAllPosts()).slice(0, 2)
 
   return (
     <div
       className={clsx(
-        'header-2 relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900',
-        bottomBorder && 'border-b',
-        !bottomBorder && 'has-[.header-popover-full-panel]:border-b',
+        'header-2 relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 mb-4',
         className
       )}
     >

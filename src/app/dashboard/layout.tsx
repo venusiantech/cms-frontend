@@ -124,7 +124,7 @@ export default function DashboardLayout({
                   className="fixed inset-0 z-40"
                   onClick={() => setShowUserMenu(false)}
                 />
-                <div className="absolute right-0 mt-2 w-64 bg-neutral-900 rounded-lg shadow-xl border border-neutral-700 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-64 bg-[#0a0a0a] rounded-lg shadow-xl border border-neutral-700 py-2 z-50">
                   <div className="px-4 py-3 border-b border-neutral-800">
                     <p className="text-sm font-medium text-neutral-100 truncate">{user?.email}</p>
                     {user?.role === 'SUPER_ADMIN' && (
