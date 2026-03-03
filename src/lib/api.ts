@@ -129,6 +129,19 @@ export const publicAPI = {
     api.post('/public/contact', data),
 };
 
+export const usersAPI = {
+  getProfile: () => api.get('/users/me'),
+  updateProfile: (data: {
+    name?: string;
+    firstName?: string;
+    lastName?: string;
+    mobileNumber?: string;
+    dateOfBirth?: string;
+    emailNotificationsEnabled?: boolean;
+    notificationEmails?: string[];
+  }) => api.put('/users/me', data),
+};
+
 export const bulkUploadAPI = {
   uploadCsv: (file: File) => {
     const formData = new FormData();

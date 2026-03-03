@@ -8,13 +8,16 @@ import { websitesAPI } from '@/lib/dashboard';
 
 const TEMPLATE_OPTIONS = [
   { key: 'modernNews' as const, label: 'Modern News', image: '/templateA/assets/images/modernNews.png' },
-  { key: 'templateA' as const, label: 'Template A', image: '/templateA/assets/images/TemplateA.png' },
+  { key: 'templateA' as const, label: 'Merinda Blog', image: '/templateA/assets/images/TemplateA.png' },
+  { key: 'arclight' as const, label: 'Arclight Magazine', image: 'https://placehold.co/800x500/1a1a2e/ffffff?text=Arclight+Magazine' },
 ];
+
+type TemplateKey = 'modernNews' | 'templateA' | 'arclight';
 
 export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGlobalLoading }: any) {
   const [contactFormEnabled, setContactFormEnabled] = useState(true);
-  const [selectedTemplateKey, setSelectedTemplateKey] = useState<'modernNews' | 'templateA'>('modernNews');
-  const [enlargedTemplateKey, setEnlargedTemplateKey] = useState<'modernNews' | 'templateA' | null>(null);
+  const [selectedTemplateKey, setSelectedTemplateKey] = useState<TemplateKey>('modernNews');
+  const [enlargedTemplateKey, setEnlargedTemplateKey] = useState<TemplateKey | null>(null);
 
   const mutation = useMutation({
     mutationFn: () => websitesAPI.generate(domainId, selectedTemplateKey, contactFormEnabled),
@@ -32,14 +35,14 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-3xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         <div className="mb-4 sm:mb-5">
           <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Generate Website</h2>
         </div>
 
         <div className="mb-4 sm:mb-5">
           <p className="text-xs sm:text-sm font-semibold text-neutral-200 mb-3 sm:mb-4">Choose template</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             {TEMPLATE_OPTIONS.map((opt) => (
               <div
                 key={opt.key}
@@ -67,7 +70,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                     )}
                   </div>
                   <div className="p-2.5 sm:p-3 bg-neutral-800 border-t border-neutral-700 flex-shrink-0 flex items-center justify-between gap-2">
-                    <span className="text-xs sm:text-sm font-light text-neutral-100">{opt.label === 'Template A' ? 'Merinda Blog' : 'Modern News'}</span>
+                    <span className="text-xs sm:text-sm font-light text-neutral-100">{opt.label}</span>
                   </div>
                 </button>
                 <button
