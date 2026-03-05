@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI } from '@/lib/dashboard';
-import { Globe, Search, Sparkles, ChevronDown, Upload } from 'lucide-react';
+import { Globe, Search, Sparkles, ChevronDown, Upload, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
 import {
@@ -12,13 +13,16 @@ import {
   SynonymSelectionModal,
   GenerateWebsiteModal,
   CsvUploadModal,
-  CsvPreviewEditor,
 } from '@/components/dashboard';
 import type { UploadResult } from '@/components/dashboard';
+import { bulkUploadAPI } from '@/lib/api';
+
+const CSV_RESULT_STORAGE_KEY = 'csvUploadResult';
 
 const SEARCH_DEBOUNCE_MS = 600;
 
 export default function DashboardPage() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [showAddDomain, setShowAddDomain] = useState(false);
   const [showSynonymSelection, setShowSynonymSelection] = useState<string | null>(null);
@@ -30,8 +34,36 @@ export default function DashboardPage() {
   // CSV bulk upload state
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCsvUpload, setShowCsvUpload] = useState(false);
-  const [csvResult, setCsvResult] = useState<UploadResult | null>(null);
+  const [isFetchingInactive, setIsFetchingInactive] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleOpenInactiveBulk = async () => {
+    setIsFetchingInactive(true);
+    try {
+      const res = await bulkUploadAPI.getInactiveDomains();
+      const list = Array.isArray(res.data) ? res.data : (res.data as { domains?: unknown[] })?.domains ?? [];
+      if (list.length === 0) {
+        toast('No inactive bulk-uploaded domains', {
+          icon: '📋',
+          style: { background: '#262626', color: '#fafafa' },
+        });
+        return;
+      }
+      const result: UploadResult = {
+        saved: list as UploadResult['saved'],
+        savedCount: list.length,
+        skippedCount: 0,
+        total: list.length,
+        skipped: [],
+      };
+      sessionStorage.setItem(CSV_RESULT_STORAGE_KEY, JSON.stringify(result));
+      router.push('/dashboard/preview-editor');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to load inactive domains');
+    } finally {
+      setIsFetchingInactive(false);
+    }
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -134,6 +166,19 @@ export default function DashboardPage() {
               aria-label="Search domains"
             />
           </div>
+          <button
+            type="button"
+            onClick={handleOpenInactiveBulk}
+            disabled={isFetchingInactive}
+            className="h-12 w-12 bg-[#0a0a0a] text-white flex-shrink-0 flex items-center justify-center border border-neutral-700 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 hover:border-neutral-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="View inactive bulk-uploaded domains"
+          >
+            {isFetchingInactive ? (
+              <span className="size-4 border-3 border-neutral-500 border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <FileText size={18} />
+            )}
+          </button>
           {/* Add New dropdown */}
           <div className="relative flex-shrink-0" ref={dropdownRef}>
             <button
@@ -244,19 +289,14 @@ export default function DashboardPage() {
       {showCsvUpload && (
         <CsvUploadModal
           onClose={() => setShowCsvUpload(false)}
-          onSuccess={(result) => {
+          onSuccess={(uploadResult) => {
             setShowCsvUpload(false);
-            setCsvResult(result);
-          }}
-        />
-      )}
-
-      {csvResult && (
-        <CsvPreviewEditor
-          result={csvResult}
-          onClose={() => {
-            setCsvResult(null);
-            queryClient.invalidateQueries({ queryKey: ['domains'] });
+            try {
+              sessionStorage.setItem(CSV_RESULT_STORAGE_KEY, JSON.stringify(uploadResult));
+            } catch {
+              // ignore
+            }
+            router.push('/dashboard/preview-editor');
           }}
         />
       )}

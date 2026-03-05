@@ -152,4 +152,11 @@ export const bulkUploadAPI = {
   },
   generateWebsites: (domainIds: string[]) =>
     api.post('/bulk-upload/generate-websites', { domainIds }),
+  updateDomain: (
+    id: string,
+    data: { selectedMeaning?: string; userDescription?: string }
+  ) =>
+    api.patch(`/bulk-upload/domains/${id}`, data),
+  getInactiveDomains: () =>
+    api.get('/bulk-upload/inactive-domains'),
 };

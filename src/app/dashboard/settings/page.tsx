@@ -5,9 +5,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { usersAPI } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
-import { Pencil, Loader2, Bell, Mail, Trash2, Shield, CheckCircle } from 'lucide-react';
+import { Pencil, Loader2, Bell, Mail, Trash2, CheckCircle } from 'lucide-react';
 
-type Tab = 'general' | 'verification' | 'security';
+type Tab = 'general' | 'notifications'
 
 export default function SettingsPage() {
   const { user } = useAuthStore();
@@ -103,8 +103,7 @@ export default function SettingsPage() {
 
   const TABS: { id: Tab; label: string }[] = [
     { id: 'general', label: 'General' },
-    { id: 'verification', label: 'Verification' },
-    { id: 'security', label: 'Security' },
+    { id: 'notifications', label: 'Notifications' },
   ];
 
   if (isLoading) {
@@ -254,8 +253,12 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Email Notifications */}
+      {/* ── Notifications Tab ─────────────────────────────────────── */}
+      {activeTab === 'notifications' && (
+        <div className="space-y-5">
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
             <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700">
               <Bell size={14} className="text-neutral-400" />
@@ -342,32 +345,6 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* ── Verification Tab ──────────────────────────────────────── */}
-      {activeTab === 'verification' && (
-        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center">
-            <Shield size={20} className="text-neutral-400" />
-          </div>
-          <h3 className="text-sm font-semibold text-neutral-200">Identity Verification</h3>
-          <p className="text-xs text-neutral-500 max-w-xs">
-            Verification features are coming soon. You'll be able to verify your identity and domain ownership here.
-          </p>
-        </div>
-      )}
-
-      {/* ── Security Tab ─────────────────────────────────────────── */}
-      {activeTab === 'security' && (
-        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center">
-            <Shield size={20} className="text-neutral-400" />
-          </div>
-          <h3 className="text-sm font-semibold text-neutral-200">Security Settings</h3>
-          <p className="text-xs text-neutral-500 max-w-xs">
-            Security features like password change and two-factor authentication are coming soon.
-          </p>
         </div>
       )}
     </div>

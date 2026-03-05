@@ -90,7 +90,7 @@ export default function DashboardLayout({
 
       {/* Top Navbar - Vercel-style dark */}
       <nav className="bg-black ">
-        <div className="px-4 py-4 sm:px-8 lg:px-16 xl:px-24 h-14 flex items-center justify-between">
+        <div className="px-4 py-4 sm:px-8 lg:px-16 xl:px-24 h-20 flex items-center justify-between">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center group">
             <div className="flex items-center">
