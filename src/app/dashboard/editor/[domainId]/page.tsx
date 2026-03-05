@@ -362,9 +362,9 @@ export default function EditorPage() {
       {/* Main Content - Split View */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left: Website Preview - Hidden on mobile */}
-        <div className="hidden lg:block lg:w-1/2 border-r border-neutral-800 bg-neutral-950 p-6 overflow-auto">
-          <div className="bg-neutral-900 rounded-xl overflow-hidden border border-neutral-700">
-            <div className="bg-neutral-800 px-4 py-3 flex items-center justify-between gap-3">
+        <div className="hidden lg:block lg:w-1/2 border-r border-neutral-800 bg-black p-6 overflow-auto">
+          <div className="bg-[#0a0a0a] rounded-xl overflow-hidden border border-neutral-700">
+            <div className="bg-[#0a0a0a] px-4 py-3 flex items-center justify-between gap-3">
               {/* Left: MacBook buttons */}
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -466,7 +466,7 @@ export default function EditorPage() {
       {/* Edit Blog Modal */}
       {editingBlog && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
-          <div className="bg-neutral-900 rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl border border-neutral-700 animate-in zoom-in duration-200 flex flex-col">
+          <div className="bg-[#0a0a0a] rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl border border-neutral-700 animate-in zoom-in duration-200 flex flex-col">
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-700 flex-shrink-0">
               <div className="min-w-0 flex-1">

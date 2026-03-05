@@ -73,13 +73,29 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
     try {
       const res = await bulkUploadAPI.uploadCsv(selectedFile);
       const result: UploadResult = res.data;
+      const allSkipped = result.savedCount === 0 && result.skippedCount > 0;
+      const allAlreadyExist = allSkipped && result.skipped.every((s) => s.reason === 'Domain already exists');
+
       if (result.savedCount === 0) {
-        toast.error(`No domains were saved. ${result.skippedCount} skipped.`);
-        setError(`All ${result.skippedCount} rows were skipped. Check the domain formats.`);
+        if (allAlreadyExist) {
+          const n = result.skippedCount;
+          toast.error(`${n} domain${n !== 1 ? 's' : ''} already exist`);
+          setError(`All ${n} domain${n !== 1 ? 's' : ''} already exist in your account.`);
+        } else {
+          toast.error(`No domains were saved. ${result.skippedCount} skipped.`);
+          setError(`All ${result.skippedCount} rows were skipped. Check the domain formats.`);
+        }
         setIsUploading(false);
         return;
       }
-      toast.success(`${result.savedCount} domain${result.savedCount !== 1 ? 's' : ''} imported successfully`);
+
+      if (result.skippedCount > 0) {
+        const savedMsg = `${result.savedCount} domain${result.savedCount !== 1 ? 's' : ''} added`;
+        const skippedMsg = `${result.skippedCount} skipped`;
+        toast.success(`${savedMsg} and ${skippedMsg}`);
+      } else {
+        toast.success(`${result.savedCount} domain${result.savedCount !== 1 ? 's' : ''} imported successfully`);
+      }
       onSuccess(result);
     } catch (err: any) {
       const msg = err.response?.data?.message || 'Upload failed. Please try again.';
@@ -141,7 +157,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
             ].map((row, i) => (
               <div
                 key={i}
-                className="grid grid-cols-3 border-t border-neutral-800 bg-neutral-900/40 hover:bg-neutral-800/30 transition-colors"
+                className="grid grid-cols-3 border-t border-neutral-800 bg-[#0a0a0a]/40 hover:bg-neutral-800/30 transition-colors"
               >
                 <div className="px-3 py-2 font-mono text-neutral-200">{row.domain}</div>
                 <div className="px-3 py-2 font-mono text-emerald-400/80 border-l border-neutral-800">
@@ -172,7 +188,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
                 ? 'border-neutral-400 bg-neutral-800/50'
                 : selectedFile
                   ? 'border-emerald-500/50 bg-emerald-500/5'
-                  : 'border-neutral-700 hover:border-neutral-500 hover:bg-neutral-900/50'
+                  : 'border-neutral-700 hover:border-neutral-500 hover:bg-[#0a0a0a]/50'
               }
             `}
           >

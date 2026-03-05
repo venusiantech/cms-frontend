@@ -111,7 +111,7 @@ const PostTypeFeaturedIcon: FC<Props> = ({
       {!!postType && postType !== 'standard' ? (
         <span
           className={clsx(
-            'flex items-center justify-center rounded-full border border-white bg-neutral-900/60 text-xl text-white rtl:rotate-180',
+            'flex items-center justify-center rounded-full border border-white bg-[#0a0a0a]/60 text-xl text-white rtl:rotate-180',
             wrapSize
           )}
         >

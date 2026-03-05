@@ -41,7 +41,7 @@ export default function MegaMenuPopover({
             transition
             className="header-popover-full-panel absolute inset-x-0 top-full z-40 w-full transition duration-200 data-closed:translate-y-1 data-closed:opacity-0"
           >
-            <div className="bg-white shadow-lg dark:bg-neutral-900">
+            <div className="bg-white shadow-lg dark:bg-[#0a0a0a]">
               <div className="container">
                 <div className="flex py-12 text-sm">
                   <div className="grid flex-1 grid-cols-4 gap-6 pe-10 xl:gap-8 2xl:pe-14">

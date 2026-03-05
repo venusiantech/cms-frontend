@@ -116,7 +116,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="px-4 lg:px-8 max-w-3xl">
+    <div className="px-4 lg:px-8 w-full max-w-full">
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-neutral-100">Settings</h1>
       </div>
@@ -142,7 +142,7 @@ export default function SettingsPage() {
       {activeTab === 'general' && (
         <div className="space-y-5">
           {/* Account Information */}
-          <div className="bg-neutral-900 border border-neutral-700 rounded-xl overflow-hidden">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
             {/* Section header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-700">
               <div>
@@ -256,7 +256,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Email Notifications */}
-          <div className="bg-neutral-900 border border-neutral-700 rounded-xl overflow-hidden">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
             <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700">
               <Bell size={14} className="text-neutral-400" />
               <div>
@@ -284,7 +284,7 @@ export default function SettingsPage() {
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-neutral-900 transition-transform duration-200 ${
+                    className={`inline-block h-4 w-4 transform rounded-full bg-[#0a0a0a] transition-transform duration-200 ${
                       emailNotificationsEnabled ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
@@ -347,7 +347,7 @@ export default function SettingsPage() {
 
       {/* ── Verification Tab ──────────────────────────────────────── */}
       {activeTab === 'verification' && (
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
+        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
           <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center">
             <Shield size={20} className="text-neutral-400" />
           </div>
@@ -360,7 +360,7 @@ export default function SettingsPage() {
 
       {/* ── Security Tab ─────────────────────────────────────────── */}
       {activeTab === 'security' && (
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
+        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-8 flex flex-col items-center text-center gap-3">
           <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center">
             <Shield size={20} className="text-neutral-400" />
           </div>

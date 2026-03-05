@@ -15,7 +15,7 @@ const CardAuthorBox: FC<Props> = ({ className, author }) => {
   return (
     <div
       className={clsx(
-        'card-author-box group relative flex flex-col items-center justify-center rounded-3xl border border-dashed bg-white px-3 py-5 text-center sm:px-6 sm:py-7 dark:bg-neutral-900',
+        'card-author-box group relative flex flex-col items-center justify-center rounded-3xl border border-dashed bg-white px-3 py-5 text-center sm:px-6 sm:py-7 dark:bg-[#0a0a0a]',
         className
       )}
     >

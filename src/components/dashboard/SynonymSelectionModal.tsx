@@ -61,7 +61,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-8 max-w-md w-full shadow-2xl">
+        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-8 max-w-md w-full shadow-2xl">
           <div className="flex flex-col items-center gap-4">
             <CustomLoader />
             <p className="text-sm text-neutral-400">Let's get you ready with our recommended contexts...</p>
@@ -74,7 +74,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
   if (error) {
     return (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 max-w-md w-full shadow-2xl">
+        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-6 max-w-md w-full shadow-2xl">
           <h2 className="text-xl font-light text-neutral-100 mb-4">Could not find meanings</h2>
           <p className="text-neutral-400 text-sm mb-6">
             We couldn't find different meanings for your domain. You can continue without context selection.
@@ -118,7 +118,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[95vh] overflow-y-auto">
+      <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-8 max-w-2xl w-full shadow-2xl max-h-[95vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-neutral-100">

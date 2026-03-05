@@ -259,7 +259,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
           onClick={() => setShowDnsModal(false)}
         >
           <div
-            className="bg-neutral-900 border border-neutral-700 rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl"
+            className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between mb-6">

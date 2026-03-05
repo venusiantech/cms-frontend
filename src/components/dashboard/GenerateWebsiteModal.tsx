@@ -9,7 +9,7 @@ import { websitesAPI } from '@/lib/dashboard';
 const TEMPLATE_OPTIONS = [
   { key: 'modernNews' as const, label: 'Modern News', image: '/templateA/assets/images/modernNews.png' },
   { key: 'templateA' as const, label: 'Merinda Blog', image: '/templateA/assets/images/TemplateA.png' },
-  { key: 'arclight' as const, label: 'Arclight Magazine', image: 'https://placehold.co/800x500/1a1a2e/ffffff?text=Arclight+Magazine' },
+  { key: 'arclight' as const, label: 'Arclight Magazine', image: '/templateA/assets/images/Arclight.png' },
 ];
 
 type TemplateKey = 'modernNews' | 'templateA' | 'arclight';
@@ -35,7 +35,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4">
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-3xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-6 max-w-3xl w-full shadow-2xl relative z-[61] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
         <div className="mb-4 sm:mb-5">
           <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-2">Generate Website</h2>
         </div>
@@ -100,7 +100,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
               onClick={() => setEnlargedTemplateKey(null)}
             >
               <div
-                className="relative bg-neutral-900 border border-neutral-700 rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
+                className="relative bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-neutral-700 bg-neutral-800">
@@ -121,7 +121,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                     className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg"
                   />
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-neutral-700 bg-neutral-900">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-neutral-700 bg-[#0a0a0a]">
                   <button
                     type="button"
                     onClick={() => setEnlargedTemplateKey(null)}

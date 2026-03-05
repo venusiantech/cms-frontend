@@ -95,7 +95,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
         {/* Subdomain */}
         <div>
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Subdomain</p>
-          <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-2 break-all">{getDisplaySubdomain(domain.website.subdomain)}</p>
             <a
               href={getSiteUrl(domain.website.subdomain)}
@@ -111,7 +111,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
         {/* Custom Domain */}
         <div>
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Custom Domain</p>
-          <div className="bg-neutral-900 border border-neutral-700 rounded-lg p-4">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-3 break-all">{domain.domainName}</p>
             
             {/* DNS Configuration - Show if nameservers exist */}

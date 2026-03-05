@@ -22,7 +22,7 @@ const Header2: FC<Props> = async ({ className }) => {
   return (
     <div
       className={clsx(
-        'header-2 relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 mb-4',
+        'header-2 relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-[#0a0a0a] mb-4',
         className
       )}
     >

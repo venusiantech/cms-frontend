@@ -218,7 +218,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className="bg-neutral-900 border-2 border-neutral-700 rounded-xl p-6 hover:shadow-lg hover:border-neutral-600 transition-all duration-200 text-center group"
+                className="bg-[#0a0a0a] border-1 border-neutral-700 rounded-xl p-6 hover:shadow-lg hover:border-neutral-600 transition-all duration-200 text-center group"
               >
                 <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
                   <Icon size={32} />
@@ -254,7 +254,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <p className="text-sm text-neutral-400">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
             </div>
 
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5 space-y-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5 space-y-5">
               {/* Current logo preview */}
               {logoPreview ? (
                 <div className="flex flex-col items-center gap-4">
@@ -389,7 +389,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {/* Template Selection */}
         {selectedCategory === 'templates' && (
           <>
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-5">
               <div className="mb-4">
                 <p className="font-semibold text-neutral-100 mb-1">Website Template</p>
               </div>
@@ -446,9 +446,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             {/* Template Details Modal */}
             {showTemplateModal && selectedTemplateDetails && (
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-200">
-            <div className="bg-neutral-900 rounded-xl border border-neutral-700 max-w-7xl w-full shadow-2xl animate-in zoom-in duration-200 overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="bg-[#0a0a0a] rounded-xl border border-neutral-700 max-w-7xl w-full shadow-2xl animate-in zoom-in duration-200 overflow-hidden max-h-[90vh] flex flex-col">
               {/* Modal Header */}
-              <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-neutral-900 border-b border-neutral-700">
+              <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-[#0a0a0a] border-b border-neutral-700">
                 <div>
                   <h3 className="text-lg sm:text-2xl font-semibold text-neutral-100">{selectedTemplateDetails.name}</h3>
                   {selectedTemplate === selectedTemplateDetails.key && (
@@ -514,7 +514,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Right: Template Details */}
-                <div className="w-full lg:w-96 flex flex-col bg-neutral-900">
+                <div className="w-full lg:w-96 flex flex-col bg-[#0a0a0a]">
                   <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
                     {/* Description */}
                     <div>
@@ -574,7 +574,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Ads Setting */}
         {selectedCategory === 'ads' && (
-          <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
             <div className="flex items-start justify-between">
               <label className="flex items-start gap-3 cursor-pointer flex-1">
               <input
@@ -616,7 +616,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'contact' && (
           <div className="space-y-6">
             {/* Toggle Contact Form */}
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -643,7 +643,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             </div>
 
             {/* Contact Information */}
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
               <div className="mb-4">
                 <p className="font-semibold text-neutral-100 mb-1">Contact Information</p>
                 <p className="text-sm text-neutral-400">Add your contact details to display on your website</p>
@@ -719,7 +719,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Social Media Links */}
         {selectedCategory === 'social' && (
-          <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
             <div className="mb-4">
               <p className="font-semibold text-neutral-100 mb-1">Social Media Links</p>
               <p className="text-sm text-neutral-400">Add your social media profiles to appear in your website footer</p>
@@ -798,7 +798,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <p className="text-sm text-neutral-400">Optimize your website for search engines and social media platforms</p>
             </div>
 
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
               <div className="space-y-5">
                 {/* Meta Title */}
                 <div>
@@ -987,7 +987,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <p className="text-sm text-neutral-400">Add Google Analytics to track your website visitors and behavior</p>
             </div>
 
-            <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-5">
+            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
               <div className="space-y-5">
                 {/* Google Analytics ID */}
                 <div>

@@ -40,7 +40,7 @@ const MegaMenu = ({ menuItem, featuredPosts }: { menuItem: TNavigationItem; feat
 
       {menuItem.children?.length && menuItem.type === 'mega-menu' ? (
         <div className="absolute inset-x-0 top-full z-50 sub-menu">
-          <div className="bg-white shadow-lg dark:bg-neutral-900">
+          <div className="bg-white shadow-lg dark:bg-[#0a0a0a]">
             <div className="container">
               <div className="flex border-t border-neutral-200 py-11 text-sm dark:border-neutral-700">
                 <div className="grid flex-1 grid-cols-4 gap-6 pe-10 xl:gap-8 2xl:pe-14">
@@ -84,7 +84,7 @@ const DropdownMenu = ({ menuItem }: { menuItem: TNavigationItem }) => {
         {renderMenuLink(menuItem)}
         {menuItem.children?.length && (
           <div className="absolute top-0 left-full z-10 sub-menu w-56 pl-2">
-            <ul className="relative grid space-y-1 rounded-lg bg-white py-4 text-sm shadow-lg ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10">
+            <ul className="relative grid space-y-1 rounded-lg bg-white py-4 text-sm shadow-lg ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
               {menuItem.children.map((child) => {
                 if (child.type === 'dropdown' && child.children?.length) {
                   return renderDropdown(child)
@@ -108,7 +108,7 @@ const DropdownMenu = ({ menuItem }: { menuItem: TNavigationItem }) => {
 
       {menuItem.children?.length && menuItem.type === 'dropdown' ? (
         <div className="absolute top-full left-0 z-50 sub-menu w-56">
-          <ul className="relative grid space-y-1 rounded-lg bg-white py-3 text-sm shadow-lg ring-1 ring-black/5 dark:bg-neutral-900 dark:ring-white/10">
+          <ul className="relative grid space-y-1 rounded-lg bg-white py-3 text-sm shadow-lg ring-1 ring-black/5 dark:bg-[#0a0a0a] dark:ring-white/10">
             {menuItem.children?.map((childItem) => {
               if (childItem.type === 'dropdown' && childItem.children?.length) {
                 return renderDropdown(childItem)

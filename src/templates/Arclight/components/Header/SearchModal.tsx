@@ -150,7 +150,7 @@ const SearchModal: FC<Props> = ({ type = 'type1' }) => {
       >
         <DialogBackdrop
           transition
-          className="fixed inset-0 z-50 bg-neutral-900/50 transition-opacity duration-300 ease-out data-closed:opacity-0"
+          className="fixed inset-0 z-50 bg-[#0a0a0a]/50 transition-opacity duration-300 ease-out data-closed:opacity-0"
         />
 
         <div className="fixed inset-0 z-50 hidden-scrollbar flex w-full overflow-y-auto sm:p-6 md:pt-20 md:pb-10">

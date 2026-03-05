@@ -128,7 +128,7 @@ export default function GenerateContentModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', duration: 0.5 }}
-              className="relative bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-700 max-w-5xl w-full p-10"
+              className="relative bg-[#0a0a0a] rounded-2xl shadow-2xl border border-neutral-700 max-w-5xl w-full p-10"
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-8">

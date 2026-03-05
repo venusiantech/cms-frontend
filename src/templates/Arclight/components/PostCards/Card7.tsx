@@ -57,10 +57,10 @@ const Card7: FC<Props> = ({ className, ratio = 'aspect-3/4', post, hoverClass })
           wrapSize="size-7"
           iconSize="size-4"
         />
-        <span className="absolute inset-0 bg-neutral-900/20 opacity-0 transition-opacity group-hover:opacity-100"></span>
+        <span className="absolute inset-0 bg-[#0a0a0a]/20 opacity-0 transition-opacity group-hover:opacity-100"></span>
       </div>
 
-      <div className="absolute inset-x-3 bottom-3 flex grow flex-col rounded-3xl bg-white p-4 transition-shadow group-hover:shadow-2xl dark:bg-neutral-900">
+      <div className="absolute inset-x-3 bottom-3 flex grow flex-col rounded-3xl bg-white p-4 transition-shadow group-hover:shadow-2xl dark:bg-[#0a0a0a]">
         <Link href={`/post/${handle}`} className="absolute inset-0"></Link>
         <div className="mb-3 space-y-2.5">
           <CategoryBadgeList categories={categories} />

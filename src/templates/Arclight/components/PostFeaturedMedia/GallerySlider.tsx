@@ -86,7 +86,7 @@ const GallerySlider: FC<Props> = ({ className, galleryImgs, handle, navigation =
             <div className="opacity-0 transition-opacity group-hover/cardGallerySlider:opacity-100">
               {index > 0 && (
                 <button
-                  className="absolute start-3 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white hover:border-neutral-300 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-900 dark:hover:border-neutral-500"
+                  className="absolute start-3 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white hover:border-neutral-300 focus:outline-hidden dark:border-neutral-600 dark:bg-[#0a0a0a] dark:hover:border-neutral-500"
                   onClick={() => changePhotoId(index - 1)}
                 >
                   <ChevronLeft className="size-4 rtl:rotate-180" />
@@ -94,7 +94,7 @@ const GallerySlider: FC<Props> = ({ className, galleryImgs, handle, navigation =
               )}
               {index + 1 < images.length && (
                 <button
-                  className="absolute end-3 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white hover:border-neutral-300 focus:outline-hidden dark:border-neutral-600 dark:bg-neutral-900 dark:hover:border-neutral-500"
+                  className="absolute end-3 top-1/2 z-10 flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white hover:border-neutral-300 focus:outline-hidden dark:border-neutral-600 dark:bg-[#0a0a0a] dark:hover:border-neutral-500"
                   onClick={() => changePhotoId(index + 1)}
                 >
                   <ChevronRight className="size-4 rtl:rotate-180" />

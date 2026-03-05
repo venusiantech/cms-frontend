@@ -109,7 +109,7 @@ function renderMarkdown(content: string, articleTitle: string): (JSX.Element | n
               </thead>
               <tbody>
                 {bodyRows.map((row, r) => (
-                  <tr key={r} className={r % 2 === 0 ? 'bg-white dark:bg-neutral-900' : 'bg-neutral-50 dark:bg-neutral-800/50'}>
+                  <tr key={r} className={r % 2 === 0 ? 'bg-white dark:bg-[#0a0a0a]' : 'bg-neutral-50 dark:bg-neutral-800/50'}>
                     {row.map((cell, c) => (
                       <td key={c} className="border border-neutral-200 px-3 py-2 text-neutral-900 dark:border-neutral-600 dark:text-neutral-300">
                         {formatCellContent(cell, `td-${keyIdx}-${r}-${c}`)}

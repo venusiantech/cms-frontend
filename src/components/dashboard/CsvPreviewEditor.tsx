@@ -165,7 +165,7 @@ export function CsvPreviewEditor({ result, onClose }: CsvPreviewEditorProps) {
                     key={domain.id}
                     onClick={() => toggleRow(domain.id)}
                     className={`cursor-pointer transition-colors ${
-                      isSelected ? 'bg-neutral-900' : 'hover:bg-neutral-900/50'
+                      isSelected ? 'bg-[#0a0a0a]' : 'hover:bg-[#0a0a0a]/50'
                     }`}
                   >
                     <td className="w-12 px-4 py-3">

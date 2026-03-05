@@ -114,7 +114,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
           </div>
 
           {/* Right: form or success */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-900 sm:p-8">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#0a0a0a] sm:p-8">
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <span className="flex size-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">
@@ -129,7 +129,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="mt-6 rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+                  className="mt-6 rounded-lg bg-[#0a0a0a] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                 >
                   Send another message
                 </button>
@@ -192,7 +192,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded-lg bg-neutral-900 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:opacity-60 disabled:cursor-not-allowed dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+                    className="w-full rounded-lg bg-[#0a0a0a] py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:opacity-60 disabled:cursor-not-allowed dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                   >
                     {isSubmitting ? (
                       <span className="inline-flex items-center gap-2">

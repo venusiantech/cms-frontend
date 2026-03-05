@@ -43,7 +43,7 @@ export default function BlogsTab({
   return (
     <div className="space-y-6">
       {/* Generate Content Button */}
-      <div className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-semibold text-neutral-100 mb-1">Generate More Content</h3>
           <p className="text-sm text-neutral-400">Add AI-generated blog posts to your site</p>
@@ -86,7 +86,7 @@ export default function BlogsTab({
               className={`border rounded-xl p-4 sm:p-5 transition-all duration-200 ${
                 blog.isHero
                   ? 'border-yellow-600/50 bg-yellow-900/20'
-                  : 'border-neutral-700 bg-neutral-900 hover:border-neutral-600'
+                  : 'border-neutral-700 bg-[#0a0a0a] hover:border-neutral-600'
               }`}
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3 sm:gap-4">

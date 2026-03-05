@@ -54,7 +54,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
   return (
     <header
       className={clsx(
-        'relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 mb-8',
+        'relative z-20 border-neutral-200 bg-white dark:border-neutral-700 dark:bg-[#0a0a0a] mb-8',
       )}
     >
       <div className="container h-20 flex items-center">

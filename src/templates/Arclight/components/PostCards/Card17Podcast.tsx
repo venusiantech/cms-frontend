@@ -20,7 +20,7 @@ const Card17Podcast: FC<Props> = ({ className, post }) => {
   return (
     <div
       className={clsx(
-        'post-card-17-podcast relative flex items-center justify-between gap-x-5 rounded-3xl border border-dashed border-neutral-200 bg-white p-2.5 dark:border-neutral-700 dark:bg-neutral-900',
+        'post-card-17-podcast relative flex items-center justify-between gap-x-5 rounded-3xl border border-dashed border-neutral-200 bg-white p-2.5 dark:border-neutral-700 dark:bg-[#0a0a0a]',
         className
       )}
     >

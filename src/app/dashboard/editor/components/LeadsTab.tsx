@@ -57,7 +57,7 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
       ) : leads && leads.length > 0 ? (
         <div className="space-y-3">
           {leads.map((lead: any) => (
-            <div key={lead.id} className="bg-neutral-900 border border-neutral-700 rounded-xl p-4 sm:p-5">
+            <div key={lead.id} className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-5">
               <div className="flex flex-col sm:flex-row items-start justify-between gap-2 sm:gap-3 mb-3">
                 <div className="w-full sm:w-auto">
                   <h4 className="font-medium text-neutral-100">{lead.name}</h4>

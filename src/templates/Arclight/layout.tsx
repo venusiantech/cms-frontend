@@ -34,7 +34,7 @@ export function ArclightInnerLayout({ children }: { children: React.ReactNode })
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <html lang="en" className={beVietnamPro.className}>
-      <body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
+      <body className="bg-white text-base text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-200">
         <ArclightInnerLayout>{children}</ArclightInnerLayout>
       </body>
     </html>

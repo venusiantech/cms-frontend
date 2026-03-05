@@ -43,7 +43,7 @@ export function Aside({
     <Dialog as="div" className="relative z-50" onClose={onClose} open={open}>
       <DialogBackdrop
         transition
-        className="fixed inset-0 bg-neutral-900/50 duration-300 ease-out data-closed:opacity-0"
+        className="fixed inset-0 bg-[#0a0a0a]/50 duration-300 ease-out data-closed:opacity-0"
       />
 
       <div className="fixed inset-0">

@@ -144,7 +144,7 @@ export default function DashboardPage() {
               <ChevronDown size={14} className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
             </button>
             {showDropdown && (
-              <div className="absolute right-0 mt-1.5 w-48 bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl z-20 py-1 overflow-hidden">
+              <div className="absolute right-0 mt-1.5 w-48 bg-[#0a0a0a] border border-neutral-700 rounded-lg shadow-2xl z-20 py-1 overflow-hidden">
                 <button
                   onClick={() => { setShowDropdown(false); setShowAddDomain(true); }}
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800 transition-colors text-left"
