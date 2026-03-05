@@ -1,100 +1,131 @@
-import { CustomLink } from '../../data/types'
-import Logo from '../shared/Logo'
-import SocialsList1 from '../shared/SocialsList1'
+'use client'
+
+import { Facebook01Icon, InstagramIcon, NewTwitterIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
-export interface WidgetFooterMenu {
-  id: string
-  title: string
-  menus: CustomLink[]
+export interface FooterProps {
+  siteName: string
+  subHeading?: string | null
+  logoUrl?: string | null
+  logoDisplayMode?: string | null
+  instagramUrl?: string | null
+  facebookUrl?: string | null
+  twitterUrl?: string | null
 }
 
-const widgetMenus: WidgetFooterMenu[] = [
-  {
-    id: '5',
-    title: 'Getting started',
-    menus: [
-      { href: '/', label: 'Installation' },
-      { href: '/', label: 'Release Notes' },
-      { href: '/', label: 'Upgrade Guide' },
-      { href: '/', label: 'Browser Support' },
-      { href: '/', label: 'Editor Support' },
-    ],
-  },
-  {
-    id: '1',
-    title: 'Explore',
-    menus: [
-      { href: '/', label: 'Design features' },
-      { href: '/', label: 'Prototyping' },
-      { href: '/', label: 'Design systems' },
-      { href: '/', label: 'Pricing' },
-      { href: '/', label: 'Customers' },
-    ],
-  },
-  {
-    id: '2',
-    title: 'Resources',
-    menus: [
-      { href: '/', label: 'Best practices' },
-      { href: '/', label: 'Support' },
-      { href: '/', label: 'Developers' },
-      { href: '/', label: 'Learn design' },
-      { href: '/', label: "What's new" },
-    ],
-  },
-  {
-    id: '4',
-    title: 'Community',
-    menus: [
-      { href: '/', label: 'Discussion Forums' },
-      { href: '/', label: 'Code of Conduct' },
-      { href: '/', label: 'Community Resources' },
-      { href: '/', label: 'Contributing' },
-      { href: '/', label: 'Concurrent Mode' },
-    ],
-  },
-]
+const Footer: React.FC<FooterProps> = ({
+  siteName,
+  subHeading,
+  logoUrl,
+  logoDisplayMode,
+  instagramUrl,
+  facebookUrl,
+  twitterUrl,
+}) => {
+  const mode = logoDisplayMode || 'logo_only'
+  const showLogo = !!logoUrl && mode !== 'text_only'
+  const showText = !logoUrl || mode === 'text_only' || mode === 'both'
 
-const Footer: React.FC = () => {
-  const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
-    return (
-      <div key={index} className="text-sm">
-        <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">{menu.title}</h2>
-        <ul className="mt-5 space-y-4">
-          {menu.menus.map((item, index) => (
-            <li key={index}>
-              <a
-                key={index}
-                className="text-neutral-600 hover:text-black dark:text-neutral-300 dark:hover:text-white"
-                href={item.href}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/privacy-policy', label: 'Privacy Policy' },
+  ]
+
+  const hasSocials = !!(facebookUrl || instagramUrl || twitterUrl)
 
   return (
-    <>
-      {/* footer */}
-      <div className="nc-Footer relative border-t border-neutral-200 py-16 lg:py-28 dark:border-neutral-700">
-        <div className="container grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10">
-          <div className="col-span-2 grid grid-cols-4 gap-5 md:col-span-4 lg:flex lg:flex-col lg:md:col-span-1">
-            <div className="col-span-2 md:col-span-1">
-              <Logo size="size-10" />
-            </div>
-            <div className="col-span-2 flex items-center md:col-span-3">
-              <SocialsList1 />
-            </div>
-          </div>
-          {widgetMenus.map(renderWidgetMenuItem)}
+    <div className="nc-Footer relative border-t border-neutral-200 py-16 lg:py-28 dark:border-neutral-700">
+      <div className="container grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10">
+        <div className="col-span-2 md:col-span-4 lg:col-span-2">
+          <Link href="/" className="inline-block text-primary-600 dark:text-primary-500">
+            {showLogo && (
+              <span className="relative block h-10 w-28 shrink-0 overflow-hidden">
+                <Image
+                  src={logoUrl}
+                  alt={siteName}
+                  fill
+                  className="object-contain"
+                  sizes="112px"
+                />
+              </span>
+            )}
+            {showText && (
+              <span className="font-medium italic text-3xl text-neutral-900 dark:text-neutral-100">{siteName}</span>
+            )}
+          </Link>
+          {subHeading && (
+            <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{subHeading}</p>
+          )}
         </div>
+        <div className="col-span-2 flex flex-col items-center justify-start md:col-span-4 lg:col-span-2">
+          <nav className="text-sm">
+            <h2 className="font-semibold mb-4 text-neutral-700 dark:text-neutral-200">Quick Links</h2>
+            <ul className="mt-5 space-y-4 sm:mt-6 lg:mt-0">
+              {navLinks.map((item) => (
+                <li key={item.label} className="">
+                  <Link
+                    href={item.href}
+                    className="text-neutral-600 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+        {hasSocials && (
+          <div className="text-sm col-span-2 md:col-span-4 lg:col-span-1">
+            <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">Follow</h2>
+            <ul className="mt-5 flex items-center gap-x-3.5 lg:mt-5" aria-label="Social links">
+              {facebookUrl && (
+                <li>
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+                    aria-label="Facebook"
+                  >
+                    <HugeiconsIcon icon={Facebook01Icon} size={20} />
+                  </a>
+                </li>
+              )}
+              {instagramUrl && (
+                <li>
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+                    aria-label="Instagram"
+                  >
+                    <HugeiconsIcon icon={InstagramIcon} size={20} />
+                  </a>
+                </li>
+              )}
+              {twitterUrl && (
+                <li>
+                  <a
+                    href={twitterUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+                    aria-label="Twitter"
+                  >
+                    <HugeiconsIcon icon={NewTwitterIcon} size={20} />
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   )
 }
 

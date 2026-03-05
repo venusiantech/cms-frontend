@@ -5,10 +5,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { FC, useState } from 'react'
 import CategoryBadgeList from './CategoryBadgeList'
-import PostCardCommentBtn from './PostCardCommentBtn'
-import PostCardLikeBtn from './PostCardLikeBtn'
 import PostCardMeta from '../PostCardMeta/PostCardMeta'
-import PostCardSaveBtn from './PostCardSaveBtn'
 import PostFeaturedMedia from '../PostFeaturedMedia/PostFeaturedMedia'
 
 interface Props {
@@ -19,7 +16,7 @@ interface Props {
 }
 
 const Card11: FC<Props> = ({ className, post, hiddenAuthor = false, ratio = 'aspect-4/3' }) => {
-  const { title, handle, categories, date, likeCount, liked, commentCount, readingTime, bookmarked } = post
+  const { title, categories, date } = post
 
   const [isHover, setIsHover] = useState(false)
 

@@ -105,16 +105,26 @@ function blogsFromPage(
   })
 }
 
-const DEFAULT_AUTHOR = {
-  id: 'cms-author',
-  name: 'Editor',
-  handle: 'editor',
-  avatar: {
-    src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=128&auto=format&fit=crop',
-    alt: 'Editor',
-    width: 1920,
-    height: 1080,
-  },
+/** Four avatar URLs; assigned by sequence (index % 4) to posts. */
+const AVATAR_URLS = [
+  'https://api.dicebear.com/7.x/avataaars/png?seed=Emma',
+  'https://api.dicebear.com/7.x/avataaars/png?seed=Yuki',
+  'https://api.dicebear.com/7.x/avataaars/png?seed=Carlos',
+  'https://api.dicebear.com/7.x/avataaars/png?seed=Ahmed',
+]
+
+function defaultAuthor(domainName: string, avatarSrc: string) {
+  return {
+    id: 'cms-author',
+    name: domainName,
+    handle: domainName.toLowerCase().replace(/\s+/g, '-'),
+    avatar: {
+      src: avatarSrc,
+      alt: domainName,
+      width: 1920,
+      height: 1080,
+    },
+  }
 }
 
 const DEFAULT_CATEGORY = {
@@ -141,11 +151,8 @@ export function toArclightPost(
   index: number,
   opts?: { content?: string }
 ): ArclightCmsPost {
-  const author = {
-    ...DEFAULT_AUTHOR,
-    name: b.domainName,
-    handle: b.domainName.toLowerCase().replace(/\s+/g, '-'),
-  }
+  const avatarSrc = AVATAR_URLS[index % AVATAR_URLS.length]
+  const author = defaultAuthor(b.domainName, avatarSrc)
   return {
     id: b.slug,
     sectionId: b.sectionId,

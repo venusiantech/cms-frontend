@@ -43,21 +43,12 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
   const showLogo = !!logoUrl && mode !== 'text_only'
   const showText = !logoUrl || mode === 'text_only' || mode === 'both'
 
-  // Arrayfy menu items
+  // Menu items (no contact here)
   const menuItems: MenuItem[] = [
     {
       label: 'All Articles',
       href: '/categories',
     },
-    ...(onContactClick
-      ? [
-          {
-            label: 'Contact',
-            asButton: true,
-            onClick: onContactClick,
-          },
-        ]
-      : []),
   ]
 
   return (
@@ -113,8 +104,9 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
           </nav>
         </div>
 
-        {/* Right: Socials */}
+        {/* Right: Socials and Contact */}
         <div className="flex items-center gap-x-6">
+          {/* Social Links */}
           {(facebookUrl || instagramUrl || twitterUrl) && (
             <ul className="flex items-center gap-x-3.5" aria-label="Social links">
               {facebookUrl && (
@@ -157,6 +149,17 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
                 </li>
               )}
             </ul>
+          )}
+          {/* Contact Button (as icon-like or regular button) */}
+          {onContactClick && (
+            <button
+              type="button"
+              onClick={onContactClick}
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
+              style={{ minWidth: 0 }}
+            >
+              Contact
+            </button>
           )}
         </div>
       </div>

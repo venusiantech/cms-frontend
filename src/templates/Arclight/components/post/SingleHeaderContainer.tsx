@@ -6,7 +6,6 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import { FC } from 'react'
 import SingleMeta from './SingleMeta'
-import { SingleMetaAction } from './SingleMetaAction'
 import SingleTitle from './SingleTitle'
 
 /** Post shape compatible with CMS (ArclightCmsPost) and legacy TPostDetail. */
@@ -43,9 +42,6 @@ const HeaderStyle1 = ({ className, post }: { className?: string; post: SinglePos
   const imgSrc = typeof post.featuredImage === 'object' && post.featuredImage?.src ? post.featuredImage.src : ''
   return (
     <>
-      <div className="container">
-        <Divider />
-      </div>
       <header className={clsx('single-header-style-1 container mt-8 lg:mt-16', className)}>
         <div className="mx-auto max-w-4xl">
           <TitleAndMeta post={post} />
@@ -74,7 +70,7 @@ interface Props {
   headerStyle?: 'style1' | 'style2' | 'style3'
 }
 
-const SingleHeaderContainer: FC<Props> = ({ className, post, headerStyle = 'style1' }) => {
+const SingleHeaderContainer: FC<Props> = ({ className, post }) => {
   return <HeaderStyle1 className={className} post={post} />
 }
 

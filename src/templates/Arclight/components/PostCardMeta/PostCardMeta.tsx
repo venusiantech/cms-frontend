@@ -4,18 +4,8 @@ import Link from 'next/link'
 import { FC } from 'react'
 import LocalDate from '../LocalDate'
 
-const AVATAR_IMAGES = [
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=Yuki",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmed"
-];
-
-// Helper for picking a random avatar at render time
-function getRandomAvatar() {
-  const index = Math.floor(Math.random() * AVATAR_IMAGES.length);
-  return AVATAR_IMAGES[index];
-}
+/** Fallback when post does not provide author.avatar (e.g. non-CMS usage). */
+const FALLBACK_AVATAR_URL = 'https://api.dicebear.com/7.x/avataaars/png?seed=Emma'
 
 interface Props {
   className?: string
@@ -26,19 +16,20 @@ interface Props {
 
 const PostCardMeta: FC<Props> = ({ className, meta, hiddenAvatar = false, avatarSize = 'size-7' }) => {
   const { date, author } = meta
-
-  // Render a random avatar per component instance
-  const avatarUrl = getRandomAvatar();
+  const avatarUrl = typeof author?.avatar === 'object' && author?.avatar?.src
+    ? author.avatar.src
+    : typeof author?.avatar === 'string'
+      ? author.avatar
+      : FALLBACK_AVATAR_URL
 
   return (
     <div className={clsx('post-card-meta flex flex-wrap items-center text-xs/6', className)}>
       <div className="relative flex items-center gap-x-2.5">
-        <Link href={`/author/${author.handle}`} className="absolute inset-0" />
         {!hiddenAvatar && (
           <img
             className={clsx('rounded-full object-cover', avatarSize)}
             src={avatarUrl}
-            alt="Avatar"
+            alt={author?.avatar && typeof author.avatar === 'object' ? author.avatar.alt : 'Avatar'}
           />
         )}
         <span className="block font-semibold text-neutral-900 dark:text-neutral-300">{author.name}</span>

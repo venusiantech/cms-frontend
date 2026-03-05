@@ -16,7 +16,7 @@ const ApplicationLayout: React.FC<Props> = ({ children }) => {
       {children}
 
       {/* footer - Chose footer style here / footer 1 or footer 2 or footer 3 or footer 4 */}
-      <Footer />
+      <Footer siteName="Arclight" />
       {/* aside sidebar navigation */}
       <AsideSidebarNavigation />
     </>

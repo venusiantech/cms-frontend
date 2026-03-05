@@ -16,7 +16,6 @@ const PostCardMeta3: FC<Props> = ({ className, author, readingTime, date }) => {
   const { name, handle, avatar } = author
   return (
     <div className={clsx('post-card-meta-3 relative flex items-center text-xs/5', className)}>
-      <Link href={`/author/${handle}`} className="absolute inset-0" />
 
       <Avatar className="size-10" src={avatar.src} width={40} height={40} sizes="40px" />
       <div className="ms-3">

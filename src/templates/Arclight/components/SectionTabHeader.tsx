@@ -20,7 +20,6 @@ const SectionTabHeader: FC<Props> = ({
   dimHeading,
   heading,
   onChangeTab,
-  rightButtonHref = '/category/all',
 }) => {
   const [currentTab, setCurrentTab] = useState(tabActive)
 
@@ -50,10 +49,6 @@ const SectionTabHeader: FC<Props> = ({
             )
           )}
         </div>
-        <Button outline className="ms-auto shrink-0" href={rightButtonHref}>
-          <span>View all</span>
-          <ArrowRight className="size-5 rtl:rotate-180" />
-        </Button>
       </div>
     </div>
   )

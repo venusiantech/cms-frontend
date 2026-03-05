@@ -54,7 +54,7 @@ interface ArclightTemplateProps {
   }
   domain: { name: string }
   articleId?: string
-  pageType?: 'home' | 'contact' | 'article' | 'categories' | 'latest-articles'  
+  pageType?: 'home' | 'contact' | 'article' | 'categories' | 'latest-articles'
 }
 
 export default function ArclightTemplate({
@@ -196,7 +196,15 @@ export default function ArclightTemplate({
           onContactClick={handleContactClick}
         />
         {renderContent()}
-        <Footer />
+        <Footer
+          siteName={siteDisplay}
+          subHeading={page.seo?.description ?? null}
+          logoUrl={website.websiteLogo}
+          logoDisplayMode={website.logoDisplayMode}
+          instagramUrl={website.instagramUrl}
+          facebookUrl={website.facebookUrl}
+          twitterUrl={website.twitterUrl}
+        />
       </AsideProvider>
     </ThemeProvider>
   )
