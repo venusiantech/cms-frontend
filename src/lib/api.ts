@@ -43,8 +43,10 @@ export const domainsAPI = {
 };
 
 export const websitesAPI = {
-  generate: (domainId: string, templateKey: string, contactFormEnabled?: boolean) =>
-    api.post('/websites/generate', { domainId, templateKey, contactFormEnabled }),
+  suggestTitles: (domainId: string) =>
+    api.post<{ titles: string[] }>('/websites/suggest-titles', { domainId }),
+  generate: (domainId: string, templateKey: string, contactFormEnabled?: boolean, selectedTitles?: string[]) =>
+    api.post('/websites/generate', { domainId, templateKey, contactFormEnabled, selectedTitles }),
   checkJobStatus: (jobId: string) =>
     api.get(`/websites/jobs/${jobId}`),
   cancelJob: (jobId: string) =>
