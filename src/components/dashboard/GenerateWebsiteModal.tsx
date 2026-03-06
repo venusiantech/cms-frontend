@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle, Loader2, Maximize2, RefreshCw, Sparkles, X } fr
 import toast from 'react-hot-toast';
 import { websitesAPI } from '@/lib/dashboard';
 
+
 const TEMPLATE_OPTIONS = [
   { key: 'modernNews' as const, label: 'Modern News', image: '/templateA/assets/images/modernNews.png' },
   { key: 'templateA' as const, label: 'Merinda Blog', image: '/templateA/assets/images/TemplateA.png' },
