@@ -144,6 +144,13 @@ export const usersAPI = {
   }) => api.put('/users/me', data),
 };
 
+export const stripeAPI = {
+  getPlans: () => api.get('/stripe/plans'),
+  getSubscription: () => api.get('/stripe/subscription'),
+  subscribe: (planId: string) => api.post('/stripe/subscribe', { planId }),
+  portal: () => api.post('/stripe/portal'),
+};
+
 export const bulkUploadAPI = {
   uploadCsv: (file: File) => {
     const formData = new FormData();

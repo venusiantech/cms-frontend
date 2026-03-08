@@ -2,12 +2,37 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { usersAPI } from '@/lib/api';
+import { usersAPI, stripeAPI } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
-import { Pencil, Loader2, Bell, Mail, Trash2, CheckCircle } from 'lucide-react';
+import {
+  Pencil, Loader2, Bell, Mail, Trash2, CheckCircle,
+  CreditCard, Zap, ExternalLink, AlertCircle, Calendar,
+} from 'lucide-react';
 
-type Tab = 'general' | 'notifications'
+type Tab = 'general' | 'notifications' | 'subscription'
+
+interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  creditsPerMonth: number;
+  maxWebsites: number;
+  stripePriceId?: string | null;
+  isCustom?: boolean;
+  isActive: boolean;
+}
+
+interface Subscription {
+  status: string;
+  planId: string;
+  creditsRemaining: number;
+  currentPeriodEnd?: string;
+  stripeSubscriptionId?: string;
+  cancelAtPeriodEnd?: boolean;
+  plan?: Plan;
+  ledger?: { id: string; amount: number; description: string; createdAt: string }[];
+}
 
 export default function SettingsPage() {
   const { user } = useAuthStore();
@@ -101,9 +126,37 @@ export default function SettingsPage() {
     });
   };
 
+  // ── Subscription data ──────────────────────────────────────────
+  const { data: plans = [] } = useQuery({
+    queryKey: ['stripe-plans'],
+    queryFn: async () => { const res = await stripeAPI.getPlans(); return res.data as Plan[]; },
+    enabled: activeTab === 'subscription',
+  });
+
+  const { data: subscription, isLoading: subLoading } = useQuery({
+    queryKey: ['stripe-subscription'],
+    queryFn: async () => { const res = await stripeAPI.getSubscription(); return res.data as Subscription | null; },
+    enabled: activeTab === 'subscription',
+  });
+
+  const [pendingPlanId, setPendingPlanId] = useState<string | null>(null);
+
+  const subscribeMutation = useMutation({
+    mutationFn: (planId: string) => { setPendingPlanId(planId); return stripeAPI.subscribe(planId); },
+    onSuccess: (res: any) => { window.location.href = res.data.url; },
+    onError: (e: any) => { setPendingPlanId(null); toast.error(e.response?.data?.message || 'Failed to start checkout'); },
+  });
+
+  const portalMutation = useMutation({
+    mutationFn: () => stripeAPI.portal(),
+    onSuccess: (res: any) => { window.location.href = res.data.url; },
+    onError: (e: any) => toast.error(e.response?.data?.message || 'Failed to open billing portal'),
+  });
+
   const TABS: { id: Tab; label: string }[] = [
     { id: 'general', label: 'General' },
     { id: 'notifications', label: 'Notifications' },
+    { id: 'subscription', label: 'Subscription' },
   ];
 
   if (isLoading) {
@@ -253,6 +306,193 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── Subscription Tab ──────────────────────────────────────── */}
+      {activeTab === 'subscription' && (
+        <div className="space-y-5">
+          {subLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+            </div>
+          ) : (
+            <>
+              {/* Current plan card */}
+              <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700">
+                  <CreditCard size={14} className="text-neutral-400" />
+                  <div>
+                    <h2 className="text-sm font-semibold text-neutral-100">Current Subscription</h2>
+                    <p className="text-xs text-neutral-500 mt-0.5">Your active plan and credits</p>
+                  </div>
+                </div>
+                <div className="px-6 py-5">
+                  {!subscription || subscription.status === 'none' ? (
+                    <div className="flex items-center gap-3 text-neutral-400 text-sm">
+                      <AlertCircle size={15} />
+                      <span>No active subscription found.</span>
+                    </div>
+                  ) : (
+                    (() => {
+                      const isFreePlan = (subscription.plan?.price ?? 0) === 0 && !subscription.plan?.isCustom;
+                      const isCancelling = subscription.cancelAtPeriodEnd && subscription.status === 'ACTIVE';
+                      const endDate = subscription.currentPeriodEnd
+                        ? new Date(subscription.currentPeriodEnd).toLocaleDateString()
+                        : '—';
+                      return (
+                        <div className={`grid gap-4 ${isFreePlan ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-4'}`}>
+                          <div>
+                            <p className="text-xs text-neutral-500 mb-1">Plan</p>
+                            <p className="text-sm font-semibold text-neutral-100">
+                              {subscription.plan?.name ?? '—'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-neutral-500 mb-1">Credits Left</p>
+                            <p className="text-sm font-semibold text-neutral-100">
+                              {subscription.creditsRemaining ?? 0}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-neutral-500 mb-1">Status</p>
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
+                              isCancelling
+                                ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
+                                : subscription.status === 'ACTIVE'
+                                ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                                : subscription.status === 'PENDING_PAYMENT'
+                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                : 'bg-neutral-500/10 text-neutral-400 border border-neutral-500/20'
+                            }`}>
+                              {isCancelling
+                                ? `Cancels ${endDate}`
+                                : subscription.status === 'ACTIVE'
+                                ? 'Active'
+                                : subscription.status === 'PENDING_PAYMENT'
+                                ? 'Pending Payment'
+                                : 'Cancelled'}
+                            </span>
+                          </div>
+                          {!isFreePlan && (
+                            <div>
+                              <p className="text-xs text-neutral-500 mb-1">
+                                {isCancelling ? 'Ends On' : 'Renews'}
+                              </p>
+                              <p className="text-xs text-neutral-400 flex items-center gap-1">
+                                <Calendar size={11} />
+                                {endDate}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()
+                  )}
+                  {subscription && subscription.status === 'ACTIVE' && subscription.stripeSubscriptionId && (
+                    <div className="mt-4 pt-4 border-t border-neutral-800">
+                      <button
+                        onClick={() => portalMutation.mutate()}
+                        disabled={portalMutation.isPending}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs transition-colors disabled:opacity-50 ${
+                          subscription.cancelAtPeriodEnd
+                            ? 'border-orange-500/40 text-orange-400 hover:bg-orange-500/10'
+                            : 'border-neutral-600 text-neutral-300 hover:bg-neutral-800'
+                        }`}
+                      >
+                        {portalMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <ExternalLink size={12} />}
+                        {subscription.cancelAtPeriodEnd ? 'Reactivate / Manage Subscription' : 'Manage / Cancel Subscription'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Plan cards */}
+              <div>
+                <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-3">Available Plans</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {plans.map((plan) => {
+                    const isCurrent = subscription?.planId === plan.id;
+                    const isThisPending = pendingPlanId === plan.id && subscribeMutation.isPending;
+                    const isFreePlan = plan.price === 0 && !plan.isCustom;
+                    return (
+                      <div
+                        key={plan.id}
+                        className={`relative bg-[#0a0a0a] border rounded-xl p-5 flex flex-col gap-3 transition-colors ${
+                          isCurrent ? 'border-white/30' : 'border-neutral-700 hover:border-neutral-600'
+                        }`}
+                      >
+                        {isCurrent && (
+                          <span className="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white text-black">
+                            Current
+                          </span>
+                        )}
+                        <div>
+                          <p className="text-sm font-semibold text-neutral-100">{plan.name}</p>
+                          <p className="text-2xl font-bold text-neutral-100 mt-1">
+                            {plan.price === 0 ? 'Free' : `$${plan.price}`}
+                            {plan.price > 0 && <span className="text-xs text-neutral-500 font-normal ml-1">/mo</span>}
+                          </p>
+                        </div>
+                        <ul className="space-y-1.5 flex-1">
+                          <li className="flex items-center gap-2 text-xs text-neutral-400">
+                            <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                            {plan.creditsPerMonth} credits{isFreePlan ? ' (one-time)' : ' / month'}
+                          </li>
+                          <li className="flex items-center gap-2 text-xs text-neutral-400">
+                            <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                            Up to {plan.maxWebsites} website{plan.maxWebsites !== 1 ? 's' : ''}
+                          </li>
+                        </ul>
+                        <button
+                          disabled={isCurrent || !plan.stripePriceId || subscribeMutation.isPending}
+                          onClick={() => subscribeMutation.mutate(plan.id)}
+                          className={`w-full py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
+                            isCurrent
+                              ? 'bg-neutral-800 text-neutral-500 cursor-default'
+                              : !plan.stripePriceId
+                              ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+                              : subscribeMutation.isPending && !isThisPending
+                              ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+                              : 'bg-white hover:bg-neutral-200 text-black'
+                          }`}
+                        >
+                          {isThisPending && <Loader2 size={11} className="animate-spin" />}
+                          {isCurrent ? 'Current Plan' : isFreePlan ? 'Free' : isThisPending ? 'Redirecting...' : 'Upgrade'}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Credit ledger */}
+              {subscription?.ledger && subscription.ledger.length > 0 && (
+                <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
+                  <div className="px-6 py-4 border-b border-neutral-700">
+                    <h2 className="text-sm font-semibold text-neutral-100">Credit History</h2>
+                    <p className="text-xs text-neutral-500 mt-0.5">Last 20 credit transactions</p>
+                  </div>
+                  <div className="divide-y divide-neutral-800">
+                    {subscription.ledger.slice(0, 20).map((entry: any) => (
+                      <div key={entry.id} className="flex items-center justify-between px-6 py-3">
+                        <div>
+                          <p className="text-xs text-neutral-200">{entry.description}</p>
+                          <p className="text-xs text-neutral-500 mt-0.5">
+                            {new Date(entry.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <span className={`text-sm font-semibold ${entry.amount > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {entry.amount > 0 ? '+' : ''}{entry.amount}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 
