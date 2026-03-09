@@ -149,6 +149,8 @@ export const stripeAPI = {
   getSubscription: () => api.get('/stripe/subscription'),
   subscribe: (planId: string) => api.post('/stripe/subscribe', { planId }),
   portal: () => api.post('/stripe/portal'),
+  requestCustomPlan: (message: string) => api.post('/stripe/custom-plan-request', { message }),
+  getCustomPlanRequests: () => api.get('/stripe/custom-plan-request'),
 };
 
 export const bulkUploadAPI = {

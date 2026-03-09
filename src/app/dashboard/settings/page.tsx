@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
 import {
   Pencil, Loader2, Bell, Mail, Trash2, CheckCircle,
-  CreditCard, Zap, ExternalLink, AlertCircle, Calendar,
+  CreditCard, Zap, ExternalLink, AlertCircle, Calendar, Sparkles, X,
 } from 'lucide-react';
 
 type Tab = 'general' | 'notifications' | 'subscription'
@@ -140,6 +140,20 @@ export default function SettingsPage() {
   });
 
   const [pendingPlanId, setPendingPlanId] = useState<string | null>(null);
+
+  // ── Custom plan request modal ──────────────────────────────────
+  const [showCustomModal, setShowCustomModal] = useState(false);
+  const [customMessage, setCustomMessage] = useState('');
+
+  const customPlanMutation = useMutation({
+    mutationFn: (message: string) => stripeAPI.requestCustomPlan(message),
+    onSuccess: () => {
+      toast.success('Request submitted! Our team will reach out shortly.');
+      setShowCustomModal(false);
+      setCustomMessage('');
+    },
+    onError: (e: any) => toast.error(e.response?.data?.message || 'Failed to submit request'),
+  });
 
   const subscribeMutation = useMutation({
     mutationFn: (planId: string) => { setPendingPlanId(planId); return stripeAPI.subscribe(planId); },
@@ -411,8 +425,8 @@ export default function SettingsPage() {
               {/* Plan cards */}
               <div>
                 <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-3">Available Plans</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {plans.map((plan) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {plans.filter((p) => !p.isCustom).map((plan) => {
                     const isCurrent = subscription?.planId === plan.id;
                     const isThisPending = pendingPlanId === plan.id && subscribeMutation.isPending;
                     const isFreePlan = plan.price === 0 && !plan.isCustom;
@@ -464,6 +478,36 @@ export default function SettingsPage() {
                       </div>
                     );
                   })}
+
+                  {/* Custom / Enterprise card */}
+                  <div className="relative bg-[#0a0a0a] border border-dashed border-neutral-700 hover:border-neutral-500 rounded-xl p-5 flex flex-col gap-3 transition-colors">
+                    <div>
+                      <p className="text-sm font-semibold text-neutral-100 flex items-center gap-1.5">
+                        <Sparkles size={13} className="text-purple-400" />
+                        Custom / Enterprise
+                      </p>
+                      <p className="text-2xl font-bold text-neutral-100 mt-1">
+                        Custom
+                        <span className="text-xs text-neutral-500 font-normal ml-1">pricing</span>
+                      </p>
+                    </div>
+                    <ul className="space-y-1.5 flex-1">
+                      <li className="flex items-center gap-2 text-xs text-neutral-400">
+                        <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                        Unlimited credits
+                      </li>
+                      <li className="flex items-center gap-2 text-xs text-neutral-400">
+                        <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                        Unlimited websites
+                      </li>
+                    </ul>
+                    <button
+                      onClick={() => setShowCustomModal(true)}
+                      className="w-full py-2 rounded-lg text-xs font-medium bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition-colors"
+                    >
+                      Request Custom Plan
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -493,6 +537,58 @@ export default function SettingsPage() {
               )}
             </>
           )}
+        </div>
+      )}
+
+      {/* ── Custom Plan Request Modal ─────────────────────────────── */}
+      {showCustomModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-[#0f0f0f] border border-neutral-700 rounded-2xl w-full max-w-md shadow-2xl">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
+              <div className="flex items-center gap-2">
+                <Sparkles size={15} className="text-purple-400" />
+                <h3 className="text-sm font-semibold text-neutral-100">Request Custom Plan</h3>
+              </div>
+              <button
+                onClick={() => { setShowCustomModal(false); setCustomMessage(''); }}
+                className="text-neutral-500 hover:text-neutral-300 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <p className="text-xs text-neutral-400">
+                Tell us about your requirements — number of websites, monthly blog volume, team size, or any specific needs.
+                Our team will review your request and reach out with a tailored quote.
+              </p>
+              <div>
+                <label className="block text-xs text-neutral-500 mb-1.5">Your requirements</label>
+                <textarea
+                  rows={5}
+                  value={customMessage}
+                  onChange={(e) => setCustomMessage(e.target.value)}
+                  placeholder="e.g. We need to manage 500+ domains, generate 50 blogs/day, with dedicated support..."
+                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors resize-none"
+                />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => { setShowCustomModal(false); setCustomMessage(''); }}
+                  className="px-4 py-2 text-xs text-neutral-400 border border-neutral-700 rounded-lg hover:bg-neutral-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => customPlanMutation.mutate(customMessage)}
+                  disabled={!customMessage.trim() || customPlanMutation.isPending}
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {customPlanMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                  {customPlanMutation.isPending ? 'Submitting...' : 'Submit Request'}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
