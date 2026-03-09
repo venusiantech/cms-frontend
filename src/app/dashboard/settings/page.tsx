@@ -480,34 +480,56 @@ export default function SettingsPage() {
                   })}
 
                   {/* Custom / Enterprise card */}
-                  <div className="relative bg-[#0a0a0a] border border-dashed border-neutral-700 hover:border-neutral-500 rounded-xl p-5 flex flex-col gap-3 transition-colors">
-                    <div>
-                      <p className="text-sm font-semibold text-neutral-100 flex items-center gap-1.5">
-                        <Sparkles size={13} className="text-purple-400" />
-                        Custom / Enterprise
-                      </p>
-                      <p className="text-2xl font-bold text-neutral-100 mt-1">
-                        Custom
-                        <span className="text-xs text-neutral-500 font-normal ml-1">pricing</span>
-                      </p>
-                    </div>
-                    <ul className="space-y-1.5 flex-1">
-                      <li className="flex items-center gap-2 text-xs text-neutral-400">
-                        <Zap size={11} className="text-neutral-500 flex-shrink-0" />
-                        Unlimited credits
-                      </li>
-                      <li className="flex items-center gap-2 text-xs text-neutral-400">
-                        <Zap size={11} className="text-neutral-500 flex-shrink-0" />
-                        Unlimited websites
-                      </li>
-                    </ul>
-                    <button
-                      onClick={() => setShowCustomModal(true)}
-                      className="w-full py-2 rounded-lg text-xs font-medium bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition-colors"
-                    >
-                      Request Custom Plan
-                    </button>
-                  </div>
+                  {(() => {
+                    const isCurrentCustom = subscription?.plan?.isCustom === true;
+                    return (
+                      <div className={`relative bg-[#0a0a0a] rounded-xl p-5 flex flex-col gap-3 transition-colors ${
+                        isCurrentCustom
+                          ? 'border border-purple-500/40'
+                          : 'border border-dashed border-neutral-700 hover:border-neutral-500'
+                      }`}>
+                        {isCurrentCustom && (
+                          <span className="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500 text-white">
+                            Current
+                          </span>
+                        )}
+                        <div>
+                          <p className="text-sm font-semibold text-neutral-100 flex items-center gap-1.5">
+                            <Sparkles size={13} className="text-purple-400" />
+                            Custom / Enterprise
+                          </p>
+                          <p className="text-2xl font-bold text-neutral-100 mt-1">
+                            {isCurrentCustom ? subscription?.plan?.name ?? 'Custom' : 'Custom'}
+                            {!isCurrentCustom && <span className="text-xs text-neutral-500 font-normal ml-1">pricing</span>}
+                          </p>
+                        </div>
+                        <ul className="space-y-1.5 flex-1">
+                          <li className="flex items-center gap-2 text-xs text-neutral-400">
+                            <Zap size={11} className={isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-500 flex-shrink-0'} />
+                            {isCurrentCustom ? `${subscription?.creditsRemaining ?? 0} credits remaining` : 'Unlimited credits'}
+                          </li>
+                          <li className="flex items-center gap-2 text-xs text-neutral-400">
+                            <Zap size={11} className={isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-500 flex-shrink-0'} />
+                            {isCurrentCustom
+                              ? `Up to ${subscription?.plan?.maxWebsites ?? '—'} websites`
+                              : 'Unlimited websites'}
+                          </li>
+                        </ul>
+                        {isCurrentCustom ? (
+                          <div className="w-full py-2 rounded-lg text-xs font-medium bg-purple-600/10 text-purple-300 border border-purple-500/20 text-center">
+                            Active Custom Plan
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setShowCustomModal(true)}
+                            className="w-full py-2 rounded-lg text-xs font-medium bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition-colors"
+                          >
+                            Request Custom Plan
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
 
