@@ -109,9 +109,9 @@ export default function DashboardLayout({
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-800 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 py-2 hover:bg-[#262626] rounded-lg transition-colors"
             >
-              <div className="w-8 h-8 bg-neutral-700 rounded-lg flex items-center justify-center text-neutral-100 font-semibold text-sm">
+              <div className="w-8 h-8 bg-[#404040] rounded-lg flex items-center justify-center text-neutral-100 font-semibold text-sm">
                 {user?.email?.charAt(0).toUpperCase()}
               </div>
               <ChevronDown size={16} className={`text-neutral-400 transition-transform duration-200 ${showUserMenu ? 'rotate-180' : ''}`} />
@@ -128,7 +128,7 @@ export default function DashboardLayout({
                   <div className="px-4 py-3 border-b border-neutral-800">
                     <p className="text-sm font-medium text-neutral-100 truncate">{user?.email}</p>
                     {user?.role === 'SUPER_ADMIN' && (
-                      <span className="inline-block mt-1.5 px-2 py-0.5 bg-neutral-800 text-neutral-300 text-xs rounded-md font-medium">
+                      <span className="inline-block mt-1.5 px-2 py-0.5 bg-[#262626] text-neutral-300 text-xs rounded-md font-medium">
                         Super Admin
                       </span>
                     )}
@@ -136,14 +136,14 @@ export default function DashboardLayout({
                   <Link
                     href="/dashboard/settings"
                     onClick={() => setShowUserMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-white hover:bg-neutral-800 transition-all duration-200"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-white hover:bg-[#262626] transition-all duration-200"
                   >
                     <Settings size={18} />
                     <span className="font-medium">Settings</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-red-400 hover:bg-neutral-800 transition-all duration-200 group"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-red-400 hover:bg-[#262626] transition-all duration-200 group"
                   >
                     <LogOut size={18} className="group-hover:rotate-12 transition-transform duration-200" />
                     <span className="font-medium">Logout</span>

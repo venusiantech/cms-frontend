@@ -53,7 +53,7 @@ export function Aside({
               transition
               className={clsx(
                 contentMaxWidthClassName,
-                'h-screen w-screen translate-x-0 overflow-hidden bg-white text-start align-middle shadow-xl transition duration-200 ease-in-out dark:bg-neutral-800',
+                'h-screen w-screen translate-x-0 overflow-hidden bg-white text-start align-middle shadow-xl transition duration-200 ease-in-out dark:bg-[#262626]',
                 openFrom === 'left' && 'data-closed:-translate-x-20 data-closed:opacity-0',
                 openFrom === 'right' && 'data-closed:translate-x-20 data-closed:opacity-0'
               )}

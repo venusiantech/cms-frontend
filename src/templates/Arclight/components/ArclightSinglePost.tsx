@@ -46,7 +46,7 @@ function formatInline(text: string, keyPrefix: string): (string | JSX.Element)[]
   return parts.flatMap((part, i) => {
     if (part.match(/^\*\*.*\*\*$/)) return [<strong key={`${keyPrefix}-b-${i}`}>{part.slice(2, -2)}</strong>]
     if (part.match(/^\*.*\*$/)) return [<em key={`${keyPrefix}-i-${i}`}>{part.slice(1, -1)}</em>]
-    if (part.match(/^`.*`$/)) return [<code key={`${keyPrefix}-c-${i}`} className="rounded bg-neutral-200 px-1 dark:bg-neutral-700">{part.slice(1, -1)}</code>]
+    if (part.match(/^`.*`$/)) return [<code key={`${keyPrefix}-c-${i}`} className="rounded bg-neutral-200 px-1 dark:bg-[#404040]">{part.slice(1, -1)}</code>]
     return linkifyText(part).map((p, j) => (typeof p === 'string' ? p : <Fragment key={`${keyPrefix}-l-${i}-${j}`}>{p}</Fragment>))
   })
 }

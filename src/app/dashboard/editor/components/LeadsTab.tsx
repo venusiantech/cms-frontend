@@ -40,7 +40,7 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
         <button
           onClick={handleRefresh}
           disabled={isLoading}
-          className="w-full sm:w-auto px-3 py-2 text-sm text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full sm:w-auto px-3 py-2 text-sm text-neutral-400 hover:text-neutral-100 hover:bg-[#262626] rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           Refresh
@@ -76,7 +76,7 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
                   })}
                 </span>
               </div>
-              <div className="bg-neutral-800 rounded-lg p-3 border border-neutral-700">
+              <div className="bg-[#262626] rounded-lg p-3 border border-neutral-700">
                 <p className="text-sm text-neutral-300 whitespace-pre-wrap break-words">{lead.message}</p>
               </div>
             </div>

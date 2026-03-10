@@ -90,9 +90,9 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                 {website?.contactEmail && (
                   <a
                     href={`mailto:${website.contactEmail}`}
-                    className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-neutral-200 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+                    className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-[#262626]/50 dark:text-neutral-200 dark:hover:border-neutral-600 dark:hover:bg-[#262626]"
                   >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm dark:bg-neutral-700 dark:text-neutral-300">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm dark:bg-[#404040] dark:text-neutral-300">
                       <FaEnvelope className="size-5" aria-hidden />
                     </span>
                     <span className="truncate font-medium">{website.contactEmail}</span>
@@ -101,9 +101,9 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                 {website?.contactPhone && (
                   <a
                     href={`tel:${website.contactPhone}`}
-                    className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800/50 dark:text-neutral-200 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+                    className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50/80 px-4 py-3 text-neutral-700 transition hover:border-neutral-300 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-[#262626]/50 dark:text-neutral-200 dark:hover:border-neutral-600 dark:hover:bg-[#262626]"
                   >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm dark:bg-neutral-700 dark:text-neutral-300">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-neutral-500 shadow-sm dark:bg-[#404040] dark:text-neutral-300">
                       <FaPhoneAlt className="size-5" aria-hidden />
                     </span>
                     <span className="font-medium">{website.contactPhone}</span>
@@ -129,7 +129,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="mt-6 rounded-lg bg-[#0a0a0a] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+                  className="mt-6 rounded-lg bg-[#0a0a0a] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#262626] dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                 >
                   Send another message
                 </button>
@@ -155,7 +155,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                       value={formData.name}
                       onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                       placeholder="Your name"
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-[#262626] dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
                     />
                   </div>
 
@@ -170,7 +170,7 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                       value={formData.email}
                       onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                       placeholder="your@email.com"
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
+                      className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-[#262626] dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
                     />
                   </div>
 
@@ -185,14 +185,14 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
                       value={formData.message}
                       onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                       placeholder="How can we help?"
-                      className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
+                      className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-neutral-900 placeholder-neutral-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-neutral-600 dark:bg-[#262626] dark:text-white dark:placeholder-neutral-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/20"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded-lg bg-[#0a0a0a] py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:opacity-60 disabled:cursor-not-allowed dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+                    className="w-full rounded-lg bg-[#0a0a0a] py-3 text-sm font-semibold text-white transition hover:bg-[#262626] disabled:opacity-60 disabled:cursor-not-allowed dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                   >
                     {isSubmitting ? (
                       <span className="inline-flex items-center gap-2">

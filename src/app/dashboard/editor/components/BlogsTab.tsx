@@ -96,7 +96,7 @@ export default function BlogsTab({
                     <button
                       onClick={() => reorderSectionMutation?.mutate({ sectionId: blog.id, direction: 'up' })}
                       disabled={index === 0 || !reorderSectionMutation}
-                      className="p-1 hover:bg-neutral-800 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      className="p-1 hover:bg-[#262626] rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                       title="Move up"
                     >
                       <ChevronUp size={16} className="text-neutral-400" />
@@ -104,7 +104,7 @@ export default function BlogsTab({
                     <button
                       onClick={() => reorderSectionMutation?.mutate({ sectionId: blog.id, direction: 'down' })}
                       disabled={index === blogs.length - 1 || !reorderSectionMutation}
-                      className="p-1 hover:bg-neutral-800 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      className="p-1 hover:bg-[#262626] rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                       title="Move down"
                     >
                       <ChevronDown size={16} className="text-neutral-400" />

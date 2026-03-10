@@ -9,7 +9,7 @@ interface Props {
   authors: TAuthor[]
 }
 
-const WidgetAuthors: FC<Props> = ({ className = 'bg-neutral-100 dark:bg-neutral-800', authors }) => {
+const WidgetAuthors: FC<Props> = ({ className = 'bg-neutral-100 dark:bg-[#262626]', authors }) => {
   return (
     <div className={clsx('widget-authors overflow-hidden rounded-3xl', className)}>
       <WidgetHeading title="Hottest authors" viewAll={{ label: 'View all', href: '/#' }} />
@@ -17,7 +17,7 @@ const WidgetAuthors: FC<Props> = ({ className = 'bg-neutral-100 dark:bg-neutral-
         <div className="flex flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
           {authors?.map((author) => (
             <CardAuthor
-              className="p-4 hover:bg-neutral-200 xl:p-5 dark:hover:bg-neutral-700"
+              className="p-4 hover:bg-neutral-200 xl:p-5 dark:hover:bg-[#404040]"
               key={author.id}
               author={author}
             />

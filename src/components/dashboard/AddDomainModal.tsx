@@ -67,7 +67,7 @@ export function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
               if (e.key === 'Enter') handleSubmit();
             }}
             placeholder="example.com"
-            className={`w-full px-4 py-2.5 bg-neutral-800 border rounded-md text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
+            className={`w-full px-4 py-2.5 bg-[#262626] border rounded-md text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
               }`}
             autoFocus
           />
@@ -82,7 +82,7 @@ export function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
+            className="flex-1 px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
           >
             Cancel
           </button>

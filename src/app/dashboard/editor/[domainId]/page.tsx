@@ -337,7 +337,7 @@ export default function EditorPage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#262626] rounded-lg transition-colors"
             >
               <ArrowLeft size={18} className="text-neutral-400" />
             </button>
@@ -374,7 +374,7 @@ export default function EditorPage() {
               
               {/* Center: URL bar */}
               <div className="flex-1 flex justify-center">
-                <div className="bg-neutral-700 rounded px-3 py-1 text-xs text-neutral-300 font-mono">
+                <div className="bg-[#404040] rounded px-3 py-1 text-xs text-neutral-300 font-mono">
                   {getDisplaySubdomain(domain.website.subdomain)}
                 </div>
               </div>
@@ -477,7 +477,7 @@ export default function EditorPage() {
               </div>
               <button
                 onClick={() => setEditingBlog(null)}
-                className="p-2 hover:bg-neutral-800 rounded-lg transition-colors flex-shrink-0 ml-2"
+                className="p-2 hover:bg-[#262626] rounded-lg transition-colors flex-shrink-0 ml-2"
               >
                 <X size={18} className="text-neutral-400 sm:w-5 sm:h-5" />
               </button>
@@ -495,7 +495,7 @@ export default function EditorPage() {
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter blog title..."
                   />
                 </div>
@@ -509,7 +509,7 @@ export default function EditorPage() {
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                     rows={8}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
                     placeholder="Enter blog content (supports Markdown)..."
                   />
                   <p className="text-xs text-neutral-500 mt-1.5 sm:mt-2">
@@ -565,7 +565,7 @@ export default function EditorPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-neutral-700 bg-neutral-800/50 flex-shrink-0">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-neutral-700 bg-[#262626]/50 flex-shrink-0">
               {/* Delete Button (left side) */}
               {!editingBlog.isHero ? (
                 <button

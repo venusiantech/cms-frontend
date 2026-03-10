@@ -35,7 +35,7 @@ function formatInline(text: string, keyPrefix: string): (string | JSX.Element)[]
   return parts.flatMap((part, i) => {
     if (part.match(/^\*\*.*\*\*$/)) return [<strong key={`${keyPrefix}-b-${i}`}>{part.slice(2, -2)}</strong>]
     if (part.match(/^\*.*\*$/)) return [<em key={`${keyPrefix}-i-${i}`}>{part.slice(1, -1)}</em>]
-    if (part.match(/^`.*`$/)) return [<code key={`${keyPrefix}-c-${i}`} className="rounded bg-neutral-200 px-1 dark:bg-neutral-700">{part.slice(1, -1)}</code>]
+    if (part.match(/^`.*`$/)) return [<code key={`${keyPrefix}-c-${i}`} className="rounded bg-neutral-200 px-1 dark:bg-[#404040]">{part.slice(1, -1)}</code>]
     return linkifyText(part).map((p, j) => (typeof p === 'string' ? p : <Fragment key={`${keyPrefix}-l-${i}-${j}`}>{p}</Fragment>))
   })
 }
@@ -99,7 +99,7 @@ function renderMarkdown(content: string, articleTitle: string): (JSX.Element | n
           <div key={keyIdx++} className="my-4 overflow-x-auto">
             <table className="w-full border-collapse border border-neutral-200 dark:border-neutral-600">
               <thead>
-                <tr className="bg-neutral-100 dark:bg-neutral-800">
+                <tr className="bg-neutral-100 dark:bg-[#262626]">
                   {headerRow.map((cell, c) => (
                     <th key={c} className="border border-neutral-200 px-3 py-2 text-left font-semibold dark:border-neutral-600 dark:text-neutral-200">
                       {formatCellContent(cell, `th-${keyIdx}-${c}`)}
@@ -109,7 +109,7 @@ function renderMarkdown(content: string, articleTitle: string): (JSX.Element | n
               </thead>
               <tbody>
                 {bodyRows.map((row, r) => (
-                  <tr key={r} className={r % 2 === 0 ? 'bg-white dark:bg-[#0a0a0a]' : 'bg-neutral-50 dark:bg-neutral-800/50'}>
+                  <tr key={r} className={r % 2 === 0 ? 'bg-white dark:bg-[#0a0a0a]' : 'bg-neutral-50 dark:bg-[#262626]/50'}>
                     {row.map((cell, c) => (
                       <td key={c} className="border border-neutral-200 px-3 py-2 text-neutral-900 dark:border-neutral-600 dark:text-neutral-300">
                         {formatCellContent(cell, `td-${keyIdx}-${r}-${c}`)}

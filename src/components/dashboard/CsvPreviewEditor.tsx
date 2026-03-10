@@ -142,7 +142,7 @@ export function CsvPreviewEditor({ result, onClose, onUpdateResult }: CsvPreview
       <div className="flex-shrink-0 flex items-center gap-4 px-4 lg:px-8 h-14 border-b border-neutral-800 bg-black">
         <button
           onClick={onClose}
-          className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-neutral-900 rounded-md transition-colors flex-shrink-0"
+          className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-[#171717] rounded-md transition-colors flex-shrink-0"
           title="Back to dashboard"
         >
           <ArrowLeft size={16} />
@@ -150,7 +150,7 @@ export function CsvPreviewEditor({ result, onClose, onUpdateResult }: CsvPreview
 
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <h1 className="text-base font-medium text-neutral-100 truncate">CSV Import Preview</h1>
-          <span className="flex-shrink-0 px-2 py-0.5 bg-neutral-900 text-neutral-400 text-xs rounded-full border border-neutral-700">
+          <span className="flex-shrink-0 px-2 py-0.5 bg-[#171717] text-neutral-400 text-xs rounded-full border border-neutral-700">
             {result.savedCount} imported
           </span>
           {result.skippedCount > 0 && (
@@ -251,7 +251,7 @@ export function CsvPreviewEditor({ result, onClose, onUpdateResult }: CsvPreview
                           Queued
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-neutral-900 text-neutral-500 text-xs rounded-full border border-neutral-700">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#171717] text-neutral-500 text-xs rounded-full border border-neutral-700">
                           Pending
                         </span>
                       )}
@@ -261,7 +261,7 @@ export function CsvPreviewEditor({ result, onClose, onUpdateResult }: CsvPreview
                         <button
                           type="button"
                           onClick={() => openEdit(domain)}
-                          className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800 rounded-md transition-colors"
+                          className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-[#262626] rounded-md transition-colors"
                           title="Edit keywords and description"
                         >
                           <Pencil size={14} />
@@ -325,7 +325,7 @@ export function CsvPreviewEditor({ result, onClose, onUpdateResult }: CsvPreview
               <button
                 type="button"
                 onClick={closeEdit}
-                className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800 rounded-md transition-colors"
+                className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-[#262626] rounded-md transition-colors"
               >
                 <X size={16} />
               </button>

@@ -13,7 +13,7 @@ const HamburgerBtnMenu = ({ className }: { className?: string }) => {
       type="button"
       onClick={() => openAside('sidebar-navigation')}
       className={clsx(
-        '-m-2.5 flex cursor-pointer items-center justify-center rounded-full p-2.5 hover:bg-neutral-100 focus-visible:outline-0 dark:hover:bg-neutral-700',
+        '-m-2.5 flex cursor-pointer items-center justify-center rounded-full p-2.5 hover:bg-neutral-100 focus-visible:outline-0 dark:hover:bg-[#404040]',
         className
       )}
     >

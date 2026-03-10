@@ -143,7 +143,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0 border border-neutral-700">
+          <div className="w-10 h-10 bg-[#262626] rounded-lg flex items-center justify-center flex-shrink-0 border border-neutral-700">
             <Globe size={20} className="text-neutral-400" />
           </div>
           <div className="min-w-0 flex-1">
@@ -161,7 +161,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
                 deleteMutation.mutate();
               }
             }}
-            className="text-neutral-300 hover:text-neutral-300 hover:bg-neutral-800 p-1.5 rounded transition-colors"
+            className="text-neutral-300 hover:text-neutral-300 hover:bg-[#262626] p-1.5 rounded transition-colors"
             title="Delete domain"
           >
             <MoreHorizontal size={16} />
@@ -229,7 +229,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
               href={getSiteUrl(domain.website.subdomain)}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
+              className="px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
               title="View site"
             >
               <ExternalLink size={18} />
@@ -264,7 +264,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
           >
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-neutral-800 rounded-xl flex items-center justify-center border border-neutral-700">
+                <div className="w-12 h-12 bg-[#262626] rounded-xl flex items-center justify-center border border-neutral-700">
                   <Server size={24} className="text-neutral-400" />
                 </div>
                 <div>
@@ -274,14 +274,14 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
               </div>
               <button
                 onClick={() => setShowDnsModal(false)}
-                className="text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 p-2 rounded-lg transition-colors"
+                className="text-neutral-400 hover:text-neutral-200 hover:bg-[#262626] p-2 rounded-lg transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
 
             <div className="space-y-5">
-              <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
+              <div className="bg-[#262626] border border-neutral-700 rounded-lg p-4">
                 <p className="text-sm text-neutral-400">Point your domain to these nameservers</p>
                 <p className="text-base font-semibold text-neutral-100 mt-1">{domain.domainName}</p>
               </div>
@@ -291,7 +291,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
                 {domain.nameServers.map((ns: string, idx: number) => (
                   <div
                     key={idx}
-                    className="group relative bg-neutral-800 border border-neutral-700 hover:border-neutral-600 rounded-lg px-4 py-3.5 transition-colors"
+                    className="group relative bg-[#262626] border border-neutral-700 hover:border-neutral-600 rounded-lg px-4 py-3.5 transition-colors"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono text-sm text-neutral-200 flex-1">{ns}</span>
@@ -300,7 +300,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
                           navigator.clipboard.writeText(ns);
                           toast.success('Copied to clipboard!');
                         }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-neutral-300 bg-neutral-700 hover:bg-neutral-600 rounded-md transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-neutral-300 bg-[#404040] hover:bg-neutral-600 rounded-md transition-colors"
                       >
                         Copy
                       </button>
@@ -310,7 +310,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
               </div>
 
               {domain.nameServersStatus && (
-                <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-4">
+                <div className="bg-[#262626] border border-neutral-700 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${domain.nameServersStatus === 'active' ? 'bg-emerald-500' : 'bg-amber-500'

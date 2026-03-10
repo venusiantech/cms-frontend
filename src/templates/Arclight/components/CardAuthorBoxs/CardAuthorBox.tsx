@@ -27,7 +27,7 @@ const CardAuthorBox: FC<Props> = ({ className, author }) => {
         </h2>
         <span className={`mt-1 line-clamp-1 text-sm text-neutral-500 dark:text-neutral-400`}>{career}</span>
       </div>
-      <div className="mt-4 flex items-center justify-center rounded-full bg-neutral-100 px-4 py-2 text-xs leading-none font-medium dark:bg-neutral-800">
+      <div className="mt-4 flex items-center justify-center rounded-full bg-neutral-100 px-4 py-2 text-xs leading-none font-medium dark:bg-[#262626]">
         {count} <ArrowRight className="ms-3 text-yellow-600" size={16} />
       </div>
     </div>

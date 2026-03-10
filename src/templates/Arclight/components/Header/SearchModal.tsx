@@ -156,7 +156,7 @@ const SearchModal: FC<Props> = ({ type = 'type1' }) => {
         <div className="fixed inset-0 z-50 hidden-scrollbar flex w-full overflow-y-auto sm:p-6 md:pt-20 md:pb-10">
           <DialogPanel
             transition
-            className="mx-auto w-full max-w-2xl transform divide-y divide-gray-100 self-end overflow-hidden bg-white shadow-2xl ring-1 ring-black/5 transition duration-300 ease-out data-closed:translate-y-10 data-closed:opacity-0 sm:self-start sm:rounded-xl dark:divide-gray-700 dark:bg-neutral-800 dark:ring-white/10"
+            className="mx-auto w-full max-w-2xl transform divide-y divide-gray-100 self-end overflow-hidden bg-white shadow-2xl ring-1 ring-black/5 transition duration-300 ease-out data-closed:translate-y-10 data-closed:opacity-0 sm:self-start sm:rounded-xl dark:divide-gray-700 dark:bg-[#262626] dark:ring-white/10"
           >
             <Combobox
               onChange={(item: Option | TPost | null) => {
@@ -218,7 +218,7 @@ const SearchModal: FC<Props> = ({ type = 'type1' }) => {
                             className={({ focus }) =>
                               clsx(
                                 'relative flex cursor-default items-center select-none',
-                                focus && 'bg-neutral-100 dark:bg-neutral-700'
+                                focus && 'bg-neutral-100 dark:bg-[#404040]'
                               )
                             }
                           >
@@ -249,7 +249,7 @@ const SearchModal: FC<Props> = ({ type = 'type1' }) => {
                           className={({ focus }) =>
                             clsx(
                               'flex cursor-default items-center rounded-md px-3 py-2 select-none',
-                              focus && 'bg-neutral-100 dark:bg-neutral-700'
+                              focus && 'bg-neutral-100 dark:bg-[#404040]'
                             )
                           }
                         >
@@ -286,7 +286,7 @@ const SearchModal: FC<Props> = ({ type = 'type1' }) => {
                         className={({ focus }) =>
                           clsx(
                             'flex cursor-default items-center rounded-md px-3 py-2 select-none',
-                            focus && 'bg-neutral-100 dark:bg-neutral-700'
+                            focus && 'bg-neutral-100 dark:bg-[#404040]'
                           )
                         }
                       >

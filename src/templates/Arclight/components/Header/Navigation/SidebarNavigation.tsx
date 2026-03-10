@@ -32,7 +32,7 @@ const SidebarNavigation: React.FC<Props> = ({ data }) => {
             <Link
               href={childMenu.href || '#'}
               onClick={handleClose}
-              className={`mt-0.5 flex rounded-lg pe-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 ${itemClass}`}
+              className={`mt-0.5 flex rounded-lg pe-4 text-sm hover:bg-neutral-100 dark:hover:bg-[#262626] ${itemClass}`}
             >
               <span className={`py-2.5 ${!childMenu.children ? 'block w-full' : ''}`}>{childMenu.name}</span>
               {childMenu.children && (
@@ -57,7 +57,7 @@ const SidebarNavigation: React.FC<Props> = ({ data }) => {
   const _renderItem = (menu: TNavigationItem, index: number) => {
     return (
       <Disclosure key={index} as="li" className="text-neutral-900 dark:text-white">
-        <DisclosureButton className="flex w-full cursor-pointer rounded-lg px-3 text-start text-sm font-medium tracking-wide uppercase hover:bg-neutral-100 dark:hover:bg-neutral-800">
+        <DisclosureButton className="flex w-full cursor-pointer rounded-lg px-3 text-start text-sm font-medium tracking-wide uppercase hover:bg-neutral-100 dark:hover:bg-[#262626]">
           <Link
             href={menu.href || '#'}
             className={clsx(!menu.children?.length && 'flex-1', 'block py-2.5')}
@@ -88,7 +88,7 @@ const SidebarNavigation: React.FC<Props> = ({ data }) => {
           redirect('/search')
         }}
       >
-        <div className="flex h-full items-center gap-x-2.5 rounded-xl bg-neutral-50 px-3 py-3 dark:bg-neutral-800">
+        <div className="flex h-full items-center gap-x-2.5 rounded-xl bg-neutral-50 px-3 py-3 dark:bg-[#262626]">
           <HugeiconsIcon icon={Search01Icon} size={24} color="currentColor" strokeWidth={1.5} />
           <input
             type="search"

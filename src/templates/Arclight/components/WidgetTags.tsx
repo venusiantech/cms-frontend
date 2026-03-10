@@ -9,7 +9,7 @@ interface Props {
   tags: TTag[]
 }
 
-const WidgetTags: FC<Props> = ({ className = 'bg-neutral-100 dark:bg-neutral-800', tags }) => {
+const WidgetTags: FC<Props> = ({ className = 'bg-neutral-100 dark:bg-[#262626]', tags }) => {
   return (
     <div className={clsx('widget-tags overflow-hidden rounded-3xl', className)}>
       <WidgetHeading title="Suggested tags" viewAll={{ label: 'View all', href: '/#' }} />

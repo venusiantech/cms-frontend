@@ -125,7 +125,7 @@ export function TagsInput({
           </div>
 
           {/* Dropdown options */}
-          <ComboboxOptions className="absolute z-40 mt-1 hidden-scrollbar max-h-60 w-full overflow-auto rounded-lg border bg-white shadow-lg focus:outline-none dark:bg-neutral-800">
+          <ComboboxOptions className="absolute z-40 mt-1 hidden-scrollbar max-h-60 w-full overflow-auto rounded-lg border bg-white shadow-lg focus:outline-none dark:bg-[#262626]">
             {filteredSuggestions.length === 0 && !shouldShowCreateOption ? (
               <div className="px-3 py-2 text-sm text-neutral-500">
                 {query === '' ? 'Start typing to see suggestions' : 'No suggestions found'}

@@ -170,7 +170,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
           <button
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
-            className="inline-flex items-center justify-center rounded-md p-2 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="inline-flex items-center justify-center rounded-md p-2 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-[#262626] dark:hover:text-white"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileOpen}
           >
@@ -211,7 +211,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
                   key={item.label}
                   type="button"
                   onClick={item.onClick}
-                  className="w-full rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                  className="w-full rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-[#262626]"
                 >
                   {item.label}
                 </button>
@@ -219,7 +219,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
                 <Link
                   key={item.label}
                   href={item.href || '/'}
-                  className="w-full rounded-md px-2 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                  className="w-full rounded-md px-2 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-[#262626]"
                 >
                   {item.label}
                 </Link>
@@ -275,7 +275,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
                   setMobileOpen(false)
                   onContactClick()
                 }}
-                className="mt-1 w-full rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                className="mt-1 w-full rounded-md px-2 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-[#262626]"
               >
                 Contact
               </button>

@@ -43,7 +43,7 @@ export function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress
     : generatingMessages[currentMessageIndex];
 
   return (
-    <div className="bg-neutral-800/60 border border-neutral-700 rounded-lg">
+    <div className="bg-[#262626]/60 border border-neutral-700 rounded-lg">
       <div className="flex items-center">
         <div className="flex-shrink-0 scale-50">
           <CustomLoader />

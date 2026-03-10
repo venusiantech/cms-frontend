@@ -117,7 +117,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-neutral-800 rounded-md transition-colors"
+            className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-[#262626] rounded-md transition-colors"
           >
             <X size={16} />
           </button>
@@ -132,7 +132,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
           {/* Visual table */}
           <div className="rounded-lg border border-neutral-800 overflow-hidden text-xs">
             {/* Header row */}
-            <div className="grid grid-cols-3 bg-neutral-800/60">
+            <div className="grid grid-cols-3 bg-[#262626]/60">
               <div className="px-3 py-2 font-semibold text-neutral-300 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
                 domain
@@ -157,7 +157,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
             ].map((row, i) => (
               <div
                 key={i}
-                className="grid grid-cols-3 border-t border-neutral-800 bg-[#0a0a0a]/40 hover:bg-neutral-800/30 transition-colors"
+                className="grid grid-cols-3 border-t border-neutral-800 bg-[#0a0a0a]/40 hover:bg-[#262626]/30 transition-colors"
               >
                 <div className="px-3 py-2 font-mono text-neutral-200">{row.domain}</div>
                 <div className="px-3 py-2 font-mono text-emerald-400/80 border-l border-neutral-800">
@@ -185,7 +185,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
             className={`
               relative flex flex-col items-center justify-center gap-3 p-8 rounded-lg border-2 border-dashed cursor-pointer transition-colors
               ${isDragging
-                ? 'border-neutral-400 bg-neutral-800/50'
+                ? 'border-neutral-400 bg-[#262626]/50'
                 : selectedFile
                   ? 'border-emerald-500/50 bg-emerald-500/5'
                   : 'border-neutral-700 hover:border-neutral-500 hover:bg-[#0a0a0a]/50'
@@ -213,7 +213,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
               </>
             ) : (
               <>
-                <div className="w-10 h-10 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-[#262626] border border-neutral-700 flex items-center justify-center">
                   <Upload size={18} className="text-neutral-400" />
                 </div>
                 <div className="text-center">
@@ -238,7 +238,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
         <div className="flex gap-3 px-6 pb-6">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-sm font-light border border-neutral-700 transition-colors"
+            className="flex-1 px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md text-sm font-light border border-neutral-700 transition-colors"
           >
             Cancel
           </button>

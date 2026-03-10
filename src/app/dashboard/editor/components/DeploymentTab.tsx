@@ -146,7 +146,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   {domain.nameServers.map((ns: string, idx: number) => (
                     <div 
                       key={idx} 
-                      className="bg-neutral-800 border border-neutral-600 rounded-lg px-3 py-2.5 flex items-center justify-between gap-3 hover:bg-neutral-700 transition-colors"
+                      className="bg-[#262626] border border-neutral-600 rounded-lg px-3 py-2.5 flex items-center justify-between gap-3 hover:bg-[#404040] transition-colors"
                     >
                       <span className="font-mono text-xs text-neutral-200 flex-1">{ns}</span>
                       <button
@@ -154,7 +154,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                           navigator.clipboard.writeText(ns);
                           toast.success('Copied to clipboard!');
                         }}
-                        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-neutral-200 bg-neutral-700 hover:bg-white hover:text-black rounded-md transition-all duration-200"
+                        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-neutral-200 bg-[#404040] hover:bg-white hover:text-black rounded-md transition-all duration-200"
                       >
                         <Copy size={12} />
                         <span>Copy</span>
@@ -163,7 +163,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   ))}
                 </div>
                 
-                <div className="bg-neutral-800 rounded-lg p-3 border-l-2 border-neutral-500">
+                <div className="bg-[#262626] rounded-lg p-3 border-l-2 border-neutral-500">
                   <p className="text-xs text-neutral-300 leading-relaxed">
                     💡 Update nameservers at your domain registrar. Changes may take 24-48 hours to propagate.
                   </p>
@@ -174,7 +174,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   <button
                     onClick={() => checkDnsMutation.mutate()}
                     disabled={checkDnsMutation.isPending}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-300 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-300 bg-[#262626] hover:bg-[#404040] border border-neutral-600 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {checkDnsMutation.isPending ? (
                       <Loader2 size={12} className="animate-spin" />
@@ -250,7 +250,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                     )}
                   </button>
                   
-                  <div className="mt-3 bg-neutral-800 rounded-lg p-3 border-l-2 border-orange-500">
+                  <div className="mt-3 bg-[#262626] rounded-lg p-3 border-l-2 border-orange-500">
                     <p className="text-xs text-neutral-300 leading-relaxed">
                       ⚠️ <strong>Note:</strong> Domain must have a valid extension (e.g., .com, .net, .io). If setup fails, verify your domain format is correct.
                     </p>

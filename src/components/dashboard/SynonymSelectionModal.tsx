@@ -82,7 +82,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
+              className="flex-1 px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md font-light border border-neutral-700 transition-colors"
             >
               Cancel
             </button>
@@ -131,7 +131,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
             </p>
           </div>
           {selectedMeanings.length > 0 && (
-            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-bold whitespace-nowrap bg-neutral-700 text-neutral-100">
+            <div className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-bold whitespace-nowrap bg-[#404040] text-neutral-100">
               {selectedMeanings.length}/{MAX_SELECTIONS}
             </div>
           )}
@@ -145,7 +145,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
             value={userDescription}
             onChange={(e) => setUserDescription(e.target.value)}
             placeholder="E.g., A blog about chocolate recipes and baking tips..."
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#262626] border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors"
             rows={3}
             maxLength={500}
           />
@@ -157,7 +157,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
             <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2 sm:mb-3">
               Select contexts (up to {MAX_SELECTIONS}) or skip
             </label>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-neutral-800/50 rounded-lg border border-neutral-700 min-h-[120px] relative">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 p-3 sm:p-4 pt-12 bg-[#262626]/50 rounded-lg border border-neutral-700 min-h-[120px] relative">
               {meaningEntries.map(([meaning, exampleSentence]: [string, any]) => {
                 const isSelected = selectedMeanings.some(m => m.key === meaning);
                 const isDisabled = selectedMeanings.length >= MAX_SELECTIONS && !isSelected;
@@ -169,14 +169,14 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
                       className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${isSelected
                         ? 'bg-white border-white text-black scale-105'
                         : isDisabled
-                          ? 'bg-neutral-800 border-neutral-700 text-neutral-500 cursor-not-allowed opacity-50'
-                          : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
+                          ? 'bg-[#262626] border-neutral-700 text-neutral-500 cursor-not-allowed opacity-50'
+                          : 'bg-[#262626] border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
                         }`}
                     >
                       {isSelected && '✓ '}
                       {meaning}
                     </button>
-                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl min-w-max max-w-[280px] border border-neutral-600">
+                    <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-[#404040] text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl min-w-max max-w-[280px] border border-neutral-600">
                       <div className="italic normal-case text-center leading-relaxed">"{exampleSentence}"</div>
                       <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
                         <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
@@ -190,13 +190,13 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
                   onClick={() => setSelectedMeanings([])}
                   className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${selectedMeanings.length === 0
                     ? 'bg-white border-white text-black scale-105'
-                    : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
+                    : 'bg-[#262626] border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
                     }`}
                 >
                   {selectedMeanings.length === 0 && '✓ '}
                   SKIP & LET AI DECIDE
                 </button>
-                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-neutral-700 text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl whitespace-nowrap border border-neutral-600">
+                <div className="hidden sm:block absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)] px-3 py-2.5 bg-[#404040] text-neutral-100 text-xs rounded-lg opacity-0 peer-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-[60] shadow-xl whitespace-nowrap border border-neutral-600">
                   <div className="normal-case">Let AI decide based on general knowledge</div>
                   <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px]">
                     <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-neutral-700"></div>
@@ -212,7 +212,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
                     <div
                       key={key}
                       title={`"${context}"`}
-                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-neutral-700 text-neutral-100 rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-neutral-600 transition-colors"
+                      className="px-2 sm:px-3 py-1 sm:py-1.5 bg-[#404040] text-neutral-100 rounded-full text-[10px] sm:text-xs font-bold uppercase flex items-center gap-1 sm:gap-1.5 hover:bg-neutral-600 transition-colors"
                     >
                       {key}
                       <button
@@ -229,14 +229,14 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
           </div>
         )}
 
-        <div className="text-[10px] sm:text-xs text-center text-neutral-500 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-neutral-800/30">
+        <div className="text-[10px] sm:text-xs text-center text-neutral-500 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-[#262626]/30">
           💡 This context helps AI generate more relevant and personalized content for your website
         </div>
 
         <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-neutral-700">
           <button
             onClick={onClose}
-            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border border-neutral-600 text-neutral-300 rounded-lg text-sm sm:text-base font-semibold hover:bg-neutral-800 transition-colors"
+            className="flex-1 px-4 sm:px-6 py-2 sm:py-3 border border-neutral-600 text-neutral-300 rounded-lg text-sm sm:text-base font-semibold hover:bg-[#262626] transition-colors"
           >
             Cancel
           </button>

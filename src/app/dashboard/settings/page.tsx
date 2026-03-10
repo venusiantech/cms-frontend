@@ -218,7 +218,7 @@ export default function SettingsPage() {
               {!isEditing ? (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-600 text-xs text-neutral-300 hover:bg-neutral-800 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-600 text-xs text-neutral-300 hover:bg-[#262626] transition-colors"
                 >
                   <Pencil size={12} />
                   Edit
@@ -228,7 +228,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handleCancel}
                     disabled={mutation.isPending}
-                    className="px-3 py-1.5 rounded-lg border border-neutral-600 text-xs text-neutral-400 hover:bg-neutral-800 transition-colors disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg border border-neutral-600 text-xs text-neutral-400 hover:bg-[#262626] transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -264,7 +264,7 @@ export default function SettingsPage() {
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={!isEditing}
                     placeholder={isEditing ? 'Enter first name' : '—'}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                    className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                   />
                 </div>
 
@@ -277,7 +277,7 @@ export default function SettingsPage() {
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={!isEditing}
                     placeholder={isEditing ? 'Enter last name' : '—'}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                    className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ export default function SettingsPage() {
                     value={dateOfBirth}
                     onChange={(e) => setDateOfBirth(e.target.value)}
                     disabled={!isEditing}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default [color-scheme:dark]"
+                    className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default [color-scheme:dark]"
                   />
                 </div>
 
@@ -302,7 +302,7 @@ export default function SettingsPage() {
                     onChange={(e) => setMobileNumber(e.target.value)}
                     disabled={!isEditing}
                     placeholder={isEditing ? '+1 234 567 8900' : '—'}
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                    className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                   />
                 </div>
 
@@ -313,7 +313,7 @@ export default function SettingsPage() {
                     type="email"
                     value={user?.email || ''}
                     readOnly
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-400 cursor-default select-none focus:outline-none"
+                    className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-400 cursor-default select-none focus:outline-none"
                   />
                   <p className="text-xs text-neutral-600 mt-1">Email cannot be changed</p>
                 </div>
@@ -411,7 +411,7 @@ export default function SettingsPage() {
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs transition-colors disabled:opacity-50 ${
                           subscription.cancelAtPeriodEnd
                             ? 'border-orange-500/40 text-orange-400 hover:bg-orange-500/10'
-                            : 'border-neutral-600 text-neutral-300 hover:bg-neutral-800'
+                            : 'border-neutral-600 text-neutral-300 hover:bg-[#262626]'
                         }`}
                       >
                         {portalMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <ExternalLink size={12} />}
@@ -464,11 +464,11 @@ export default function SettingsPage() {
                           onClick={() => subscribeMutation.mutate(plan.id)}
                           className={`w-full py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
                             isCurrent
-                              ? 'bg-neutral-800 text-neutral-500 cursor-default'
+                              ? 'bg-[#262626] text-neutral-500 cursor-default'
                               : !plan.stripePriceId
-                              ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+                              ? 'bg-[#262626] text-neutral-500 cursor-not-allowed'
                               : subscribeMutation.isPending && !isThisPending
-                              ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+                              ? 'bg-[#262626] text-neutral-500 cursor-not-allowed'
                               : 'bg-white hover:bg-neutral-200 text-black'
                           }`}
                         >
@@ -590,13 +590,13 @@ export default function SettingsPage() {
                   value={customMessage}
                   onChange={(e) => setCustomMessage(e.target.value)}
                   placeholder="e.g. We need to manage 500+ domains, generate 50 blogs/day, with dedicated support..."
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors resize-none"
+                  className="w-full bg-[#171717] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors resize-none"
                 />
               </div>
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={() => { setShowCustomModal(false); setCustomMessage(''); }}
-                  className="px-4 py-2 text-xs text-neutral-400 border border-neutral-700 rounded-lg hover:bg-neutral-800 transition-colors"
+                  className="px-4 py-2 text-xs text-neutral-400 border border-neutral-700 rounded-lg hover:bg-[#262626] transition-colors"
                 >
                   Cancel
                 </button>
@@ -669,7 +669,7 @@ export default function SettingsPage() {
                         value={email}
                         onChange={(e) => setNotifEmail(i, e.target.value)}
                         placeholder={`Recipient ${i + 1} email`}
-                        className="w-full bg-neutral-800 border border-neutral-700 rounded-lg pl-8 pr-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
+                        className="w-full bg-[#262626] border border-neutral-700 rounded-lg pl-8 pr-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
                       />
                     </div>
                     {email && (

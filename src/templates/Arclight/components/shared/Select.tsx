@@ -39,7 +39,7 @@ const Select = forwardRef(function Select(
           // Border
           'border border-neutral-300 data-hover:border-neutral-400 dark:border-white/10 dark:data-hover:border-white/20',
           // Background color
-          'bg-transparent dark:bg-white/5 dark:*:bg-neutral-800',
+          'bg-transparent dark:bg-white/5 dark:*:bg-[#262626]',
           // Hide default focus styles
           'focus:outline-hidden',
           // Invalid state

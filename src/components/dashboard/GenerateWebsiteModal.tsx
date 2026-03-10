@@ -102,7 +102,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                       disabled={isPending}
                       className="text-left disabled:opacity-60 disabled:cursor-not-allowed flex flex-col flex-1 min-w-0"
                     >
-                      <div className="w-full h-36 sm:h-44 bg-neutral-800 flex-shrink-0 relative">
+                      <div className="w-full h-36 sm:h-44 bg-[#262626] flex-shrink-0 relative">
                         <img src={opt.image} alt={opt.label} className="w-full h-full object-cover object-top" />
                         {selectedTemplateKey === opt.key && (
                           <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full flex items-center justify-center">
@@ -110,7 +110,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                           </div>
                         )}
                       </div>
-                      <div className="p-2.5 sm:p-3 bg-neutral-800 border-t border-neutral-700 flex-shrink-0 flex items-center justify-between gap-2">
+                      <div className="p-2.5 sm:p-3 bg-[#262626] border-t border-neutral-700 flex-shrink-0 flex items-center justify-between gap-2">
                         <span className="text-xs sm:text-sm font-light text-neutral-100">{opt.label}</span>
                       </div>
                     </button>
@@ -118,7 +118,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                       type="button"
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); setEnlargedTemplateKey(opt.key); }}
                       disabled={isPending}
-                      className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 flex items-center justify-center transition-colors disabled:opacity-50"
+                      className="absolute bottom-10 sm:bottom-12 right-1.5 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#262626] hover:bg-[#404040] border border-neutral-600 flex items-center justify-center transition-colors disabled:opacity-50"
                       title="Preview full size"
                     >
                       <Maximize2 size={14} className="text-neutral-300 sm:w-4 sm:h-4" />
@@ -135,17 +135,17 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
               return (
                 <div className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-black/80" onClick={() => setEnlargedTemplateKey(null)}>
                   <div className="relative bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-neutral-700 bg-neutral-800">
+                    <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-neutral-700 bg-[#262626]">
                       <span className="font-light text-sm sm:text-base text-neutral-100">{opt.label}</span>
-                      <button type="button" onClick={() => setEnlargedTemplateKey(null)} className="p-1.5 sm:p-2 rounded-lg hover:bg-neutral-700 transition-colors">
+                      <button type="button" onClick={() => setEnlargedTemplateKey(null)} className="p-1.5 sm:p-2 rounded-lg hover:bg-[#404040] transition-colors">
                         <X size={18} className="text-neutral-400 sm:w-5 sm:h-5" />
                       </button>
                     </div>
-                    <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-neutral-800">
+                    <div className="p-2 sm:p-4 overflow-auto flex-1 min-h-0 bg-[#262626]">
                       <img src={opt.image} alt={opt.label} className="w-full h-auto max-h-[75vh] object-contain object-top rounded-lg" />
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-neutral-700 bg-[#0a0a0a]">
-                      <button type="button" onClick={() => setEnlargedTemplateKey(null)} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-neutral-600 text-neutral-300 text-xs sm:text-sm font-light hover:bg-neutral-800">Back</button>
+                      <button type="button" onClick={() => setEnlargedTemplateKey(null)} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-neutral-600 text-neutral-300 text-xs sm:text-sm font-light hover:bg-[#262626]">Back</button>
                       <button type="button" onClick={() => { setSelectedTemplateKey(opt.key); setEnlargedTemplateKey(null); }} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-white text-black text-xs sm:text-sm font-light hover:bg-neutral-200">Use this template</button>
                     </div>
                   </div>
@@ -153,7 +153,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
               );
             })()}
 
-            <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+            <div className="bg-[#262626] border border-neutral-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <label className="flex items-start gap-2.5 sm:gap-3 cursor-pointer">
                 <span className="relative inline-block w-10 sm:w-11 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
                   <input type="checkbox" checked={contactFormEnabled} onChange={(e) => setContactFormEnabled(e.target.checked)} disabled={isPending} className="absolute w-0 h-0 opacity-0 peer" />
@@ -168,7 +168,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <button onClick={onClose} disabled={isPending} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              <button onClick={onClose} disabled={isPending} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                 Cancel
               </button>
               <button onClick={() => suggestMutation.mutate()} disabled={isPending} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-white hover:bg-neutral-200 text-black rounded-md disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm font-light flex items-center justify-center gap-2 transition-colors">
@@ -205,7 +205,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                   }}
                   disabled={isPending}
                   title="Regenerate title suggestions"
-                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-700 bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-neutral-200 text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+                  className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-neutral-700 bg-[#171717] hover:bg-[#262626] text-neutral-400 hover:text-neutral-200 text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-1"
                 >
                   <RefreshCw size={13} className={suggestMutation.isPending ? 'animate-spin' : ''} />
                   Refresh
@@ -239,8 +239,8 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                       isSelected
                         ? 'border-white bg-white/5'
                         : isDisabled
-                        ? 'border-neutral-800 bg-neutral-900/30 opacity-40 cursor-not-allowed'
-                        : 'border-neutral-700 bg-neutral-900 hover:border-neutral-500 hover:bg-neutral-800 cursor-pointer'
+                        ? 'border-neutral-800 bg-[#171717]/30 opacity-40 cursor-not-allowed'
+                        : 'border-neutral-700 bg-[#171717] hover:border-neutral-500 hover:bg-[#262626] cursor-pointer'
                     }`}
                   >
                     {/* Checkbox indicator */}
@@ -262,7 +262,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <button onClick={() => setStep('template')} disabled={isPending} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              <button onClick={() => setStep('template')} disabled={isPending} className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md text-xs sm:text-sm font-light border border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                 Back
               </button>
               <button

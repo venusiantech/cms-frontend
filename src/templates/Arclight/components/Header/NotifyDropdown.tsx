@@ -57,7 +57,7 @@ const NotifyDropdown: FC<Props> = ({ className = '', notifications = _defaultNot
           }}
           className="z-40 w-sm rounded-3xl shadow-lg ring-1 ring-black/5 transition duration-200 ease-in-out data-closed:translate-y-1 data-closed:opacity-0"
         >
-          <div className="relative grid gap-8 bg-white p-7 dark:bg-neutral-800">
+          <div className="relative grid gap-8 bg-white p-7 dark:bg-[#262626]">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-200">Notifications</h3>
             {notifications.map((item, index) => (
               <CloseButton

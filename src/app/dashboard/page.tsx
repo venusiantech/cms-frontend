@@ -170,7 +170,7 @@ export default function DashboardPage() {
             type="button"
             onClick={handleOpenInactiveBulk}
             disabled={isFetchingInactive}
-            className="h-12 w-12 bg-[#0a0a0a] text-white flex-shrink-0 flex items-center justify-center border border-neutral-700 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 hover:border-neutral-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-12 w-12 bg-[#0a0a0a] text-white flex-shrink-0 flex items-center justify-center border border-neutral-700 rounded-md text-neutral-400 hover:text-neutral-200 hover:bg-[#262626] hover:border-neutral-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="View inactive bulk-uploaded domains"
           >
             {isFetchingInactive ? (
@@ -192,14 +192,14 @@ export default function DashboardPage() {
               <div className="absolute right-0 mt-1.5 w-48 bg-[#0a0a0a] border border-neutral-700 rounded-lg shadow-2xl z-20 py-1 overflow-hidden">
                 <button
                   onClick={() => { setShowDropdown(false); setShowAddDomain(true); }}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-[#262626] transition-colors text-left"
                 >
                   <Globe size={14} className="text-neutral-500 flex-shrink-0" />
                   Add a Domain
                 </button>
                 <button
                   onClick={() => { setShowDropdown(false); setShowCsvUpload(true); }}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-neutral-800 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-[#262626] transition-colors text-left"
                 >
                   <Upload size={14} className="text-neutral-500 flex-shrink-0" />
                   Upload CSV
@@ -233,7 +233,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 px-4">
-          <div className="w-20 h-20 bg-neutral-800 rounded-2xl flex items-center justify-center mb-6 border border-neutral-700">
+          <div className="w-20 h-20 bg-[#262626] rounded-2xl flex items-center justify-center mb-6 border border-neutral-700">
             <Globe size={36} className="text-neutral-500" />
           </div>
           <h3 className="text-2xl font-light text-neutral-100 mb-2">No domains yet</h3>

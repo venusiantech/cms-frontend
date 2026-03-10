@@ -144,7 +144,7 @@ export default function GenerateContentModal({
                 <button
                   onClick={onClose}
                   disabled={isGenerating}
-                  className="p-2.5 hover:bg-neutral-800 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2.5 hover:bg-[#262626] rounded-lg transition-colors disabled:opacity-50"
                 >
                   <X size={22} className="text-neutral-400" />
                 </button>
@@ -166,7 +166,7 @@ export default function GenerateContentModal({
                         value={userDescription}
                         onChange={(e) => setUserDescription(e.target.value)}
                         placeholder="Describe what your domain is about..."
-                        className="w-full px-4 py-3 bg-neutral-800 border-2 border-neutral-600 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 resize-none text-sm"
+                        className="w-full px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 resize-none text-sm"
                         rows={5}
                         maxLength={500}
                       />
@@ -187,7 +187,7 @@ export default function GenerateContentModal({
                           onChange={(e) => setKeywords(e.target.value)}
                           onKeyDown={handleKeyDown}
                           placeholder="Add keywords..."
-                          className="flex-1 px-4 py-3 bg-neutral-800 border-2 border-neutral-600 rounded-xl text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all placeholder:text-neutral-500"
+                          className="flex-1 px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all placeholder:text-neutral-500"
                         />
                         <button
                           onClick={handleAddKeyword}
@@ -204,7 +204,7 @@ export default function GenerateContentModal({
                       {/* Display Saved Keywords as Chips */}
                       {savedKeywords.length > 0 && (
                         <div className="mt-4">
-                          <div className="flex flex-wrap gap-2 p-3 bg-neutral-800 rounded-xl border border-neutral-600">
+                          <div className="flex flex-wrap gap-2 p-3 bg-[#262626] rounded-xl border border-neutral-600">
                             <AnimatePresence mode="popLayout">
                               {savedKeywords.map((keyword) => (
                                 <motion.div
@@ -262,7 +262,7 @@ export default function GenerateContentModal({
                       <label className="block text-sm font-medium text-neutral-300 mb-2.5">
                         Content Type
                       </label>
-                      <div className="p-4 rounded-xl border-2 border-neutral-600 bg-neutral-800/50 flex items-center justify-between gap-3">
+                      <div className="p-4 rounded-xl border-2 border-neutral-600 bg-[#262626]/50 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <div className="p-2.5 rounded-lg bg-neutral-600">
                             <FileText size={22} className="text-white" />
@@ -282,7 +282,7 @@ export default function GenerateContentModal({
                             setQuantity(Math.max(1, Math.min(20, val)));
                           }}
                           disabled={isGenerating}
-                          className="w-20 px-3 py-2 bg-neutral-800 border-2 border-neutral-600 rounded-lg text-center text-sm font-semibold text-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 disabled:opacity-50"
+                          className="w-20 px-3 py-2 bg-[#262626] border-2 border-neutral-600 rounded-lg text-center text-sm font-semibold text-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
@@ -294,7 +294,7 @@ export default function GenerateContentModal({
                         whileTap={{ scale: 0.98 }}
                         onClick={onClose}
                         disabled={isGenerating}
-                        className="flex-1 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-xl font-medium text-sm hover:bg-neutral-800 transition-colors disabled:opacity-50"
+                        className="flex-1 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-xl font-medium text-sm hover:bg-[#262626] transition-colors disabled:opacity-50"
                       >
                         Cancel
                       </motion.button>

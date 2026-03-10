@@ -38,7 +38,7 @@ export function DropdownMenu({
         // Handle scrolling when menu won't fit in viewport
         'overflow-y-auto',
         // Popover background
-        'bg-white dark:bg-neutral-800',
+        'bg-white dark:bg-[#262626]',
         // Shadows
         'shadow-lg ring-1 ring-neutral-950/10 dark:ring-white/10 dark:ring-inset',
         // Define grid at the menu level if subgrid is supported
@@ -64,7 +64,7 @@ export function DropdownItem({
     // Text styles
     'text-left text-base/6 text-neutral-950 sm:text-sm/6 rtl:text-right dark:text-white forced-colors:text-[CanvasText]',
     // Focus
-    'data-focus:bg-neutral-100 dark:data-focus:bg-neutral-700',
+    'data-focus:bg-neutral-100 dark:data-focus:bg-[#404040]',
     // Disabled state
     'data-disabled:opacity-50',
     // Forced colors mode

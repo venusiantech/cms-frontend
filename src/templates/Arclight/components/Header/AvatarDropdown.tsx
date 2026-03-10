@@ -47,7 +47,7 @@ export default function AvatarDropdown({ className }: Props) {
           }}
           className="z-40 w-80 rounded-3xl shadow-lg ring-1 ring-black/5 transition duration-200 ease-in-out data-closed:translate-y-1 data-closed:opacity-0"
         >
-          <div className="relative flex flex-col gap-y-6 bg-white px-6 py-7 dark:bg-neutral-800">
+          <div className="relative flex flex-col gap-y-6 bg-white px-6 py-7 dark:bg-[#262626]">
             <div className="relative flex items-center gap-x-3">
               <Avatar
                 alt="avatar"
@@ -70,7 +70,7 @@ export default function AvatarDropdown({ className }: Props) {
             {/* ------------------ 1 --------------------- */}
             <Link
               href={'/author/john-doe'}
-              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={UserIcon} size={24} strokeWidth={1.5} />
@@ -81,7 +81,7 @@ export default function AvatarDropdown({ className }: Props) {
             {/* ------------------ 2 --------------------- */}
             <Link
               href={'/dashboard/posts'}
-              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={Task01Icon} size={24} strokeWidth={1.5} />
@@ -92,7 +92,7 @@ export default function AvatarDropdown({ className }: Props) {
             {/* ------------------ 2 --------------------- */}
             <Link
               href={`/author/${user.handle}?tab=favorites`}
-              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={FavouriteIcon} size={24} strokeWidth={1.5} />
@@ -103,7 +103,7 @@ export default function AvatarDropdown({ className }: Props) {
             {/* ------------------ 2 --------------------- */}
             <Link
               href={`/submission`}
-              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center gap-x-4 rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={PlusSignCircleIcon} size={24} strokeWidth={1.5} />
@@ -114,7 +114,7 @@ export default function AvatarDropdown({ className }: Props) {
             <Divider />
 
             {/* ------------------ 2 --------------------- */}
-            <div className="focus-visible:ring-opacity-50 -m-3 flex items-center justify-between rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 dark:hover:bg-neutral-700">
+            <div className="focus-visible:ring-opacity-50 -m-3 flex items-center justify-between rounded-lg p-2 hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 dark:hover:bg-[#404040]">
               <div className="flex items-center">
                 <div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                   <HugeiconsIcon icon={Idea01Icon} size={24} strokeWidth={1.5} />
@@ -128,7 +128,7 @@ export default function AvatarDropdown({ className }: Props) {
 
             <Link
               href={'#'}
-              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={BulbChargingIcon} size={24} strokeWidth={1.5} />
@@ -139,7 +139,7 @@ export default function AvatarDropdown({ className }: Props) {
             {/* ------------------ 2 --------------------- */}
             <Link
               href={'#'}
-              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-[#404040]"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <HugeiconsIcon icon={Logout01Icon} size={24} strokeWidth={1.5} />
