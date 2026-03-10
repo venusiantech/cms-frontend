@@ -113,8 +113,8 @@ export default function ContactSection({ domain, website, onBack }: ContactSecti
             )}
           </div>
 
-          {/* Right: form or success */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#0a0a0a] sm:p-8">
+          {/* Right: form or success (contact-form-card used by TemplateA contact-page.css for dark mode) */}
+          <div className="contact-form-card rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-[#0a0a0a] sm:p-8">
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <span className="flex size-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">

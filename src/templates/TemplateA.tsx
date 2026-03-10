@@ -223,6 +223,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       '/templateA/assets/css/fontello.css',
       '/templateA/assets/css/style.css',
       '/templateA/assets/css/responsive.css',
+      '/templateA/assets/css/contact-page.css',
     ];
 
     const linkElements: HTMLLinkElement[] = [];
@@ -364,7 +365,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       );
     }
 
-    // Contact Form Page
+    // Contact Form Page (wrapper scopes contact-page.css so Bootstrap doesn't override)
     if (showContactForm) {
       return (
         <Layout 
@@ -380,12 +381,14 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
         >
-          <ContactSection
-            domain={domain}
-            website={website}
-            onBack={onBack}
-            assetsPath={ASSETS}
-          />
+          <div className="template-a-contact-page">
+            <ContactSection
+              domain={domain}
+              website={website}
+              onBack={onBack}
+              assetsPath={ASSETS}
+            />
+          </div>
         </Layout>
       );
     }
