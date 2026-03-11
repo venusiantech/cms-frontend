@@ -151,6 +151,7 @@ export const dashboardAPI = {
 export const stripeAPI = {
   getPlans: () => api.get('/stripe/plans'),
   getSubscription: () => api.get('/stripe/subscription'),
+  getLedger: (page = 1, limit = 20) => api.get('/stripe/ledger', { params: { page, limit } }),
   subscribe: (planId: string) => api.post('/stripe/subscribe', { planId }),
   portal: () => api.post('/stripe/portal'),
   requestCustomPlan: (message: string) => api.post('/stripe/custom-plan-request', { message }),

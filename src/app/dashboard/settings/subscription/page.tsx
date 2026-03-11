@@ -34,7 +34,6 @@ interface Subscription {
   stripeSubscriptionId?: string;
   cancelAtPeriodEnd?: boolean;
   plan?: Plan;
-  ledger?: { id: string; amount: number; description: string; createdAt: string }[];
 }
 
 export default function SettingsSubscriptionPage() {
