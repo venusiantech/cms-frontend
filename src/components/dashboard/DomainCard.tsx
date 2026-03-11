@@ -138,7 +138,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
 
   return (
     <div
-      className="group bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 rounded-lg p-4 sm:p-5 transition-all duration-200"
+      className="group bg-[#0a0a0a] border border-neutral-800 hover:border-neutral-700 rounded-lg p-2 lg:p-4 transition-all duration-200"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
