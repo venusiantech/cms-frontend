@@ -124,13 +124,6 @@ function StatCard({
       transition={{ duration: 0.4, delay, ease: 'easeOut' }}
     >
       <GlowCard glowColor={`${color}18`} className="p-5 h-full relative overflow-hidden">
-        {/* Watermark icon — large, bottom-right */}
-        <Icon
-          size={90}
-          className="absolute -bottom-4 -right-4 opacity-[0.07] pointer-events-none"
-          style={{ color }}
-        />
-
         {/* Top row: colored circle icon + sub-label */}
         <div className="flex items-center justify-between mb-3">
           <div
