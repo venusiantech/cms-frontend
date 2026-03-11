@@ -337,34 +337,6 @@ export default function SettingsSubscriptionPage() {
           </div>
         </div>
 
-        {subscription?.ledger && subscription.ledger.length > 0 && (
-          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-neutral-700">
-              <h2 className="text-sm font-semibold text-neutral-100">Credit History</h2>
-              <p className="text-xs text-neutral-500 mt-0.5">Last 20 credit transactions</p>
-            </div>
-            <div className="divide-y divide-neutral-800">
-              {subscription.ledger.slice(0, 20).map((entry: any) => (
-                <div key={entry.id} className="flex items-center justify-between px-6 py-3">
-                  <div>
-                    <p className="text-xs text-neutral-200">{entry.description}</p>
-                    <p className="text-xs text-neutral-500 mt-0.5">
-                      {new Date(entry.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <span
-                    className={`text-sm font-semibold ${
-                      entry.amount > 0 ? 'text-green-400' : 'text-red-400'
-                    }`}
-                  >
-                    {entry.amount > 0 ? '+' : ''}
-                    {entry.amount}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {showCustomModal && (
