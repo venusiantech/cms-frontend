@@ -1,13 +1,37 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/authStore';
-import Link from 'next/link';
-import Image from 'next/image';
-import { LogOut, ChevronDown, Settings } from 'lucide-react';
+import { stripeAPI } from '@/lib/api';
 import { Toaster } from 'react-hot-toast';
-import { useState } from 'react';
+import { DashboardSidebar } from '@/components/dashboard';
+import { Menu } from 'lucide-react';
+import Link from 'next/link';
+
+/** Map pathname to nav bar page title */
+function getDashboardPageTitle(pathname: string | null): string {
+  if (!pathname) return 'Dashboard';
+  if (pathname === '/dashboard') return 'Dashboard';
+  if (pathname === '/dashboard/domains') return 'Domains';
+  if (pathname.startsWith('/dashboard/settings/')) {
+    const rest = pathname.replace('/dashboard/settings/', '') || 'general';
+    const labels: Record<string, string> = {
+      general: 'General',
+      notifications: 'Notifications',
+      subscription: 'Subscription',
+      ledger: 'Ledger',
+    };
+    const sub = labels[rest] || rest;
+    return `Settings / ${sub}`;
+  }
+  if (pathname === '/dashboard/settings') return 'Settings';
+  if (pathname.includes('/dashboard/editor/') && pathname.endsWith('/leads')) return 'Editor / Leads';
+  if (pathname.includes('/dashboard/editor/')) return 'Editor';
+  if (pathname.includes('/dashboard/preview-editor')) return 'Preview Editor';
+  return 'Dashboard';
+}
 
 export default function DashboardLayout({
   children,
@@ -16,14 +40,23 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, logout, user } = useAuthStore();
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pageTitle = getDashboardPageTitle(pathname);
 
   // Check if we're on the editor page (no padding needed)
   const isEditorPage = pathname?.includes('/dashboard/editor/');
 
-  // Handle client-side mounting
+  const [mounted, setMounted] = useState(false);
+
+  const { data: subscription } = useQuery({
+    queryKey: ['stripe-subscription'],
+    queryFn: async () => {
+      const res = await stripeAPI.getSubscription();
+      return res.data as { plan?: { name: string } } | null;
+    },
+  });
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -34,23 +67,11 @@ export default function DashboardLayout({
     }
   }, [mounted, isAuthenticated, router]);
 
-  // Don't render anything until mounted to avoid hydration mismatch
-  if (!mounted) {
-    return null;
-  }
-
-  if (!isAuthenticated()) {
-    return null;
-  }
-
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
-  };
+  if (!mounted) return null;
+  if (!isAuthenticated()) return null;
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Toast Notifications */}
+    <div className="h-screen bg-black flex overflow-hidden">
       <Toaster
         position="top-right"
         toastOptions={{
@@ -88,77 +109,44 @@ export default function DashboardLayout({
         }}
       />
 
-      {/* Top Navbar - Vercel-style dark */}
-      <nav className="bg-black ">
-        <div className="px-4 py-4 sm:px-8 lg:px-16 xl:px-24 h-20 flex items-center justify-between">
-          {/* Left: Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="flex items-center">
-              <img
-                src="/logo/fastofy.png"
-                alt="Fastofy Logo"
-                className="w-18 h-20 opacity-90"
-              />
-              <span className="text-2xl font-tracking-tight">
-                <span className="text-white">FASTOFY</span>
-              </span>
-            </div>
-          </Link>
+      {/* Sidebar: controlled on mobile/tablet via hamburger */}
+      <DashboardSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-          {/* Right: User Avatar & Menu */}
-          <div className="relative">
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Top bar: hamburger + page name (logo is in sidebar) */}
+        <nav className="h-16 flex-shrink-0 flex items-center justify-between gap-3 border-b border-neutral-800 bg-black px-4 md:px-6">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-[#262626] rounded-lg transition-colors"
+              type="button"
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 rounded-md text-neutral-400 hover:text-white hover:bg-[#262626] transition-colors flex-shrink-0"
+              aria-label="Open menu"
             >
-              <div className="w-8 h-8 bg-[#404040] rounded-lg flex items-center justify-center text-neutral-100 font-semibold text-sm">
-                {user?.email?.charAt(0).toUpperCase()}
-              </div>
-              <ChevronDown size={16} className={`text-neutral-400 transition-transform duration-200 ${showUserMenu ? 'rotate-180' : ''}`} />
+              <Menu size={22} />
             </button>
-
-            {/* Dropdown Menu */}
-            {showUserMenu && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowUserMenu(false)}
-                />
-                <div className="absolute right-0 mt-2 w-64 bg-[#0a0a0a] rounded-lg shadow-xl border border-neutral-700 py-2 z-50">
-                  <div className="px-4 py-3 border-b border-neutral-800">
-                    <p className="text-sm font-medium text-neutral-100 truncate">{user?.email}</p>
-                    {user?.role === 'SUPER_ADMIN' && (
-                      <span className="inline-block mt-1.5 px-2 py-0.5 bg-[#262626] text-neutral-300 text-xs rounded-md font-medium">
-                        Super Admin
-                      </span>
-                    )}
-                  </div>
-                  <Link
-                    href="/dashboard/settings"
-                    onClick={() => setShowUserMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-white hover:bg-[#262626] transition-all duration-200"
-                  >
-                    <Settings size={18} />
-                    <span className="font-medium">Settings</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-neutral-300 hover:text-red-400 hover:bg-[#262626] transition-all duration-200 group"
-                  >
-                    <LogOut size={18} className="group-hover:rotate-12 transition-transform duration-200" />
-                    <span className="font-medium">Logout</span>
-                  </button>
-                </div>
-              </>
-            )}
+            <h1 className="text-sm font-light text-neutral-300 truncate">
+              {pageTitle}
+            </h1>
           </div>
-        </div>
-      </nav>
+          {subscription?.plan?.name && (
+            <Link
+              href="/dashboard/settings/subscription"
+              className="flex-shrink-0 inline-flex items-center rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1.5 text-xs text-neutral-400 hover:text-neutral-200 hover:border-neutral-600 hover:bg-neutral-800/80 transition-colors"
+            >
+              <span className="text-neutral-500">Current plan:</span>
+              <span className="ml-1.5 font-medium text-neutral-300">{subscription.plan.name}</span>
+            </Link>
+          )}
+        </nav>
 
-      {/* Main content */}
-      <main className={`min-h-screen bg-black ${isEditorPage ? '' : 'px-4 sm:px-8 lg:px-16 xl:px-24 pt-8 sm:pt-12 pb-12 sm:pb-16'}`}>
-        {children}
-      </main>
+        <main
+          className={`flex-1 overflow-auto ${
+            isEditorPage ? '' : 'px-0 xl:px-12 py-4 sm:py-6'
+          }`}
+        >
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

@@ -147,7 +147,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
             <Globe size={20} className="text-neutral-400" />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-md font-light text-neutral-100 truncate">{domain.domainName}</h3>
+            <h3 className="text-sm font-light text-neutral-100 truncate">{domain.domainName}</h3>
             {domain.website?.subdomain && (
               <p className="text-sm font-light text-neutral-500 truncate mt-0.5">{getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}</p>
             )}
@@ -179,34 +179,42 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading 
           ) : (
             <>
               <span
-                className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded ${domain.status === 'ACTIVE'
-                  ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'bg-amber-500/20 text-amber-400'
-                  }`}
+                className={
+                  "inline-flex items-center text-neutral-300 gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-[#262626]"
+                }
               >
-                {domain.status === 'ACTIVE' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                {domain.status === 'ACTIVE' ? (
+                  <CheckCircle size={12} className="text-emerald-400" />
+                ) : (
+                  <Clock size={12} className="text-amber-400" />
+                )}
                 {domain.status}
               </span>
               {domain.nameServers && domain.nameServers.length > 0 ? (
                 <button
                   onClick={() => setShowDnsModal(true)}
-                  className={`inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded cursor-pointer hover:opacity-90 ${dnsStatus === 'active'
-                    ? 'bg-emerald-500/20 text-emerald-400'
-                    : 'bg-amber-500/20 text-amber-400'
-                    }`}
+                  className="inline-flex items-center text-neutral-300 gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-[#262626] cursor-pointer hover:opacity-90"
                   title="Click to view DNS configuration"
                 >
-                  {dnsStatus === 'active' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                  {dnsStatus === 'active' ? (
+                    <CheckCircle size={12} className="text-emerald-400" />
+                  ) : (
+                    <Clock size={12} className="text-amber-400" />
+                  )}
                   {dnsStatus === 'active' ? 'DNS Active' : 'DNS Pending'}
                 </button>
               ) : (
                 <button
                   onClick={() => retryCloudfareMutation.mutate()}
                   disabled={retryCloudfareMutation.isPending}
-                  className="inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-1.5 text-xs font-light px-2 py-0.5 rounded bg-[#262626] text-neutral-300 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                   title="Click to create nameserver records"
                 >
-                  {retryCloudfareMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <AlertCircle size={12} />}
+                  {retryCloudfareMutation.isPending ? (
+                    <Loader2 size={12} className="animate-spin" />
+                  ) : (
+                    <AlertCircle size={12} className="text-orange-400" />
+                  )}
                   {retryCloudfareMutation.isPending ? 'Creating...' : 'Setup Nameservers'}
                 </button>
               )}

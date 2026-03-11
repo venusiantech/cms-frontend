@@ -274,7 +274,7 @@ export default function EditorPage() {
         <div className="text-center">
           <p className="text-neutral-500 mb-4">Invalid domain ID</p>
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/dashboard/domains')}
             className="px-4 py-2 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors"
           >
             ← Back to Dashboard
@@ -299,7 +299,7 @@ export default function EditorPage() {
     return (
       <div className="text-center py-20">
         <p className="text-neutral-500 mb-4">Website not found</p>
-        <button onClick={() => router.push('/dashboard')} className="text-neutral-300 hover:text-white hover:underline">
+        <button onClick={() => router.push('/dashboard/domains')} className="text-neutral-300 hover:text-white hover:underline">
           ← Back to dashboard
         </button>
       </div>
@@ -332,17 +332,17 @@ export default function EditorPage() {
   return (
     <div className="h-screen flex flex-col bg-black">
       {/* Page Header */}
-      <div className="bg-black border-b border-neutral-800 px-4 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-5">
+      <div className="bg-black border-b border-neutral-800 px-4 sm:px-8 lg:px-16 xl:px-24 py-3">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/dashboard/domains')}
               className="p-2 hover:bg-[#262626] rounded-lg transition-colors"
             >
               <ArrowLeft size={18} className="text-neutral-400" />
             </button>
             <div>
-              <h1 className="text-lg sm:text-xl font-medium text-neutral-100 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
+              <h1 className="text-md sm:text-lg font-light text-neutral-100 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
               <p className="text-xs text-neutral-500 mt-0.5">{blogs.length} blogs • Active</p>
             </div>
           </div>
@@ -350,7 +350,7 @@ export default function EditorPage() {
             href={getSiteUrl(domain.website.subdomain)}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-2 sm:px-4 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center gap-2 text-xs sm:text-sm font-medium"
+            className="px-3 py-2 sm:px-4 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center gap-2 text-xs sm:text-sm"
           >
             <ExternalLink size={16} />
             <span className="hidden sm:inline">View Site</span>
@@ -362,7 +362,7 @@ export default function EditorPage() {
       {/* Main Content - Split View */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left: Website Preview - Hidden on mobile */}
-        <div className="hidden lg:block lg:w-1/2 border-r border-neutral-800 bg-black p-6 overflow-auto">
+        <div className="hidden lg:block lg:w-1/2 border-r border-neutral-800 bg-black p-4 overflow-auto">
           <div className="bg-[#0a0a0a] rounded-xl overflow-hidden border border-neutral-700">
             <div className="bg-[#0a0a0a] px-4 py-3 flex items-center justify-between gap-3">
               {/* Left: MacBook buttons */}
@@ -386,7 +386,7 @@ export default function EditorPage() {
                   href={getSiteUrl(domain.website.subdomain)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 border border-neutral-600 hover:bg-neutral-600 text-neutral-200 px-3 py-1.5 rounded text-xs font-medium transition-colors"
+                  className="flex items-center gap-1.5 border border-neutral-600 hover:bg-neutral-600 text-neutral-200 px-3 py-1.5 rounded text-xs transition-colors"
                   title="Open site in new tab"
                 >
                   <ExternalLink size={14} />

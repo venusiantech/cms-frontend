@@ -1,3 +1,4 @@
+export { DashboardSidebar } from './DashboardSidebar';
 export { DomainCard } from './DomainCard';
 export { AddDomainModal } from './AddDomainModal';
 export { SynonymSelectionModal } from './SynonymSelectionModal';

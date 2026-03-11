@@ -76,8 +76,8 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-neutral-100 mb-1">Deployment</h3>
-        <p className="text-sm text-neutral-400">Your website is live and accessible</p>
+        <h3 className="text-lg text-neutral-100 mb-1">Deployment</h3>
+        <p className="text-sm font-light text-neutral-400">Your website is live and accessible</p>
       </div>
 
       {/* Compact Status */}
@@ -86,22 +86,22 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
           <CheckCircle2 size={20} className="text-green-400" />
         </div>
         <div>
-          <h4 className="font-semibold text-neutral-100 text-sm">Deployment Successful</h4>
-          <p className="text-xs text-neutral-400">Your website is live and accessible</p>
+          <h4 className="text-neutral-100 text-sm">Deployment Successful</h4>
+          <p className="text-xs font-light text-neutral-400">Your website is live and accessible</p>
         </div>
       </div>
 
       <div className="space-y-6">
         {/* Subdomain */}
         <div>
-          <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Subdomain</p>
+          <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Subdomain</p>
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-2 break-all">{getDisplaySubdomain(domain.website.subdomain)}</p>
             <a
               href={getSiteUrl(domain.website.subdomain)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-neutral-300 hover:text-white hover:underline flex items-center gap-1 font-medium"
+              className="text-sm text-neutral-400 hover:text-white hover:underline flex items-center gap-1"
             >
               View site <ExternalLink size={14} />
             </a>
@@ -110,7 +110,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
 
         {/* Custom Domain */}
         <div>
-          <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Custom Domain</p>
+          <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Custom Domain</p>
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-3 break-all">{domain.domainName}</p>
             
@@ -118,9 +118,9 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
             {domain.nameServers && domain.nameServers.length > 0 ? (
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-semibold text-neutral-100">DNS Configuration</p>
+                  <p className="text-sm text-neutral-100">DNS Configuration</p>
                   {domain.nameServersStatus && (
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${
                       domain.nameServersStatus === 'active' 
                         ? 'bg-green-900/40 text-green-300 border-green-700/50' 
                         : 'bg-yellow-900/40 text-yellow-300 border-yellow-700/50'
@@ -154,7 +154,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                           navigator.clipboard.writeText(ns);
                           toast.success('Copied to clipboard!');
                         }}
-                        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-neutral-200 bg-[#404040] hover:bg-white hover:text-black rounded-md transition-all duration-200"
+                        className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-light text-neutral-200 bg-[#404040] hover:bg-white hover:text-black rounded-md transition-all duration-200"
                       >
                         <Copy size={12} />
                         <span>Copy</span>
@@ -174,7 +174,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   <button
                     onClick={() => checkDnsMutation.mutate()}
                     disabled={checkDnsMutation.isPending}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-neutral-300 bg-[#262626] hover:bg-[#404040] border border-neutral-600 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-neutral-300 bg-[#262626] hover:bg-[#404040] border border-neutral-600 rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {checkDnsMutation.isPending ? (
                       <Loader2 size={12} className="animate-spin" />
@@ -196,7 +196,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                     <button
                       onClick={() => deployWorkersMutation.mutate()}
                       disabled={isDeploying}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
                       <Rocket size={16} className={isDeploying ? 'animate-bounce' : ''} />
                       {isDeploying ? 'Deploying...' : 'Deploy DNS Records'}
@@ -211,7 +211,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                 {domain.workersDeployed && (
                   <div className="mt-4 pt-4 border-t border-neutral-700 flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-green-400 flex-shrink-0" />
-                    <p className="text-xs text-green-400 font-medium">
+                    <p className="text-xs text-green-400 font-light">
                       DNS records are configured and pointing to your website
                     </p>
                   </div>
@@ -225,8 +225,8 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                       <AlertCircle size={20} className="text-orange-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-orange-200 mb-1">Nameservers Not Configured</p>
-                      <p className="text-xs text-orange-300/90 leading-relaxed">
+                      <p className="text-sm text-orange-200 mb-1">Nameservers Not Configured</p>
+                      <p className="text-xs text-orange-300/90 leading-relaxed font-light">
                         DNS records need to be created for this domain. Click below to set up nameservers via Cloudflare.
                       </p>
                     </div>
@@ -235,7 +235,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   <button
                     onClick={() => retryCloudfareMutation.mutate()}
                     disabled={retryCloudfareMutation.isPending}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-500 text-white rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {retryCloudfareMutation.isPending ? (
                       <>
@@ -251,7 +251,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                   </button>
                   
                   <div className="mt-3 bg-[#262626] rounded-lg p-3 border-l-2 border-orange-500">
-                    <p className="text-xs text-neutral-300 leading-relaxed">
+                    <p className="text-xs text-neutral-300 leading-relaxed font-light">
                       ⚠️ <strong>Note:</strong> Domain must have a valid extension (e.g., .com, .net, .io). If setup fails, verify your domain format is correct.
                     </p>
                   </div>

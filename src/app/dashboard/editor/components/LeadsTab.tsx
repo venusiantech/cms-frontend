@@ -34,13 +34,13 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-neutral-100 mb-1">Contact Form Leads</h3>
-          <p className="text-sm text-neutral-400">Messages from visitors to your website</p>
+          <h3 className="text-lg text-neutral-100 mb-1">Contact Form Leads</h3>
+          <p className="text-sm font-light text-neutral-400">Messages from visitors to your website</p>
         </div>
         <button
           onClick={handleRefresh}
           disabled={isLoading}
-          className="w-full sm:w-auto px-3 py-2 text-sm text-neutral-400 hover:text-neutral-100 hover:bg-[#262626] rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full sm:w-auto px-3 py-2 text-sm font-light text-neutral-400 hover:text-neutral-100 hover:bg-[#262626] rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           Refresh

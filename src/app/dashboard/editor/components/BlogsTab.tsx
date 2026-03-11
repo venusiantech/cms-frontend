@@ -45,13 +45,13 @@ export default function BlogsTab({
       {/* Generate Content Button */}
       <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-semibold text-neutral-100 mb-1">Generate More Content</h3>
-          <p className="text-sm text-neutral-400">Add AI-generated blog posts to your site</p>
+          <h3 className="text-neutral-100 mb-1">Generate More Content</h3>
+          <p className="text-sm font-light text-neutral-400">Add AI-generated blog posts to your site</p>
         </div>
         <button
           onClick={() => setShowGenerateModal(true)}
           disabled={generateMoreBlogsMutation.isPending}
-          className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium disabled:opacity-50"
+          className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
         >
           {generateMoreBlogsMutation.isPending ? (
             <>
@@ -78,7 +78,7 @@ export default function BlogsTab({
 
       {/* Blogs List */}
       <div>
-        <h3 className="text-lg font-semibold text-neutral-100 mb-4">All Blogs ({blogs.length})</h3>
+        <h3 className="text-lg text-neutral-100 mb-4">All Blogs ({blogs.length})</h3>
         <div className="space-y-3">
           {blogs.map((blog: any, index: number) => (
             <div
@@ -115,17 +115,17 @@ export default function BlogsTab({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       {blog.isHero && (
-                        <span className="px-2 py-0.5 bg-yellow-500 text-white text-xs font-semibold rounded">
+                        <span className="px-2 py-0.5 bg-yellow-500 text-white text-xs rounded">
                           HERO
                         </span>
                       )}
                       <span className="text-xs text-neutral-500">Blog #{index + 1}</span>
                     </div>
-                    <h4 className="font-medium text-neutral-100 mb-1 line-clamp-2">
+                    <h4 className="text-neutral-100 mb-1 line-clamp-2">
                       {blog.title}
                     </h4>
                     {blog.isHero && (
-                      <p className="text-xs text-yellow-400/90 mt-2">
+                      <p className="text-xs font-light text-yellow-400/90 mt-2">
                         Hero blog cannot be deleted
                       </p>
                     )}
@@ -135,7 +135,7 @@ export default function BlogsTab({
                 {/* Edit Button */}
                 <button
                   onClick={() => onEditBlog(blog)}
-                  className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
                 >
                   <Edit3 size={16} />
                   Edit

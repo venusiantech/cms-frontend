@@ -31,7 +31,7 @@ export default function CsvPreviewEditorPage() {
   useEffect(() => {
     if (!isHydrated) return;
     if (!result) {
-      router.replace('/dashboard');
+      router.replace('/dashboard/domains');
     }
   }, [isHydrated, result, router]);
 
@@ -42,7 +42,7 @@ export default function CsvPreviewEditorPage() {
       // ignore
     }
     queryClient.invalidateQueries({ queryKey: ['domains'] });
-    router.push('/dashboard');
+    router.push('/dashboard/domains');
   };
 
   const handleUpdateResult = (next: UploadResult) => {

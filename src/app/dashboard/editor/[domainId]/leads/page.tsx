@@ -46,7 +46,7 @@ export default function DomainLeadsPage() {
     return (
       <div className="text-center py-20">
         <p className="text-gray-500 mb-4">Invalid domain</p>
-        <button onClick={() => router.push('/dashboard')} className="text-gray-900 hover:underline">
+        <button onClick={() => router.push('/dashboard/domains')} className="text-gray-900 hover:underline">
           ← Back to dashboard
         </button>
       </div>

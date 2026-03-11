@@ -223,7 +223,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
                   <Icon size={32} />
                 </div>
-                <h3 className="font-semibold text-neutral-100 text-lg mb-2">{category.name}</h3>
+                <h3 className="font-medium text-neutral-100 text-lg mb-2">{category.name}</h3>
                 <p className="text-sm text-neutral-400">{category.description}</p>
               </button>
             );
@@ -242,7 +242,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         className="flex items-center gap-2 text-neutral-400 hover:text-neutral-100 transition-colors"
       >
         <ArrowLeft size={20} />
-        <span className="font-medium">Back to Settings</span>
+        <span className="">Back to Settings</span>
       </button>
 
       <div className="">
@@ -250,7 +250,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'logo' && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-neutral-100 mb-1">Website Logo</h3>
+              <h3 className="text-lg text-neutral-100 mb-1">Website Logo</h3>
               <p className="text-sm text-neutral-400">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
             </div>
 
@@ -270,7 +270,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <button
                       onClick={() => logoInputRef.current?.click()}
                       disabled={isUploadingLogo}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-lg hover:bg-[#262626] transition-colors text-sm font-medium disabled:opacity-50"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-neutral-600 text-neutral-300 rounded-lg hover:bg-[#262626] transition-colors text-sm  disabled:opacity-50"
                     >
                       {isUploadingLogo ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
                       Replace Logo
@@ -278,7 +278,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <button
                       onClick={handleLogoDelete}
                       disabled={isDeletingLogo}
-                      className="flex items-center gap-2 px-4 py-2.5 border border-red-700/50 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm font-medium disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2.5 border border-red-700/50 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm  disabled:opacity-50"
                     >
                       {isDeletingLogo ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                       Remove
@@ -301,7 +301,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         <ImageIcon size={24} className="text-neutral-400" />
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-semibold text-neutral-300">Click to upload logo</p>
+                        <p className="text-sm font-medium text-neutral-300">Click to upload logo</p>
                         <p className="text-xs text-neutral-500 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
                       </div>
                     </>
@@ -326,7 +326,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
               {/* Display mode radio buttons */}
               <div className="border-t border-neutral-700 pt-4">
-                <p className="text-sm font-semibold text-neutral-100 mb-3">Header Display</p>
+                <p className="text-sm font-medium text-neutral-100 mb-3">Header Display</p>
                 <div className="space-y-2">
                   {([
                     { value: 'logo_only', label: 'Logo only', desc: 'Show only the logo image' },
@@ -350,8 +350,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         className="mt-0.5 accent-neutral-400"
                       />
                       <div>
-                        <p className="text-sm font-medium text-neutral-100">{opt.label}</p>
-                        <p className="text-xs text-neutral-500">{opt.desc}</p>
+                        <p className="text-sm font-light text-neutral-100">{opt.label}</p>
+                        <p className="text-xs font-light text-neutral-500">{opt.desc}</p>
                       </div>
                     </label>
                   ))}
@@ -370,7 +370,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     }
                   }}
                   disabled={isSavingMode}
-                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg text-sm  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSavingMode ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   {isSavingMode ? 'Saving...' : 'Save Display Mode'}
@@ -378,7 +378,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               </div>
 
               <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3">
-                <p className="text-xs text-blue-200">
+                <p className="text-xs font-light text-blue-200">
                   💡 <strong>Tip:</strong> Use a transparent PNG or SVG for the best results. Recommended dimensions: at least 200px wide, up to 400px.
                 </p>
               </div>
@@ -391,7 +391,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
           <>
             <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-5">
               <div className="mb-4">
-                <p className="font-semibold text-neutral-100 mb-1">Website Template</p>
+                <p className="font-medium text-neutral-100 mb-1">Website Template</p>
               </div>
 
               {isLoadingTemplates ? (
@@ -421,13 +421,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         }}
                       />
                       {selectedTemplate === template.key && (
-                        <div className="absolute top-2 right-2 px-2 py-1 bg-neutral-600 text-neutral-100 text-xs font-medium rounded">
+                        <div className="absolute top-2 right-2 px-2 py-1 bg-neutral-600 text-neutral-100 text-xs  rounded">
                           Active
                         </div>
                       )}
                       {/* Hover Overlay */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-200 flex items-center justify-center">
-                        <span className="text-white opacity-0 group-hover:opacity-100 text-sm font-medium">
+                        <span className="text-white opacity-0 group-hover:opacity-100 text-sm ">
                           View Details
                         </span>
                       </div>
@@ -435,7 +435,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     
                     {/* Template Name */}
                     <div className="p-3 bg-[#262626]">
-                      <h4 className="font-medium text-neutral-100 text-sm text-center">{template.name}</h4>
+                      <h4 className=" text-neutral-100 text-sm text-center">{template.name}</h4>
                     </div>
                   </button>
                 ))}
@@ -450,9 +450,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               {/* Modal Header */}
               <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-[#0a0a0a] border-b border-neutral-700">
                 <div>
-                  <h3 className="text-lg sm:text-2xl font-semibold text-neutral-100">{selectedTemplateDetails.name}</h3>
+                  <h3 className="text-lg sm:text-2xl font-medium text-neutral-100">{selectedTemplateDetails.name}</h3>
                   {selectedTemplate === selectedTemplateDetails.key && (
-                    <span className="inline-flex items-center gap-1.5 text-xs text-green-600 mt-1 font-medium">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-green-600 mt-1 ">
                       <CheckCircle2 size={14} />
                       Currently Active
                     </span>
@@ -505,7 +505,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                               />
                             </div>
                             <div className="px-2 py-1 bg-[#262626]">
-                              <p className="text-xs font-medium text-neutral-100 text-center truncate">{template.name}</p>
+                              <p className="text-xs  text-neutral-100 text-center truncate">{template.name}</p>
                             </div>
                           </button>
                         ))}
@@ -518,13 +518,13 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
                     {/* Description */}
                     <div>
-                      <h4 className="text-base font-semibold text-neutral-100 mb-3">About This Template</h4>
+                      <h4 className="text-base font-medium text-neutral-100 mb-3">About This Template</h4>
                       <p className="text-sm text-neutral-400 leading-relaxed">{selectedTemplateDetails.description}</p>
                     </div>
 
                     {/* Features */}
                     <div>
-                      <h4 className="text-base font-semibold text-neutral-100 mb-4">Features</h4>
+                      <h4 className="text-base font-medium text-neutral-100 mb-4">Features</h4>
                       <div className="space-y-3">
                         {selectedTemplateDetails.features.map((feature: string, i: number) => (
                           <div key={i} className="flex items-start gap-3">
@@ -543,7 +543,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <button
                       onClick={handleTemplateSelect}
                       disabled={isUpdatingTemplate || selectedTemplate === selectedTemplateDetails.key}
-                      className={`w-full px-6 py-3 rounded-lg transition-all duration-200 font-medium shadow-sm ${
+                      className={`w-full px-6 py-3 rounded-lg transition-all duration-200  shadow-sm ${
                         selectedTemplate === selectedTemplateDetails.key
                           ? 'bg-green-500 text-white cursor-not-allowed'
                           : 'bg-white hover:bg-neutral-200 text-black disabled:opacity-50 disabled:cursor-not-allowed'
@@ -595,16 +595,16 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 className="w-5 h-5 text-neutral-100 rounded mt-0.5 focus:ring-2 focus:ring-neutral-500"
               />
               <div>
-                <p className="font-semibold text-neutral-100 mb-1">Enable Ads</p>
+                <p className="font-medium text-neutral-100 mb-1">Enable Ads</p>
                 <p className="text-sm text-neutral-400">Show advertisements on your website</p>
               </div>
               </label>
               {domain.website.adsApproved ? (
-                <span className="px-3 py-1 bg-green-900/50 text-green-300 rounded-full text-xs font-medium border border-green-700/50">
+                <span className="px-3 py-1 bg-green-900/50 text-green-300 rounded-full text-xs  border border-green-700/50">
                   Approved
                 </span>
               ) : (
-                <span className="px-3 py-1 bg-yellow-900/50 text-yellow-300 rounded-full text-xs font-medium border border-yellow-700/50">
+                <span className="px-3 py-1 bg-yellow-900/50 text-yellow-300 rounded-full text-xs  border border-yellow-700/50">
                   Pending
                 </span>
               )}
@@ -636,7 +636,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   className="w-5 h-5 text-neutral-100 rounded mt-0.5 focus:ring-2 focus:ring-neutral-500"
                 />
                 <div>
-                  <p className="font-semibold text-neutral-100 mb-1">Enable Contact Form</p>
+                  <p className="font-medium text-neutral-100 mb-1">Enable Contact Form</p>
                   <p className="text-sm text-neutral-400">Show "Contact Us" link in your website</p>
                 </div>
               </label>
@@ -645,14 +645,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             {/* Contact Information */}
             <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
               <div className="mb-4">
-                <p className="font-semibold text-neutral-100 mb-1">Contact Information</p>
+                <p className="font-medium text-neutral-100 mb-1">Contact Information</p>
                 <p className="text-sm text-neutral-400">Add your contact details to display on your website</p>
               </div>
 
               <div className="space-y-4">
                 {/* Contact Email */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                  <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                     <Mail size={18} className="text-neutral-400" />
                     Email Address
                   </label>
@@ -667,7 +667,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Contact Phone */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                  <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                     <Phone size={18} className="text-neutral-400" />
                     Phone Number
                   </label>
@@ -721,14 +721,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'social' && (
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
             <div className="mb-4">
-              <p className="font-semibold text-neutral-100 mb-1">Social Media Links</p>
+              <p className="font-medium text-neutral-100 mb-1">Social Media Links</p>
               <p className="text-sm text-neutral-400">Add your social media profiles to appear in your website footer</p>
             </div>
 
             <div className="space-y-4">
               {/* Instagram */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                   <Instagram size={18} className="text-pink-500" />
                   Instagram
                 </label>
@@ -743,7 +743,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
               {/* Facebook */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                   <Facebook size={18} className="text-blue-600" />
                   Facebook
                 </label>
@@ -758,7 +758,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
               {/* Twitter */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                   <Twitter size={18} className="text-sky-500" />
                   Twitter / X
                 </label>
@@ -775,7 +775,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <button
                 onClick={handleSocialMediaUpdate}
                 disabled={isUpdatingSocial}
-                className="w-full px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg  transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isUpdatingSocial ? (
                   <span className="flex items-center justify-center gap-2">
@@ -794,7 +794,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'metadata' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-neutral-100 mb-1">SEO & Social Sharing Settings</h3>
+              <h3 className="text-lg font-medium text-neutral-100 mb-1">SEO & Social Sharing Settings</h3>
               <p className="text-sm text-neutral-400">Optimize your website for search engines and social media platforms</p>
             </div>
 
@@ -802,7 +802,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <div className="space-y-5">
                 {/* Meta Title */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Title *
                   </label>
                   <input
@@ -816,7 +816,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <p className="text-xs text-neutral-500">
                       Appears in search results and browser tabs (50-60 characters recommended)
                     </p>
-                    <span className={`text-xs font-medium ${
+                    <span className={`text-xs  ${
                       metaTitle.length > 60 ? 'text-red-600' : 'text-neutral-500'
                     }`}>
                       {metaTitle.length}/60
@@ -826,7 +826,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Description */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Description *
                   </label>
                   <textarea
@@ -840,7 +840,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <p className="text-xs text-neutral-500">
                       Brief description shown in search results and social media
                     </p>
-                    <span className={`text-xs font-medium ${
+                    <span className={`text-xs  ${
                       metaDescription.length > 160 ? 'text-red-600' : 'text-neutral-500'
                     }`}>
                       {metaDescription.length}/160
@@ -850,7 +850,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Image */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label className="block text-sm  text-neutral-300 mb-2">
                     Preview Image URL *
                   </label>
                   <input
@@ -867,7 +867,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Keywords */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Keywords
                   </label>
                   <input
@@ -884,7 +884,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Meta Author */}
                 <div>
-                  <label className="block text-sm font-medium text-neutral-300 mb-2">
+                  <label className="block text-sm  text-neutral-300 mb-2">
                     Author / Owner Name
                   </label>
                   <input
@@ -902,7 +902,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 {/* Social Media Preview Card */}
                 {(metaTitle || metaDescription || metaImage) && (
                   <div className="pt-4 border-t border-neutral-700">
-                    <p className="text-xs font-medium text-neutral-300 mb-3">How it will look when shared:</p>
+                    <p className="text-xs  text-neutral-300 mb-3">How it will look when shared:</p>
                     <div className="border border-neutral-700 rounded-lg overflow-hidden bg-[#262626] shadow-sm">
                       {metaImage && (
                         <img
@@ -916,7 +916,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                       )}
                       <div className="p-4">
                         <p className="text-xs text-neutral-500 mb-1">{domain.domainName}</p>
-                        <h4 className="font-semibold text-neutral-100 mb-1 line-clamp-2">
+                        <h4 className="font-medium text-neutral-100 mb-1 line-clamp-2">
                           {metaTitle || `${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)}`}
                         </h4>
                         <p className="text-sm text-neutral-400 line-clamp-2">
@@ -932,7 +932,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   <button
                     onClick={handleMetadataUpdate}
                     disabled={isUpdatingMetadata}
-                    className="w-full sm:w-auto px-8 py-3 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm shadow-sm"
+                    className="w-full sm:w-auto px-8 py-3 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed  text-sm shadow-sm"
                   >
                     {isUpdatingMetadata ? (
                       <span className="flex items-center justify-center gap-2">
@@ -949,7 +949,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
             {/* SEO Tips */}
             <div className="bg-blue-900/20 border border-blue-700/50 rounded-xl p-5">
-              <h4 className="text-sm font-semibold text-blue-200 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-medium text-blue-200 mb-3 flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 SEO Best Practices
               </h4>
@@ -983,7 +983,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {selectedCategory === 'analytics' && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-neutral-100 mb-1">Google Analytics Tracking</h3>
+              <h3 className="text-lg font-medium text-neutral-100 mb-1">Google Analytics Tracking</h3>
               <p className="text-sm text-neutral-400">Add Google Analytics to track your website visitors and behavior</p>
             </div>
 
@@ -991,7 +991,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               <div className="space-y-5">
                 {/* Google Analytics ID */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-neutral-300 mb-2">
+                  <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                     <BarChart3 size={18} className="text-orange-500" />
                     Google Analytics Measurement ID
                   </label>
@@ -1013,7 +1013,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     <div className="flex items-start gap-3">
                       <CheckCircle2 size={20} className="text-green-400 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-semibold text-green-200">Google Analytics Enabled</p>
+                        <p className="text-sm font-medium text-green-200">Google Analytics Enabled</p>
                         <p className="text-xs text-green-300/90 mt-1">
                           Tracking ID: <code className="bg-[#262626] px-2 py-0.5 rounded font-mono text-neutral-200">{googleAnalyticsId}</code>
                         </p>
@@ -1058,12 +1058,12 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
             {/* Setup Instructions */}
             <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
-              <h4 className="text-sm font-semibold text-orange-900 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-medium text-orange-900 mb-3 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 How to Get Your Google Analytics ID
               </h4>
               <ol className="space-y-2 text-sm text-orange-800 list-decimal list-inside">
-                <li>Visit <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">Google Analytics</a></li>
+                <li>Visit <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline ">Google Analytics</a></li>
                 <li>Sign in with your Google account</li>
                 <li>Create a new property (or use existing)</li>
                 <li>Select <strong>Web</strong> as the platform</li>
