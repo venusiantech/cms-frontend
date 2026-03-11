@@ -126,7 +126,7 @@ export default function DomainsPage() {
   }, [domains, queryClient]);
 
   return (
-    <div className="px-4 lg:px-8">
+    <div className="px-4 lg:px-6">
       {isGlobalLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>

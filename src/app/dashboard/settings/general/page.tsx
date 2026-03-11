@@ -67,14 +67,14 @@ export default function SettingsGeneralPage() {
 
   if (isLoading) {
     return (
-      <div className="px-4 lg:px-8 flex items-center justify-center min-h-[300px]">
+      <div className="px-4 lg:px-6 flex items-center justify-center min-h-[300px]">
         <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
       </div>
     );
   }
 
   return (
-    <div className="px-4 lg:px-8 w-full max-w-full">
+    <div className="px-4 lg:px-6 w-full max-w-full">
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-neutral-100">General</h1>
       </div>

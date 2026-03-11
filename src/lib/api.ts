@@ -144,6 +144,10 @@ export const usersAPI = {
   }) => api.put('/users/me', data),
 };
 
+export const dashboardAPI = {
+  get: () => api.get('/dashboard'),
+};
+
 export const stripeAPI = {
   getPlans: () => api.get('/stripe/plans'),
   getSubscription: () => api.get('/stripe/subscription'),

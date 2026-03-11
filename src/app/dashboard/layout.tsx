@@ -10,27 +10,26 @@ import { DashboardSidebar } from '@/components/dashboard';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 
-/** Map pathname to nav bar page title */
-function getDashboardPageTitle(pathname: string | null): string {
-  if (!pathname) return 'Dashboard';
-  if (pathname === '/dashboard') return 'Dashboard';
-  if (pathname === '/dashboard/domains') return 'Domains';
+/** Map pathname to nav bar page title + subtitle */
+function getPageMeta(pathname: string | null): { title: string; subtitle: string } {
+  if (!pathname) return { title: 'Dashboard', subtitle: 'Your account at a glance' };
+  if (pathname === '/dashboard') return { title: 'Dashboard', subtitle: 'Your account at a glance' };
+  if (pathname === '/dashboard/domains') return { title: 'Domains', subtitle: 'Manage your domains and websites' };
   if (pathname.startsWith('/dashboard/settings/')) {
     const rest = pathname.replace('/dashboard/settings/', '') || 'general';
-    const labels: Record<string, string> = {
-      general: 'General',
-      notifications: 'Notifications',
-      subscription: 'Subscription',
-      ledger: 'Ledger',
+    const map: Record<string, { title: string; subtitle: string }> = {
+      general:       { title: 'General',       subtitle: 'Manage your account details' },
+      notifications: { title: 'Notifications', subtitle: 'Control your notification preferences' },
+      subscription:  { title: 'Subscription',  subtitle: 'Manage your plan and billing' },
+      ledger:        { title: 'Ledger',         subtitle: 'Your credit usage history' },
     };
-    const sub = labels[rest] || rest;
-    return `Settings / ${sub}`;
+    return map[rest] ?? { title: rest, subtitle: '' };
   }
-  if (pathname === '/dashboard/settings') return 'Settings';
-  if (pathname.includes('/dashboard/editor/') && pathname.endsWith('/leads')) return 'Editor / Leads';
-  if (pathname.includes('/dashboard/editor/')) return 'Editor';
-  if (pathname.includes('/dashboard/preview-editor')) return 'Preview Editor';
-  return 'Dashboard';
+  if (pathname === '/dashboard/settings') return { title: 'Settings', subtitle: 'Manage your account details' };
+  if (pathname.includes('/dashboard/editor/') && pathname.endsWith('/leads')) return { title: 'Leads', subtitle: 'Contact form submissions' };
+  if (pathname.includes('/dashboard/editor/')) return { title: 'Editor', subtitle: 'Edit your website content' };
+  if (pathname.includes('/dashboard/preview-editor')) return { title: 'Preview Editor', subtitle: '' };
+  return { title: 'Dashboard', subtitle: 'Your account at a glance' };
 }
 
 export default function DashboardLayout({
@@ -42,7 +41,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { isAuthenticated } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pageTitle = getDashboardPageTitle(pathname);
+  const { title: pageTitle, subtitle: pageSubtitle } = getPageMeta(pathname);
 
   // Check if we're on the editor page (no padding needed)
   const isEditorPage = pathname?.includes('/dashboard/editor/');
@@ -124,9 +123,14 @@ export default function DashboardLayout({
             >
               <Menu size={22} />
             </button>
-            <h1 className="text-sm font-light text-neutral-300 truncate">
-              {pageTitle}
-            </h1>
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold text-white tracking-tight leading-none truncate">
+                {pageTitle}
+              </h1>
+              {/* {pageSubtitle && (
+                <p className="text-xs text-neutral-500 mt-0.5 truncate">{pageSubtitle}</p>
+              )} */}
+            </div>
           </div>
           {subscription?.plan?.name && (
             <Link
@@ -141,7 +145,7 @@ export default function DashboardLayout({
 
         <main
           className={`flex-1 overflow-auto ${
-            isEditorPage ? '' : 'px-0 xl:px-12 py-4 sm:py-6'
+            isEditorPage ? '' : 'py-4 sm:py-6'
           }`}
         >
           {children}

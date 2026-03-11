@@ -63,7 +63,7 @@ export default function CsvPreviewEditorPage() {
   }
 
   return (
-    <div className="px-4 lg:px-8">
+    <div className="px-4 lg:px-6">
       <CsvPreviewEditor
         result={result}
         onClose={handleClose}
