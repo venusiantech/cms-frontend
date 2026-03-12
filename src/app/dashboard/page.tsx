@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar,
-  XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+  Tooltip, ResponsiveContainer,
 } from 'recharts';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -38,9 +38,10 @@ interface DashboardData {
     leadsThisMonth: number;
   };
   charts: {
-    creditsUsed: ChartPoint[];
-    blogsGenerated: ChartPoint[];
-    leads: ChartPoint[];
+    blogsGenerated:  ChartPoint[];
+    creditsUsed:     ChartPoint[];
+    websitesCreated: ChartPoint[];
+    leads:           ChartPoint[];
   };
 }
 
@@ -55,6 +56,29 @@ function AnimatedNumber({ value }: { value: number }) {
   useEffect(() => { motionVal.set(value); }, [value, motionVal]);
 
   return <motion.span ref={ref}>{display}</motion.span>;
+}
+
+/** Shows integer in big white + decimal suffix (e.g. ".5") in smaller grey */
+function SplitNumber({ value }: { value: number }) {
+  const motionVal = useMotionValue(0);
+  const spring = useSpring(motionVal, { stiffness: 60, damping: 18 });
+
+  const intPart = useTransform(spring, (v) => Math.floor(v).toLocaleString());
+  const decPart = useTransform(spring, (v) => {
+    const dec = v - Math.floor(v);
+    if (dec < 0.01) return '';
+    // format to 1 decimal, take only ".X" portion
+    return dec.toFixed(1).slice(1);
+  });
+
+  useEffect(() => { motionVal.set(value); }, [value, motionVal]);
+
+  return (
+    <span className="inline-flex items-end leading-none">
+      <motion.span>{intPart}</motion.span>
+      <motion.span className="text-2xl font-bold text-neutral-500 mb-0.5">{decPart}</motion.span>
+    </span>
+  );
 }
 
 // ─── Glow Card ───────────────────────────────────────────────────────────────
@@ -226,38 +250,44 @@ function UsageRing({
   );
 }
 
-// ─── Chart Card ──────────────────────────────────────────────────────────────
+// ─── Trend Card (stat + embedded sparkline) ──────────────────────────────────
 
-function ChartCard({
+function TrendCard({
   title,
+  subtitle,
+  value,
   data,
   color,
   type,
   delay = 0,
 }: {
   title: string;
+  subtitle: string;
+  value: number;
   data: ChartPoint[];
   color: string;
   type: 'area' | 'bar';
   delay?: number;
 }) {
-  const formatted = data.map((d) => ({
-    ...d,
-    label: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-  }));
-  const total = data.reduce((s, d) => s + d.value, 0);
-  const gradId = `g-${color.replace('#', '')}`;
+  const gradId = `tc-${color.replace('#', '')}`;
+
+  // Trend: compare last 7 days vs previous 7 days
+  const last7 = data.slice(-7).reduce((s, d) => s + d.value, 0);
+  const prev7 = data.slice(-14, -7).reduce((s, d) => s + d.value, 0);
+  const trendPct = prev7 === 0
+    ? last7 > 0 ? 100 : 0
+    : Math.round(((last7 - prev7) / prev7) * 100);
+  const trendUp = trendPct >= 0;
 
   const tooltipStyle = {
     contentStyle: {
-      backgroundColor: '#0d0d0d',
-      border: '1px solid #1f1f1f',
-      borderRadius: '10px',
-      fontSize: '12px',
+      backgroundColor: '#111',
+      border: '1px solid #222',
+      borderRadius: '8px',
+      fontSize: '11px',
       color: '#e5e5e5',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
     },
-    labelStyle: { color: '#555', marginBottom: 4, fontSize: 11 },
+    labelStyle: { color: '#555', fontSize: 10 },
     cursor: { stroke: '#2a2a2a', strokeWidth: 1 },
   };
 
@@ -265,55 +295,64 @@ function ChartCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, delay, ease: 'easeOut' }}
+      transition={{ duration: 0.4, delay, ease: 'easeOut' }}
     >
-      <GlowCard glowColor={`${color}12`} className="p-5">
-        <div className="flex items-start justify-between mb-1">
+      <GlowCard glowColor={`${color}12`} className="p-5 flex flex-col gap-3">
+        {/* Header */}
+        <div>
           <p className="text-sm font-semibold text-neutral-200">{title}</p>
-          <span className="flex items-center gap-1 text-[10px] text-neutral-600 bg-neutral-900 px-2 py-1 rounded-full border border-neutral-800">
-            <ArrowUpRight size={9} />
-            30d
+          <p className="text-[11px] text-neutral-600 mt-0.5">{subtitle}</p>
+        </div>
+
+        {/* Sparkline */}
+        <div className="flex-1">
+          <ResponsiveContainer width="100%" height={90}>
+            {type === 'bar' ? (
+              <BarChart data={data} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                <defs>
+                  <linearGradient id={`${gradId}-bar`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+                    <stop offset="100%" stopColor={color} stopOpacity={0.3} />
+                  </linearGradient>
+                </defs>
+                <Tooltip {...tooltipStyle} formatter={(v) => [v, title]} labelFormatter={() => ''} />
+                <Bar dataKey="value" fill={`url(#${gradId}-bar)`} radius={[3, 3, 0, 0]} maxBarSize={14} />
+              </BarChart>
+            ) : (
+              <AreaChart data={data} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+                <defs>
+                  <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+                    <stop offset="100%" stopColor={color} stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Tooltip {...tooltipStyle} formatter={(v) => [v, title]} labelFormatter={() => ''} />
+                <Area
+                  type="monotone" dataKey="value"
+                  stroke={color} strokeWidth={2}
+                  fill={`url(#${gradId})`}
+                  dot={false}
+                  activeDot={{ r: 3, fill: color, stroke: '#0a0a0a', strokeWidth: 2 }}
+                />
+              </AreaChart>
+            )}
+          </ResponsiveContainer>
+        </div>
+
+        {/* Footer: big number + trend badge */}
+        <div className="flex items-end justify-between">
+          <p className="text-4xl font-bold text-white tabular-nums leading-none">
+            <SplitNumber value={value} />
+          </p>
+          <span className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${
+            trendUp
+              ? 'bg-emerald-500/15 text-emerald-400'
+              : 'bg-red-500/15 text-red-400'
+          }`}>
+            {trendUp ? <ArrowUpRight size={11} /> : <ArrowUpRight size={11} className="rotate-90" />}
+            {trendUp ? '+' : ''}{trendPct}%
           </span>
         </div>
-        <p className="text-3xl font-bold text-white tabular-nums mb-5" style={{ textShadow: `0 0 30px ${color}40` }}>
-          <AnimatedNumber value={total} />
-        </p>
-
-        <ResponsiveContainer width="100%" height={110}>
-          {type === 'area' ? (
-            <AreaChart data={formatted} margin={{ top: 2, right: 2, left: -28, bottom: 0 }}>
-              <defs>
-                <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-                  <stop offset="100%" stopColor={color} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#141414" vertical={false} />
-              <XAxis dataKey="label" tick={{ fontSize: 9, fill: '#404040' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
-              <YAxis tick={{ fontSize: 9, fill: '#404040' }} tickLine={false} axisLine={false} allowDecimals={false} />
-              <Tooltip {...tooltipStyle} formatter={(v) => [v, title]} labelFormatter={(l) => l} />
-              <Area
-                type="monotone" dataKey="value"
-                stroke={color} strokeWidth={2}
-                fill={`url(#${gradId})`}
-                dot={false} activeDot={{ r: 4, fill: color, stroke: '#0a0a0a', strokeWidth: 2 }}
-              />
-            </AreaChart>
-          ) : (
-            <BarChart data={formatted} margin={{ top: 2, right: 2, left: -28, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#141414" vertical={false} />
-              <XAxis dataKey="label" tick={{ fontSize: 9, fill: '#404040' }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
-              <YAxis tick={{ fontSize: 9, fill: '#404040' }} tickLine={false} axisLine={false} allowDecimals={false} />
-              <Tooltip {...tooltipStyle} formatter={(v) => [v, title]} labelFormatter={(l) => l} />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]} maxBarSize={20}>
-                {formatted.map((_, i) => (
-                  <motion.rect key={i} />
-                ))}
-              </Bar>
-              <Bar dataKey="value" fill={color} fillOpacity={0.85} radius={[4, 4, 0, 0]} maxBarSize={20} />
-            </BarChart>
-          )}
-        </ResponsiveContainer>
       </GlowCard>
     </motion.div>
   );
@@ -535,18 +574,44 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* ── Remaining 3 stat cards ────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard label="Blogs Generated"  value={counts.totalBlogsGenerated} icon={FileText} color="#a78bfa" sub="all time"   delay={0.15} />
-          <StatCard label="Total Leads"      value={counts.totalLeads}          icon={Users}    color="#f472b6" sub="all time"   delay={0.2}  />
-          <StatCard label="Leads This Month" value={counts.leadsThisMonth}      icon={Zap}      color="#fb923c" sub="this month" delay={0.25} />
-        </div>
-
-        {/* ── Charts ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <ChartCard title="Blogs Generated" data={charts.blogsGenerated} color="#a78bfa" type="bar"  delay={0.1} />
-          <ChartCard title="Credits Used"    data={charts.creditsUsed}    color="#60a5fa" type="area" delay={0.15} />
-          <ChartCard title="New Leads"       data={charts.leads}          color="#34d399" type="area" delay={0.2} />
+        {/* ── Trend Cards ──────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <TrendCard
+            title="Blogs Generated"
+            subtitle="Last 30 days"
+            value={counts.totalBlogsGenerated}
+            data={charts.blogsGenerated}
+            color="#a78bfa"
+            type="bar"
+            delay={0.1}
+          />
+          <TrendCard
+            title="Credits Used"
+            subtitle="Last 30 days"
+            value={creditsUsed}
+            data={charts.creditsUsed}
+            color="#60a5fa"
+            type="area"
+            delay={0.15}
+          />
+          <TrendCard
+            title="Websites Created"
+            subtitle="Last 30 days"
+            value={charts.websitesCreated.reduce((s, d) => s + d.value, 0)}
+            data={charts.websitesCreated}
+            color="#f59e0b"
+            type="bar"
+            delay={0.2}
+          />
+          <TrendCard
+            title="New Leads"
+            subtitle="Last 30 days"
+            value={counts.totalLeads}
+            data={charts.leads}
+            color="#34d399"
+            type="area"
+            delay={0.25}
+          />
         </div>
 
       </div>
