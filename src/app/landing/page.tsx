@@ -437,6 +437,182 @@ function CouponBanner() {
 
 
 // ────────────────────────────────────────────────────────────────────────────
+// ENTERPRISE OCTOPUS NODE GRAPH
+// ────────────────────────────────────────────────────────────────────────────
+
+const CX = 500, CY = 290, R = 215;
+const NODE_ANGLES = [-90, -30, 30, 90, 150, 210];
+const NODE_POSITIONS = NODE_ANGLES.map((a) => ({
+  x: CX + R * Math.cos((a * Math.PI) / 180),
+  y: CY + R * Math.sin((a * Math.PI) / 180),
+}));
+
+function EnterpriseOctopus() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <div ref={ref} className="mt-16">
+
+      {/* Section heading */}
+      <div className="text-center mb-10">
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 mb-4">
+          <Crown size={14} className="text-violet-400" />
+          <span className="text-violet-400 text-sm font-semibold">Enterprise Infrastructure</span>
+        </span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-3 mb-3">
+          Built for Scale &amp; Reliability
+        </h2>
+        <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+          Enterprise-grade tools powering thousands of websites worldwide
+        </p>
+      </div>
+
+      {/* ── Desktop: octopus node graph ── */}
+      <div className="relative w-full hidden lg:block" style={{ paddingBottom: "58%" }}>
+
+        {/* SVG layer — lines + dots only */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          viewBox="0 0 1000 580"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgb(139,92,246)" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="rgb(139,92,246)" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="rgb(139,92,246)" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="rgb(139,92,246)" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* Center ambient glow */}
+          <circle cx={CX} cy={CY} r={110} fill="url(#hubGlow)" />
+
+          {/* Connecting paths */}
+          {NODE_POSITIONS.map((pos, i) => (
+            <motion.path
+              key={i}
+              d={`M ${CX} ${CY} L ${pos.x} ${pos.y}`}
+              stroke="rgba(139,92,246,0.35)"
+              strokeWidth="1.5"
+              strokeDasharray="6 5"
+              fill="none"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
+            />
+          ))}
+
+          {/* Node ambient glow circles */}
+          {NODE_POSITIONS.map((pos, i) => (
+            <motion.circle
+              key={`glow-${i}`}
+              cx={pos.x} cy={pos.y} r={42}
+              fill="url(#nodeGlow)"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.6 + i * 0.08 }}
+            />
+          ))}
+
+          {/* Node dots */}
+          {NODE_POSITIONS.map((pos, i) => (
+            <motion.circle
+              key={`dot-${i}`}
+              cx={pos.x} cy={pos.y} r={5}
+              fill="rgb(139,92,246)"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.65 + i * 0.08 }}
+            />
+          ))}
+
+          {/* Center ring */}
+          <motion.circle
+            cx={CX} cy={CY} r={68}
+            fill="none"
+            stroke="rgba(139,92,246,0.25)"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          />
+        </svg>
+
+        {/* Center hub */}
+        <div
+          className="absolute"
+          style={{ left: `${(CX / 1000) * 100}%`, top: `${(CY / 580) * 100}%`, transform: "translate(-50%,-50%)" }}
+        >
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={isInView ? { scale: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            // className=" rounded-2xl border border-violet-500/40 bg-gradient-to-br from-violet-900/60 to-[#0a0a0a]/90 backdrop-blur-sm p-4 text-center shadow-2xl shadow-violet-500/10"
+          >
+            <img src="/logo/fastofy.png" alt="Fastofy" className="w-30 h-30 mx-auto mb-2" />
+            {/* <p className="text-sm font-bold text-white leading-snug">Enterprise-Grade Infrastructure</p>
+            <p className="text-[10px] text-violet-400/70 mt-1 leading-tight">Built for scale &amp; reliability</p> */}
+          </motion.div>
+        </div>
+
+        {/* Feature nodes */}
+        {NODE_POSITIONS.map((pos, i) => {
+          const feature = ENTERPRISE_FEATURES[i];
+          return (
+            <div
+              key={i}
+              className="absolute"
+              style={{ left: `${(pos.x / 1000) * 100}%`, top: `${(pos.y / 580) * 100}%`, transform: "translate(-50%,-50%)" }}
+            >
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={isInView ? { scale: 1, opacity: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.35 + i * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                className="w-40 rounded-xl border border-neutral-700/60 bg-neutral-900/95 backdrop-blur-sm p-3 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/10 transition-all cursor-default group"
+              >
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="w-7 h-7 rounded-lg bg-violet-500/15 group-hover:bg-violet-500/30 flex items-center justify-center flex-shrink-0 transition-colors">
+                    <feature.icon size={14} className="text-violet-400" />
+                  </div>
+                  <p className="text-xs font-semibold text-white leading-tight">{feature.title}</p>
+                </div>
+                <p className="text-[10px] text-neutral-500 leading-snug pl-9">{feature.desc}</p>
+              </motion.div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Mobile fallback grid ── */}
+      <div className="lg:hidden p-6 rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900/80 to-neutral-800/30">
+        <div className="flex items-center gap-3 mb-6">
+          <img src="/logo/fastofy.png" alt="Fastofy" className="w-20 h-20" />
+          <div>
+            <h3 className="text-lg font-bold">Enterprise-Grade Infrastructure</h3>
+            <p className="text-sm text-neutral-500">Built for scale, security, and reliability</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {ENTERPRISE_FEATURES.map((feature, i) => (
+            <div key={i} className="p-4 rounded-xl border border-neutral-800 bg-neutral-800/30 hover:border-violet-500/30 transition-colors">
+              <feature.icon size={20} className="text-violet-400 mb-2" />
+              <p className="text-sm font-semibold mb-1">{feature.title}</p>
+              <p className="text-xs text-neutral-500">{feature.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // HOW IT WORKS — STICKY SCROLL ROADMAP
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -1108,33 +1284,8 @@ export default function LandingPage() {
             ))}
           </div>
 
-          {/* Enterprise Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16 p-8 rounded-2xl border border-neutral-800 bg-gradient-to-br from-neutral-900/80 to-neutral-800/30"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500/30 to-purple-500/20 flex items-center justify-center">
-                <Crown size={20} className="text-violet-400" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold">Enterprise-Grade Infrastructure</h3>
-                <p className="text-sm text-neutral-500">Built for scale, security, and reliability</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {ENTERPRISE_FEATURES.map((item, i) => (
-                <div key={i} className="text-center p-4 rounded-xl bg-neutral-800/30 hover:bg-neutral-800/50 transition-colors">
-                  <item.icon size={24} className="mx-auto text-violet-400 mb-2" />
-                  <p className="font-medium text-sm">{item.title}</p>
-                  <p className="text-xs text-neutral-500 mt-1">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          {/* Enterprise Features — Octopus node graph */}
+          <EnterpriseOctopus />
         </div>
       </section>
 
