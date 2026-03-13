@@ -24,26 +24,69 @@ export default async function robots() {
     (pd) => domain !== pd && domain.endsWith('.' + pd)
   );
 
-  // If it's the main platform domain (not a user site), use default robots.txt
+  const forwardedProto = headersList.get('x-forwarded-proto');
+  const isLocalDomain =
+    domain === 'localhost' ||
+    domain.startsWith('127.0.0.1') ||
+    domain.endsWith('.local');
+  const protocol = forwardedProto || (isLocalDomain ? 'http' : 'https');
+  const fullUrl = `${protocol}://${domain}`;
+
+  // If it's the main platform domain (not a user site)
   if (isPlatformDomain && !isSubdomainOfPlatform) {
     return {
-      rules: {
-        userAgent: '*',
-        disallow: '/',
-      },
+      rules: [
+        // All crawlers: allow everything except private routes
+        {
+          userAgent: '*',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+        // Explicitly allow ChatGPT / OpenAI crawlers
+        {
+          userAgent: 'GPTBot',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+        {
+          userAgent: 'OAI-SearchBot',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+        {
+          userAgent: 'ChatGPT-User',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+        // Explicitly allow Google
+        {
+          userAgent: 'Googlebot',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+        // Explicitly allow Bing
+        {
+          userAgent: 'Bingbot',
+          allow: '/',
+          disallow: ['/dashboard', '/api/'],
+        },
+      ],
+      sitemap: `${fullUrl}/sitemap.xml`,
     };
   }
 
   // For user websites, allow all crawling
-  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-  const fullUrl = `${protocol}://${host}`;
-
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      crawlDelay: 1,
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+      },
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+      },
+    ],
     sitemap: `${fullUrl}/sitemap.xml`,
   };
 }

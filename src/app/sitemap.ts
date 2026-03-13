@@ -35,16 +35,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     (pd) => domain !== pd && domain.endsWith('.' + pd)
   );
 
-  // If it's the main platform domain (not a user site), return platform homepage only
+  // If it's the main platform domain (not a user site), return all fastofy.com pages
   if (isPlatformDomain && !isSubdomainOfPlatform) {
+    const base = `${siteProtocol}://${domain}`;
+    const now = new Date();
+
     return [
-      {
-        url: `${siteProtocol}://${domain}`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 1,
-      },
-    ];
+      // ── Core pages ──────────────────────────────────────────────────────────
+      { url: base,                              lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
+
+      // ── Auth ────────────────────────────────────────────────────────────────
+      { url: `${base}/login`,                   lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+      { url: `${base}/register`,                lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+
+      // ── Product ─────────────────────────────────────────────────────────────
+      { url: `${base}/dashboard`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+
+      // ── Support ─────────────────────────────────────────────────────────────
+      { url: `${base}/contact`,                 lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+
+      // ── Legal ───────────────────────────────────────────────────────────────
+      { url: `${base}/privacy-policy`,          lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${base}/terms-of-service`,        lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${base}/refund-policy`,           lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${base}/cookie-policy`,           lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${base}/gdpr`,                    lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${base}/dpa`,                     lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${base}/affiliate-disclosure`,    lastModified: now, changeFrequency: 'monthly', priority: 0.3 },
+    ] as MetadataRoute.Sitemap;
   }
 
   const baseUrl = `${siteProtocol}://${domain}`;
