@@ -71,14 +71,10 @@ export default function SettingsNotificationsPage() {
   }
 
   return (
-    <div className="px-4 lg:px-6 w-full max-w-full">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-neutral-100">Notifications</h1>
-      </div>
-
+    <div className="px-4 lg:px-6 w-full max-w-7xl mx-auto">
       <div className="space-y-5">
         <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
-          <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700">
+          <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700 bg-black">
             <Bell size={14} className="text-neutral-400" />
             <div>
               <h2 className="text-sm font-semibold text-neutral-100">Email Notifications</h2>
@@ -127,7 +123,7 @@ export default function SettingsNotificationsPage() {
                       value={email}
                       onChange={(e) => setNotifEmail(i, e.target.value)}
                       placeholder={`Recipient ${i + 1} email`}
-                      className="w-full bg-[#262626] border border-neutral-700 rounded-lg pl-8 pr-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
+                      className="w-full bg-black border border-neutral-700 rounded-lg pl-8 pr-3 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
                     />
                   </div>
                   {email && (

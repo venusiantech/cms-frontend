@@ -74,14 +74,10 @@ export default function SettingsGeneralPage() {
   }
 
   return (
-    <div className="px-4 lg:px-6 w-full max-w-full">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-neutral-100">General</h1>
-      </div>
-
+    <div className="px-4 lg:px-6 w-full max-w-7xl mx-auto">
       <div className="space-y-5">
         <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-700">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-700 bg-black">
             <div>
               <h2 className="text-sm font-semibold text-neutral-100">Account Information</h2>
               <p className="text-xs text-neutral-500 mt-0.5">Update your account information</p>
@@ -133,7 +129,7 @@ export default function SettingsGeneralPage() {
                   onChange={(e) => setFirstName(e.target.value)}
                   disabled={!isEditing}
                   placeholder={isEditing ? 'Enter first name' : '—'}
-                  className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                  className="w-full bg-black border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                 />
               </div>
               <div>
@@ -144,7 +140,7 @@ export default function SettingsGeneralPage() {
                   onChange={(e) => setLastName(e.target.value)}
                   disabled={!isEditing}
                   placeholder={isEditing ? 'Enter last name' : '—'}
-                  className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                  className="w-full bg-black border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                 />
               </div>
               <div>
@@ -154,7 +150,7 @@ export default function SettingsGeneralPage() {
                   value={dateOfBirth}
                   onChange={(e) => setDateOfBirth(e.target.value)}
                   disabled={!isEditing}
-                  className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default [color-scheme:dark]"
+                  className="w-full bg-black border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default [color-scheme:dark]"
                 />
               </div>
               <div>
@@ -165,7 +161,7 @@ export default function SettingsGeneralPage() {
                   onChange={(e) => setMobileNumber(e.target.value)}
                   disabled={!isEditing}
                   placeholder={isEditing ? '+1 234 567 8900' : '—'}
-                  className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
+                  className="w-full bg-black border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-neutral-500 transition-colors disabled:opacity-60 disabled:cursor-default"
                 />
               </div>
               <div className="sm:col-span-2">
@@ -174,7 +170,7 @@ export default function SettingsGeneralPage() {
                   type="email"
                   value={user?.email || ''}
                   readOnly
-                  className="w-full bg-[#262626] border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-400 cursor-default select-none focus:outline-none"
+                  className="w-full bg-black border border-neutral-700 rounded-lg px-3 py-2.5 text-sm text-neutral-400 cursor-default select-none focus:outline-none"
                 />
                 <p className="text-xs text-neutral-600 mt-1">Email cannot be changed</p>
               </div>

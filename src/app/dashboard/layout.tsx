@@ -124,7 +124,7 @@ export default function DashboardLayout({
               <Menu size={22} />
             </button>
             <div className="min-w-0">
-              <h1 className="text-xl font-bold text-white tracking-tight leading-none truncate">
+              <h1 className="text-xl text-white tracking-tight leading-none truncate">
                 {pageTitle}
               </h1>
               {/* {pageSubtitle && (

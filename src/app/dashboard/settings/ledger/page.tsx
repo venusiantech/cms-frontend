@@ -93,7 +93,7 @@ export default function LedgerPage() {
   const credits = entries.reduce((sum, e) => sum + e.amount, 0);
 
   return (
-    <div className="px-4 lg:px-6 space-y-4 pb-10">
+    <div className="px-4 lg:px-6 space-y-4 pb-10 w-full max-w-7xl mx-auto">
 
       {/* Summary strip */}
       <motion.div

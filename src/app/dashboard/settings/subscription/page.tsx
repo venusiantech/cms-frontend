@@ -97,107 +97,132 @@ export default function SettingsSubscriptionPage() {
     );
   }
 
-  return (
-    <div className="px-4 lg:px-6 w-full max-w-full">
-      <div className="mb-6">
-        <h1 className="text-xl text-neutral-100">Subscription</h1>
-      </div>
+  const planName = subscription?.plan?.name ?? '—';
+  const isFreePlan = (subscription?.plan?.price ?? 0) === 0 && !subscription?.plan?.isCustom;
+  const isCancelling = Boolean(subscription?.cancelAtPeriodEnd && subscription?.status === 'ACTIVE');
+  const periodEnd = subscription?.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null;
+  const endDate = periodEnd ? periodEnd.toLocaleDateString() : '—';
 
+  const statusLabel =
+    !subscription || subscription.status === 'none'
+      ? 'No plan'
+      : isCancelling
+        ? `Cancels ${endDate}`
+        : subscription.status === 'ACTIVE'
+          ? 'Active'
+          : subscription.status === 'PENDING_PAYMENT'
+            ? 'Pending payment'
+            : 'Cancelled';
+
+  const statusClasses =
+    !subscription || subscription.status === 'none'
+      ? 'bg-neutral-500/10 text-neutral-400 border border-neutral-500/20'
+      : isCancelling
+        ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
+        : subscription.status === 'ACTIVE'
+          ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+          : subscription.status === 'PENDING_PAYMENT'
+            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+            : 'bg-neutral-500/10 text-neutral-400 border border-neutral-500/20';
+
+  return (
+    <div className="px-4 lg:px-6 w-full max-w-7xl mx-auto">
       <div className="space-y-5">
-        <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl overflow-hidden">
-          <div className="flex items-center gap-2 px-6 py-4 border-b border-neutral-700">
-            <CreditCard size={14} className="text-neutral-400" />
-            <div>
-              <h2 className="text-sm text-neutral-100">Current Subscription</h2>
-              <p className="text-xs font-light text-neutral-500 mt-0.5">Your active plan and credits</p>
-            </div>
-          </div>
-          <div className="px-6 py-5">
-            {!subscription || subscription.status === 'none' ? (
-              <div className="flex items-center gap-3 text-neutral-400 text-sm">
-                <AlertCircle size={15} />
-                <span>No active subscription found.</span>
-              </div>
-            ) : (
-              (() => {
-                const isFreePlan = (subscription.plan?.price ?? 0) === 0 && !subscription.plan?.isCustom;
-                const isCancelling = subscription.cancelAtPeriodEnd && subscription.status === 'ACTIVE';
-                const endDate = subscription.currentPeriodEnd
-                  ? new Date(subscription.currentPeriodEnd).toLocaleDateString()
-                  : '—';
-                return (
-                  <div className={`grid gap-4 ${isFreePlan ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-4'}`}>
-                    <div>
-                      <p className="text-xs text-neutral-500 mb-1">Plan</p>
-                      <p className="text-sm font-semibold text-neutral-100">
-                        {subscription.plan?.name ?? '—'}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-neutral-500 mb-1">Credits Left</p>
-                      <p className="text-sm font-semibold text-neutral-100">
-                        {subscription.creditsRemaining ?? 0}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-neutral-500 mb-1">Status</p>
-                      <span
-                        className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
-                          isCancelling
-                            ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
-                            : subscription.status === 'ACTIVE'
-                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                            : subscription.status === 'PENDING_PAYMENT'
-                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                            : 'bg-neutral-500/10 text-neutral-400 border border-neutral-500/20'
-                        }`}
-                      >
-                        {isCancelling
-                          ? `Cancels ${endDate}`
-                          : subscription.status === 'ACTIVE'
-                          ? 'Active'
-                          : subscription.status === 'PENDING_PAYMENT'
-                          ? 'Pending Payment'
-                          : 'Cancelled'}
+        {/* Current plan (make it instantly obvious) */}
+        <div className="rounded-2xl border border-neutral-800 bg-[#0a0a0a] overflow-hidden">
+          <div className="relative px-6 py-5">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-violet-500/10 via-transparent to-transparent" />
+            <div className="relative flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center">
+                    <CreditCard size={16} className="text-neutral-300" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+                      Current plan
+                    </p>
+                    <div className="mt-1 flex items-center gap-2 flex-wrap">
+                      <h2 className="text-lg font-semibold text-neutral-100 leading-none">{planName}</h2>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${statusClasses}`}>
+                        {statusLabel}
                       </span>
                     </div>
-                    {!isFreePlan && (
-                      <div>
-                        <p className="text-xs text-neutral-500 mb-1">
-                          {isCancelling ? 'Ends On' : 'Renews'}
-                        </p>
-                        <p className="text-xs text-neutral-400 flex items-center gap-1">
-                          <Calendar size={11} />
-                          {endDate}
-                        </p>
-                      </div>
-                    )}
+                    <p className="text-xs text-neutral-500 mt-1">
+                      {subscription && subscription.status !== 'none'
+                        ? isFreePlan
+                          ? 'Free plan (one-time credits).'
+                          : 'Billing and usage overview.'
+                        : 'Choose a plan to get started.'}
+                    </p>
                   </div>
-                );
-              })()
-            )}
-            {subscription && subscription.status === 'ACTIVE' && subscription.stripeSubscriptionId && (
-              <div className="mt-4 pt-4 border-t border-neutral-800">
-                <button
-                  onClick={() => portalMutation.mutate()}
-                  disabled={portalMutation.isPending}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs transition-colors disabled:opacity-50 ${
-                    subscription.cancelAtPeriodEnd
-                      ? 'border-orange-500/40 text-orange-400 hover:bg-orange-500/10'
-                      : 'border-neutral-600 text-neutral-300 hover:bg-[#262626]'
-                  }`}
-                >
-                  {portalMutation.isPending ? (
-                    <Loader2 size={12} className="animate-spin" />
-                  ) : (
-                    <ExternalLink size={12} />
-                  )}
-                  {subscription.cancelAtPeriodEnd
-                    ? 'Reactivate / Manage Subscription'
-                    : 'Manage / Cancel Subscription'}
-                </button>
+                </div>
+
+                {subscription && subscription.status === 'ACTIVE' && subscription.stripeSubscriptionId && (
+                  <button
+                    onClick={() => portalMutation.mutate()}
+                    disabled={portalMutation.isPending}
+                    className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs transition-colors disabled:opacity-50 ${
+                      subscription.cancelAtPeriodEnd
+                        ? 'border-orange-500/40 text-orange-400 hover:bg-orange-500/10'
+                        : 'border-neutral-700 text-neutral-300 hover:bg-neutral-800/60'
+                    }`}
+                  >
+                    {portalMutation.isPending ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : (
+                      <ExternalLink size={12} />
+                    )}
+                    {subscription.cancelAtPeriodEnd ? 'Manage (reactivate)' : 'Manage plan'}
+                  </button>
+                )}
               </div>
-            )}
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
+                  <p className="text-[11px] text-neutral-500">Credits remaining</p>
+                  <p className="mt-1 text-lg font-semibold text-neutral-100">
+                    {subscription?.creditsRemaining ?? 0}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
+                  <p className="text-[11px] text-neutral-500">Price</p>
+                  <p className="mt-1 text-lg font-semibold text-neutral-100">
+                    {!subscription || subscription.status === 'none'
+                      ? '—'
+                      : (subscription.plan?.price ?? 0) === 0
+                        ? 'Free'
+                        : `$${subscription.plan?.price}`}
+                    {!subscription || subscription.status === 'none' || (subscription.plan?.price ?? 0) === 0 ? null : (
+                      <span className="ml-1 text-xs font-normal text-neutral-500">/mo</span>
+                    )}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
+                  <p className="text-[11px] text-neutral-500">Websites</p>
+                  <p className="mt-1 text-lg font-semibold text-neutral-100">
+                    {subscription?.plan?.maxWebsites ?? '—'}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
+                  <p className="text-[11px] text-neutral-500">{isCancelling ? 'Ends on' : 'Renews'}</p>
+                  <p className="mt-1 text-sm font-medium text-neutral-200 flex items-center gap-1.5">
+                    <Calendar size={13} className="text-neutral-600" />
+                    {endDate}
+                  </p>
+                </div>
+              </div>
+
+              {!subscription || subscription.status === 'none' ? (
+                <div className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
+                  <AlertCircle size={16} className="text-neutral-500" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-neutral-200">No active subscription</p>
+                    <p className="text-xs text-neutral-500">Pick a plan below to unlock more credits and websites.</p>
+                  </div>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
 
@@ -213,12 +238,14 @@ export default function SettingsSubscriptionPage() {
               return (
                 <div
                   key={plan.id}
-                  className={`relative bg-[#0a0a0a] border rounded-xl p-5 flex flex-col gap-3 transition-colors ${
-                    isCurrent ? 'border-white/30' : 'border-neutral-700 hover:border-neutral-600'
+                  className={`relative bg-[#0a0a0a] border rounded-2xl p-5 flex flex-col gap-3 transition-colors ${
+                    isCurrent
+                      ? 'border-violet-400/40 shadow-[0_0_0_1px_rgba(167,139,250,0.15)]'
+                      : 'border-neutral-800 hover:border-neutral-700'
                   }`}
                 >
                   {isCurrent && (
-                    <span className="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white text-black">
+                    <span className="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-400 text-black">
                       Current
                     </span>
                   )}
