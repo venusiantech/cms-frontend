@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, RefreshCw, Edit3, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, RefreshCw, Edit3, ChevronUp, ChevronDown, CalendarDays } from 'lucide-react';
 import GenerateContentModal from './GenerateContentModal';
+import ScheduleModal from './ScheduleModal';
 
 interface BlogsTabProps {
   blogs: any[];
@@ -28,6 +29,7 @@ export default function BlogsTab({
   onEditBlog 
 }: BlogsTabProps) {
   const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
 
   const handleGenerate = (type: string, quantity: number) => {
     generateMoreBlogsMutation.mutate({ 
@@ -42,29 +44,42 @@ export default function BlogsTab({
 
   return (
     <div className="space-y-6">
-      {/* Generate Content Button */}
+      {/* Generate + Schedule Content Buttons */}
       <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-neutral-100 mb-1">Generate More Content</h3>
-          <p className="text-sm font-light text-neutral-400">Add AI-generated blog posts to your site</p>
+          <h3 className="text-neutral-100 mb-1">Content</h3>
+          <p className="text-sm font-light text-neutral-400">Generate or schedule AI-powered blog posts</p>
         </div>
-        <button
-          onClick={() => setShowGenerateModal(true)}
-          disabled={generateMoreBlogsMutation.isPending}
-          className="w-full sm:w-auto px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
-        >
-          {generateMoreBlogsMutation.isPending ? (
-            <>
-              <RefreshCw size={16} className="animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Plus size={16} />
-              Generate Content
-            </>
+        <div className="flex w-full sm:w-auto gap-2">
+          {/* Schedule Content */}
+          {domain?.website?.id && (
+            <button
+              onClick={() => setShowScheduleModal(true)}
+              className="flex-1 sm:flex-none px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-100 border border-neutral-600 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm"
+            >
+              <CalendarDays size={16} />
+              Schedule
+            </button>
           )}
-        </button>
+          {/* Generate Content */}
+          <button
+            onClick={() => setShowGenerateModal(true)}
+            disabled={generateMoreBlogsMutation.isPending}
+            className="flex-1 sm:flex-none px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+          >
+            {generateMoreBlogsMutation.isPending ? (
+              <>
+                <RefreshCw size={16} className="animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Plus size={16} />
+                Generate
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Generate Content Modal */}
@@ -75,6 +90,15 @@ export default function BlogsTab({
         isGenerating={generateMoreBlogsMutation.isPending}
         domainId={domain.id}
       />
+
+      {/* Schedule Content Modal */}
+      {domain?.website?.id && (
+        <ScheduleModal
+          isOpen={showScheduleModal}
+          onClose={() => setShowScheduleModal(false)}
+          websiteId={domain.website.id}
+        />
+      )}
 
       {/* Blogs List */}
       <div>

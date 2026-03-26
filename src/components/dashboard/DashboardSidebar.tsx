@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Globe,
   Settings,
+  CalendarDays,
   ChevronRight,
   ArrowLeft,
   LogOut,
@@ -23,8 +24,9 @@ type MainNavItem = {
 };
 
 const MAIN_NAV: MainNavItem[] = [
-  { href: '/dashboard',         label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/domains', label: 'Domains',   icon: Globe },
+  { href: '/dashboard',          label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/domains',  label: 'Domains',   icon: Globe },
+  { href: '/dashboard/schedule', label: 'Schedule',  icon: CalendarDays },
   { href: '/dashboard/settings/general', label: 'Settings', icon: Settings, hasSubMenu: true },
 ];
 

@@ -14,6 +14,8 @@ import Link from 'next/link';
 function getPageMeta(pathname: string | null): { title: string; subtitle: string } {
   if (!pathname) return { title: 'Dashboard', subtitle: 'Your account at a glance' };
   if (pathname === '/dashboard') return { title: 'Dashboard', subtitle: 'Your account at a glance' };
+  if (pathname === '/dashboard/domains')  return { title: 'Domains',  subtitle: 'Manage your domains and websites' };
+  if (pathname === '/dashboard/schedule') return { title: 'Schedule', subtitle: 'Manage content generation schedules' };
   if (pathname === '/dashboard/domains') return { title: 'Domains', subtitle: 'Manage your domains and websites' };
   if (pathname.startsWith('/dashboard/settings/')) {
     const rest = pathname.replace('/dashboard/settings/', '') || 'general';

@@ -158,6 +158,34 @@ export const stripeAPI = {
   getCustomPlanRequests: () => api.get('/stripe/custom-plan-request'),
 };
 
+export const schedulesAPI = {
+  getAll: () =>
+    api.get<{ schedules: any[] }>('/schedules'),
+  getByWebsite: (websiteId: string) =>
+    api.get<{ schedules: any[] }>(`/schedules/${websiteId}`),
+  create: (data: {
+    websiteId: string;
+    frequency: 'DAILY' | 'WEEKLY' | 'MONTHLY';
+    timeType: 'SPECIFIC' | 'RANDOM';
+    specificTime?: string;
+    dayOfWeek?: number;
+    dayOfMonth?: number;
+    quantity?: number;
+    timezone?: string;
+  }) => api.post('/schedules', data),
+  update: (id: string, data: {
+    frequency?: 'DAILY' | 'WEEKLY' | 'MONTHLY';
+    timeType?: 'SPECIFIC' | 'RANDOM';
+    specificTime?: string;
+    dayOfWeek?: number;
+    dayOfMonth?: number;
+    quantity?: number;
+    timezone?: string;
+    isActive?: boolean;
+  }) => api.put(`/schedules/${id}`, data),
+  delete: (id: string) => api.delete(`/schedules/${id}`),
+};
+
 export const bulkUploadAPI = {
   uploadCsv: (file: File) => {
     const formData = new FormData();
