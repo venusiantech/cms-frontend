@@ -94,7 +94,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
       <div className="space-y-6">
         {/* Subdomain */}
         <div>
-          <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Subdomain</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Subdomain</p>
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-2 break-all">{getDisplaySubdomain(domain.website.subdomain)}</p>
             <a
@@ -110,7 +110,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
 
         {/* Custom Domain */}
         <div>
-          <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Custom Domain</p>
+          <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Custom Domain</p>
           <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
             <p className="font-mono text-sm text-neutral-100 mb-3 break-all">{domain.domainName}</p>
             
@@ -201,7 +201,7 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
                       <Rocket size={16} className={isDeploying ? 'animate-bounce' : ''} />
                       {isDeploying ? 'Deploying...' : 'Deploy DNS Records'}
                     </button>
-                    <p className="text-xs text-neutral-500 mt-2 text-center">
+                    <p className="text-xs text-neutral-400 mt-2 text-center">
                       Configures both {domain.domainName} and www.{domain.domainName}
                     </p>
                   </div>

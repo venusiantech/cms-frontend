@@ -54,7 +54,7 @@ export function GeneratingWebsiteAnimation({ progress, isCompleted }: { progress
               }`}
           >
             {!isCompleted && (
-              <p className="text-xs text-neutral-500">{progress}% {currentMessage}</p>
+              <p className="text-xs text-neutral-400">{progress}% {currentMessage}</p>
             )}
           </div>
         </div>

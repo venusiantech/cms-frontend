@@ -81,7 +81,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
           <>
             <div className="mb-4 sm:mb-5">
               <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-1">Generate Website</h2>
-              <p className="text-xs text-neutral-500">Step 1 of 2 — Choose your template</p>
+              <p className="text-xs text-neutral-400">Step 1 of 2 — Choose your template</p>
             </div>
 
             <div className="mb-4 sm:mb-5">
@@ -195,7 +195,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-light text-neutral-100 mb-1">Choose Your Articles</h2>
-                  <p className="text-xs text-neutral-500">Step 2 of 2 — Select exactly 3 topics to generate blogs for</p>
+                  <p className="text-xs text-neutral-400">Step 2 of 2 — Select exactly 3 topics to generate blogs for</p>
                 </div>
                 <button
                   type="button"
@@ -219,7 +219,7 @@ export function GenerateWebsiteModal({ domainId, onClose, onJobStarted, setGloba
                 {selectedTitles.size} / 3 selected
               </p>
               {selectedTitles.size > 0 && (
-                <button onClick={() => setSelectedTitles(new Set())} className="text-xs text-neutral-500 hover:text-neutral-300 transition-colors">
+                <button onClick={() => setSelectedTitles(new Set())} className="text-xs text-neutral-400 hover:text-neutral-300 transition-colors">
                   Clear all
                 </button>
               )}

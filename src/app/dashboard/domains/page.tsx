@@ -127,7 +127,7 @@ export default function DomainsPage() {
   }, [domains, queryClient]);
 
   return (
-    <div className="px-4 lg:px-6">
+    <div className="px-4 lg:px-6 max-w-7xl mx-auto">
       {isGlobalLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
@@ -140,13 +140,13 @@ export default function DomainsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="relative flex-1 max-w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-400" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search domains..."
-              className="w-full h-11 pl-9 bg-[#0a0a0a] border border-neutral-700 rounded-md text-sm text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600"
+              className="w-full h-11 pl-9 bg-[#0a0a0a] border border-neutral-700 rounded-md text-sm text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600"
               aria-label="Search domains"
             />
           </div>
@@ -205,14 +205,14 @@ export default function DomainsPage() {
                   onClick={() => { setShowDropdown(false); setShowAddDomain(true); }}
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-[#262626] transition-colors text-left"
                 >
-                  <Globe size={14} className="text-neutral-500 flex-shrink-0" />
+                  <Globe size={14} className="text-neutral-400 flex-shrink-0" />
                   Add a Domain
                 </button>
                 <button
                   onClick={() => { setShowDropdown(false); setShowCsvUpload(true); }}
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-neutral-200 hover:bg-[#262626] transition-colors text-left"
                 >
-                  <Upload size={14} className="text-neutral-500 flex-shrink-0" />
+                  <Upload size={14} className="text-neutral-400 flex-shrink-0" />
                   Upload CSV
                 </button>
               </div>
@@ -225,7 +225,7 @@ export default function DomainsPage() {
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="flex flex-col items-center gap-4">
             <CustomLoader />
-            <p className="text-sm text-neutral-500">Loading your domains...</p>
+            <p className="text-sm text-neutral-400">Loading your domains...</p>
           </div>
         </div>
       ) : domains && domains.length > 0 ? (
@@ -249,7 +249,7 @@ export default function DomainsPage() {
       ) : (
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-20 h-20 bg-[#262626] rounded-2xl flex items-center justify-center mb-6 border border-neutral-700">
-            <Globe size={36} className="text-neutral-500" />
+            <Globe size={36} className="text-neutral-400" />
           </div>
           <h3 className="text-2xl font-light text-neutral-100 mb-2">No domains yet</h3>
           <p className="text-neutral-400 mb-8 text-center max-w-md text-sm">

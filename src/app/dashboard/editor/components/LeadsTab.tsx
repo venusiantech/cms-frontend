@@ -52,7 +52,7 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
           <div className="flex justify-center mb-3">
             <CustomLoader />
           </div>
-          <p className="text-sm text-neutral-500">Loading leads...</p>
+          <p className="text-sm text-neutral-400">Loading leads...</p>
         </div>
       ) : leads && leads.length > 0 ? (
         <div className="space-y-3">
@@ -63,10 +63,10 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
                   <h4 className="font-medium text-neutral-100">{lead.name}</h4>
                   <p className="text-sm text-neutral-400 break-all">{lead.email}</p>
                   {lead.company && (
-                    <p className="text-xs text-neutral-500 mt-1">{lead.company}</p>
+                    <p className="text-xs text-neutral-400 mt-1">{lead.company}</p>
                   )}
                 </div>
-                <span className="text-xs text-neutral-500 whitespace-nowrap">
+                <span className="text-xs text-neutral-400 whitespace-nowrap">
                   {new Date(lead.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -83,7 +83,7 @@ export default function LeadsTab({ domain }: LeadsTabProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 text-neutral-500">
+        <div className="text-center py-12 text-neutral-400">
           <Mail size={48} className="mx-auto text-neutral-600 mb-3" />
           <p>No leads yet</p>
           <p className="text-sm mt-1">Contacts will appear here when visitors submit the form</p>

@@ -139,17 +139,17 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
 
         <div className="mb-4 sm:mb-6">
           <label className="block text-xs sm:text-sm font-semibold text-neutral-300 mb-2">
-            Describe your domain <span className="text-neutral-500 font-normal">(Optional)</span>
+            Describe your domain <span className="text-neutral-400 font-normal">(Optional)</span>
           </label>
           <textarea
             value={userDescription}
             onChange={(e) => setUserDescription(e.target.value)}
             placeholder="E.g., A blog about chocolate recipes and baking tips..."
-            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#262626] border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-500 transition-colors"
+            className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-[#262626] border border-neutral-700 rounded-lg focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 resize-none text-xs sm:text-sm text-neutral-100 placeholder:text-neutral-400 transition-colors"
             rows={3}
             maxLength={500}
           />
-          <p className="text-xs text-neutral-500 mt-1.5">{userDescription.length}/500 characters</p>
+          <p className="text-xs text-neutral-400 mt-1.5">{userDescription.length}/500 characters</p>
         </div>
 
         {hasMeanings && (
@@ -169,7 +169,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
                       className={`peer px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border transition-all duration-200 text-[10px] sm:text-xs font-bold whitespace-nowrap uppercase ${isSelected
                         ? 'bg-white border-white text-black scale-105'
                         : isDisabled
-                          ? 'bg-[#262626] border-neutral-700 text-neutral-500 cursor-not-allowed opacity-50'
+                          ? 'bg-[#262626] border-neutral-700 text-neutral-400 cursor-not-allowed opacity-50'
                           : 'bg-[#262626] border-neutral-700 text-neutral-300 hover:border-neutral-600 hover:scale-105'
                         }`}
                     >
@@ -206,7 +206,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
             </div>
             {selectedMeanings.length > 0 && (
               <div className="mt-2 sm:mt-3">
-                <p className="text-[10px] sm:text-xs font-light text-neutral-500 mb-1.5 sm:mb-2">Selected contexts:</p>
+                <p className="text-[10px] sm:text-xs font-light text-neutral-400 mb-1.5 sm:mb-2">Selected contexts:</p>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {selectedMeanings.map(({ key, context }) => (
                     <div
@@ -229,7 +229,7 @@ export function SynonymSelectionModal({ domainId, onClose, onSuccess, setGlobalL
           </div>
         )}
 
-        <div className="text-[10px] sm:text-xs text-center text-neutral-500 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-[#262626]/30">
+        <div className="text-[10px] sm:text-xs text-center text-neutral-400 border border-neutral-700 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 bg-[#262626]/30">
           💡 This context helps AI generate more relevant and personalized content for your website
         </div>
 

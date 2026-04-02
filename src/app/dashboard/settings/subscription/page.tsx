@@ -139,7 +139,7 @@ export default function SettingsSubscriptionPage() {
                     <CreditCard size={16} className="text-neutral-300" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
                       Current plan
                     </p>
                     <div className="mt-1 flex items-center gap-2 flex-wrap">
@@ -148,7 +148,7 @@ export default function SettingsSubscriptionPage() {
                         {statusLabel}
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-500 mt-1">
+                    <p className="text-xs text-neutral-400 mt-1">
                       {subscription && subscription.status !== 'none'
                         ? isFreePlan
                           ? 'Free plan (one-time credits).'
@@ -180,13 +180,13 @@ export default function SettingsSubscriptionPage() {
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
-                  <p className="text-[11px] text-neutral-500">Credits remaining</p>
+                  <p className="text-[11px] text-neutral-400">Credits remaining</p>
                   <p className="mt-1 text-lg font-semibold text-neutral-100">
                     {subscription?.creditsRemaining ?? 0}
                   </p>
                 </div>
                 <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
-                  <p className="text-[11px] text-neutral-500">Price</p>
+                  <p className="text-[11px] text-neutral-400">Price</p>
                   <p className="mt-1 text-lg font-semibold text-neutral-100">
                     {!subscription || subscription.status === 'none'
                       ? '—'
@@ -194,18 +194,18 @@ export default function SettingsSubscriptionPage() {
                         ? 'Free'
                         : `$${subscription.plan?.price}`}
                     {!subscription || subscription.status === 'none' || (subscription.plan?.price ?? 0) === 0 ? null : (
-                      <span className="ml-1 text-xs font-normal text-neutral-500">/mo</span>
+                      <span className="ml-1 text-xs font-normal text-neutral-400">/mo</span>
                     )}
                   </p>
                 </div>
                 <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
-                  <p className="text-[11px] text-neutral-500">Websites</p>
+                  <p className="text-[11px] text-neutral-400">Websites</p>
                   <p className="mt-1 text-lg font-semibold text-neutral-100">
                     {subscription?.plan?.maxWebsites ?? '—'}
                   </p>
                 </div>
                 <div className="rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
-                  <p className="text-[11px] text-neutral-500">{isCancelling ? 'Ends on' : 'Renews'}</p>
+                  <p className="text-[11px] text-neutral-400">{isCancelling ? 'Ends on' : 'Renews'}</p>
                   <p className="mt-1 text-sm font-medium text-neutral-200 flex items-center gap-1.5">
                     <Calendar size={13} className="text-neutral-600" />
                     {endDate}
@@ -215,10 +215,10 @@ export default function SettingsSubscriptionPage() {
 
               {!subscription || subscription.status === 'none' ? (
                 <div className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-black/30 px-4 py-3">
-                  <AlertCircle size={16} className="text-neutral-500" />
+                  <AlertCircle size={16} className="text-neutral-400" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-neutral-200">No active subscription</p>
-                    <p className="text-xs text-neutral-500">Pick a plan below to unlock more credits and websites.</p>
+                    <p className="text-xs text-neutral-400">Pick a plan below to unlock more credits and websites.</p>
                   </div>
                 </div>
               ) : null}
@@ -254,18 +254,18 @@ export default function SettingsSubscriptionPage() {
                     <p className="text-2xl font-bold text-neutral-100 mt-1">
                       {plan.price === 0 ? 'Free' : `$${plan.price}`}
                       {plan.price > 0 && (
-                        <span className="text-xs text-neutral-500 font-normal ml-1">/mo</span>
+                        <span className="text-xs text-neutral-400 font-normal ml-1">/mo</span>
                       )}
                     </p>
                   </div>
                   <ul className="space-y-1.5 flex-1">
                     <li className="flex items-center gap-2 text-xs text-neutral-400">
-                      <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                      <Zap size={11} className="text-neutral-400 flex-shrink-0" />
                       {plan.creditsPerMonth} credits
                       {isFreePlan ? ' (one-time)' : ' / month'}
                     </li>
                     <li className="flex items-center gap-2 text-xs text-neutral-400">
-                      <Zap size={11} className="text-neutral-500 flex-shrink-0" />
+                      <Zap size={11} className="text-neutral-400 flex-shrink-0" />
                       Up to {plan.maxWebsites} website{plan.maxWebsites !== 1 ? 's' : ''}
                     </li>
                   </ul>
@@ -274,11 +274,11 @@ export default function SettingsSubscriptionPage() {
                     onClick={() => subscribeMutation.mutate(plan.id)}
                     className={`w-full py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
                       isCurrent
-                        ? 'bg-[#262626] text-neutral-500 cursor-default'
+                        ? 'bg-[#262626] text-neutral-400 cursor-default'
                         : !plan.stripePriceId
-                        ? 'bg-[#262626] text-neutral-500 cursor-not-allowed'
+                        ? 'bg-[#262626] text-neutral-400 cursor-not-allowed'
                         : subscribeMutation.isPending && !isThisPending
-                        ? 'bg-[#262626] text-neutral-500 cursor-not-allowed'
+                        ? 'bg-[#262626] text-neutral-400 cursor-not-allowed'
                         : 'bg-white hover:bg-neutral-200 text-black'
                     }`}
                   >
@@ -318,7 +318,7 @@ export default function SettingsSubscriptionPage() {
                     <p className="text-2xl font-bold text-neutral-100 mt-1">
                       {isCurrentCustom ? subscription?.plan?.name ?? 'Custom' : 'Custom'}
                       {!isCurrentCustom && (
-                        <span className="text-xs text-neutral-500 font-normal ml-1">pricing</span>
+                        <span className="text-xs text-neutral-400 font-normal ml-1">pricing</span>
                       )}
                     </p>
                   </div>
@@ -327,7 +327,7 @@ export default function SettingsSubscriptionPage() {
                       <Zap
                         size={11}
                         className={
-                          isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-500 flex-shrink-0'
+                          isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-400 flex-shrink-0'
                         }
                       />
                       {isCurrentCustom
@@ -338,7 +338,7 @@ export default function SettingsSubscriptionPage() {
                       <Zap
                         size={11}
                         className={
-                          isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-500 flex-shrink-0'
+                          isCurrentCustom ? 'text-purple-400 flex-shrink-0' : 'text-neutral-400 flex-shrink-0'
                         }
                       />
                       {isCurrentCustom
@@ -379,7 +379,7 @@ export default function SettingsSubscriptionPage() {
                   setShowCustomModal(false);
                   setCustomMessage('');
                 }}
-                className="text-neutral-500 hover:text-neutral-300 transition-colors"
+                className="text-neutral-400 hover:text-neutral-300 transition-colors"
               >
                 <X size={16} />
               </button>
@@ -391,7 +391,7 @@ export default function SettingsSubscriptionPage() {
                 tailored quote.
               </p>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1.5">Your requirements</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">Your requirements</label>
                 <textarea
                   rows={5}
                   value={customMessage}

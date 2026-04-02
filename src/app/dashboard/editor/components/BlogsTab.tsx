@@ -143,7 +143,7 @@ export default function BlogsTab({
                           HERO
                         </span>
                       )}
-                      <span className="text-xs text-neutral-500">Blog #{index + 1}</span>
+                      <span className="text-xs text-neutral-400">Blog #{index + 1}</span>
                     </div>
                     <h4 className="text-neutral-100 mb-1 line-clamp-2">
                       {blog.title}
@@ -169,7 +169,7 @@ export default function BlogsTab({
           ))}
 
           {blogs.length === 0 && (
-            <div className="text-center py-12 text-neutral-500">
+            <div className="text-center py-12 text-neutral-400">
               <p>No blogs yet. Generate your first blogs!</p>
             </div>
           )}

@@ -113,11 +113,11 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-neutral-800">
           <div>
             <h2 className="text-xl font-light text-neutral-100">Upload CSV</h2>
-            <p className="text-xs text-neutral-500 mt-0.5">Bulk import domains from a CSV file</p>
+            <p className="text-xs text-neutral-400 mt-0.5">Bulk import domains from a CSV file</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-neutral-500 hover:text-neutral-200 hover:bg-[#262626] rounded-md transition-colors"
+            className="p-1.5 text-neutral-400 hover:text-neutral-200 hover:bg-[#262626] rounded-md transition-colors"
           >
             <X size={16} />
           </button>
@@ -206,7 +206,7 @@ export function CsvUploadModal({ onClose, onSuccess }: CsvUploadModalProps) {
                 </div>
                 <div className="text-center">
                   <p className="text-sm font-medium text-neutral-200">{selectedFile.name}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-neutral-400 mt-0.5">
                     {(selectedFile.size / 1024).toFixed(1)} KB — click to change
                   </p>
                 </div>

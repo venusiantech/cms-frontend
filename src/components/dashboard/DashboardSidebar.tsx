@@ -70,7 +70,7 @@ function NavLink({
       } ${
         active
           ? 'text-white'
-          : 'text-neutral-500 hover:text-neutral-200'
+          : 'text-neutral-400 hover:text-neutral-200'
       }`}
     >
       {/* Animated background */}
@@ -104,7 +104,7 @@ function NavLink({
       {hasSubMenu && (
         <ChevronRight
           size={14}
-          className={`relative flex-shrink-0 transition-all ${active ? 'text-neutral-400' : 'text-neutral-700 group-hover:text-neutral-500'}`}
+          className={`relative flex-shrink-0 transition-all ${active ? 'text-neutral-400' : 'text-neutral-700 group-hover:text-neutral-400'}`}
         />
       )}
     </Link>
@@ -129,7 +129,7 @@ function SubNavLink({
       href={href}
       onClick={onClick}
       className={`relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors group ${
-        active ? 'text-white' : 'text-neutral-500 hover:text-neutral-200'
+        active ? 'text-white' : 'text-neutral-400 hover:text-neutral-200'
       }`}
     >
       {active && (
@@ -209,7 +209,7 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
               <Link
                 href="/dashboard"
                 onClick={closeSidebar}
-                className="flex items-center gap-2 px-3 py-2 mb-3 rounded-lg text-xs text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/60 transition-colors group"
+                className="flex items-center gap-2 px-3 py-2 mb-3 rounded-lg text-xs text-neutral-400 hover:text-neutral-300 hover:bg-neutral-800/60 transition-colors group"
               >
                 <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
                 Back to Dashboard
@@ -280,7 +280,7 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
         <button
           type="button"
           onClick={() => { logout(); window.location.href = '/login'; }}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-neutral-500 hover:text-red-400 hover:bg-red-500/8 transition-colors group"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-neutral-400 hover:text-red-400 hover:bg-red-500/8 transition-colors group"
         >
           <LogOut size={15} className="flex-shrink-0 transition-colors" />
           <span className="font-medium">Log out</span>
@@ -309,7 +309,7 @@ export function DashboardSidebar({ open = false, onClose }: DashboardSidebarProp
       {/* Sidebar */}
       <aside
         className={`
-          w-60 flex-shrink-0 h-screen bg-[#050505] border-r border-neutral-800/60
+          w-60 flex-shrink-0 h-screen bg-[#000000] border-r border-neutral-800/60
           md:relative md:translate-x-0
           fixed inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-out
           ${open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}

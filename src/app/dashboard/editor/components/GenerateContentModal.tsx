@@ -138,7 +138,7 @@ export default function GenerateContentModal({
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold text-neutral-100">Generate Content</h2>
-                    <p className="text-sm text-neutral-500 mt-0.5">Powered by AI</p>
+                    <p className="text-sm text-neutral-400 mt-0.5">Powered by AI</p>
                   </div>
                 </div>
                 <button
@@ -166,11 +166,11 @@ export default function GenerateContentModal({
                         value={userDescription}
                         onChange={(e) => setUserDescription(e.target.value)}
                         placeholder="Describe what your domain is about..."
-                        className="w-full px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 resize-none text-sm"
+                        className="w-full px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 resize-none text-sm"
                         rows={5}
                         maxLength={500}
                       />
-                      <p className="text-xs text-neutral-500 mt-2">
+                      <p className="text-xs text-neutral-400 mt-2">
                         {userDescription.length}/500 characters
                       </p>
                     </div>
@@ -187,7 +187,7 @@ export default function GenerateContentModal({
                           onChange={(e) => setKeywords(e.target.value)}
                           onKeyDown={handleKeyDown}
                           placeholder="Add keywords..."
-                          className="flex-1 px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all placeholder:text-neutral-500"
+                          className="flex-1 px-4 py-3 bg-[#262626] border-2 border-neutral-600 rounded-xl text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-neutral-500 transition-all placeholder:text-neutral-400"
                         />
                         <button
                           onClick={handleAddKeyword}
@@ -197,7 +197,7 @@ export default function GenerateContentModal({
                           Add
                         </button>
                       </div>
-                      <p className="text-xs text-neutral-500 mt-2">
+                      <p className="text-xs text-neutral-400 mt-2">
                         Press Enter or click Add to save keywords
                       </p>
                       
@@ -269,7 +269,7 @@ export default function GenerateContentModal({
                           </div>
                           <div>
                             <div className="font-semibold text-neutral-100">Blog Posts</div>
-                            <div className="text-xs text-neutral-500">AI-generated articles with images</div>
+                            <div className="text-xs text-neutral-400">AI-generated articles with images</div>
                           </div>
                         </div>
                         <input

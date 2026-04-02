@@ -208,7 +208,7 @@ function MonthView({ cursor, dir, eventMap }: { cursor: Date; dir: number; event
       {/* Weekday row */}
       <div className="grid grid-cols-7 border-b border-neutral-800">
         {WEEKDAYS_SHORT.map(d => (
-          <div key={d} className="py-3 text-center text-xs font-semibold text-neutral-500 uppercase tracking-wider border-r border-neutral-800 last:border-r-0">{d}</div>
+          <div key={d} className="py-3 text-center text-xs font-semibold text-neutral-400 uppercase tracking-wider border-r border-neutral-800 last:border-r-0">{d}</div>
         ))}
       </div>
 
@@ -282,7 +282,7 @@ function WeekView({ cursor, dir, eventMap }: { cursor: Date; dir: number; eventM
           const tod = isToday(d);
           return (
             <div key={i} className="py-3 flex flex-col items-center border-r border-neutral-800 last:border-r-0">
-              <span className="text-[10px] font-semibold text-neutral-500 uppercase tracking-wider mb-1">
+              <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider mb-1">
                 {WEEKDAYS_SHORT[i]}
               </span>
               <span className={`w-8 h-8 flex items-center justify-center text-sm font-bold rounded-full transition-all ${
@@ -366,7 +366,7 @@ function DayView({ cursor, dir, eventMap }: { cursor: Date; dir: number; eventMa
           <p className="text-sm font-bold text-white">
             {cursor.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </p>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-neutral-400">
             {events.length === 0 ? 'No scheduled generations' : `${events.length} scheduled generation${events.length !== 1 ? 's' : ''}`}
           </p>
         </div>
@@ -451,9 +451,9 @@ function ScheduleRow({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
           <span className="text-sm font-semibold text-white">{FREQ_LABEL[schedule.frequency]} · {schedule.domainName}</span>
-          {!schedule.isActive && <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-neutral-800 text-neutral-500 border border-neutral-700">Paused</span>}
+          {!schedule.isActive && <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded bg-neutral-800 text-neutral-400 border border-neutral-700">Paused</span>}
         </div>
-        <div className="text-xs text-neutral-500 flex items-center gap-1.5"><CalendarDays size={10} />{scheduleDesc(schedule)}</div>
+        <div className="text-xs text-neutral-400 flex items-center gap-1.5"><CalendarDays size={10} />{scheduleDesc(schedule)}</div>
         <div className="text-xs text-neutral-600 flex items-center gap-1.5 mt-0.5"><Repeat size={10} />Next: {schedule.nextRunAt ? fmtDateFull(schedule.nextRunAt, schedule.timezone) : '—'}</div>
       </div>
       <Link href={`/dashboard/editor/${schedule.websiteId}`}
@@ -607,7 +607,7 @@ export default function SchedulePage() {
                   key={opt.id}
                   onClick={() => switchView(opt.id)}
                   className={`relative px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                    view === opt.id ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
+                    view === opt.id ? 'text-white' : 'text-neutral-400 hover:text-neutral-300'
                   }`}
                 >
                   {view === opt.id && (
@@ -650,14 +650,14 @@ export default function SchedulePage() {
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
           <div>
             <h2 className="text-base font-bold text-white">All Schedules</h2>
-            <p className="text-xs text-neutral-500 mt-0.5">{schedules.length} total · {activeCount} active</p>
+            <p className="text-xs text-neutral-400 mt-0.5">{schedules.length} total · {activeCount} active</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-3">
               {(['DAILY','WEEKLY','MONTHLY'] as Frequency[]).map(f => (
                 <div key={f} className="flex items-center gap-1.5">
                   <span className={`w-2 h-2 rounded-full ${FREQ_COLOR[f].dot}`} />
-                  <span className="text-xs text-neutral-500">{FREQ_LABEL[f]}</span>
+                  <span className="text-xs text-neutral-400">{FREQ_LABEL[f]}</span>
                 </div>
               ))}
             </div>

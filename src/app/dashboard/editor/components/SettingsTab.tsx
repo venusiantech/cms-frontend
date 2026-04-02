@@ -293,7 +293,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   {isUploadingLogo ? (
                     <>
                       <Loader2 size={32} className="animate-spin text-neutral-400" />
-                      <p className="text-sm text-neutral-500">Uploading...</p>
+                      <p className="text-sm text-neutral-400">Uploading...</p>
                     </>
                   ) : (
                     <>
@@ -302,7 +302,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                       </div>
                       <div className="text-center">
                         <p className="text-sm font-medium text-neutral-300">Click to upload logo</p>
-                        <p className="text-xs text-neutral-500 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
+                        <p className="text-xs text-neutral-400 mt-1">PNG, JPG, SVG or WebP — max 5 MB</p>
                       </div>
                     </>
                   )}
@@ -351,7 +351,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                       />
                       <div>
                         <p className="text-sm font-light text-neutral-100">{opt.label}</p>
-                        <p className="text-xs font-light text-neutral-500">{opt.desc}</p>
+                        <p className="text-xs font-light text-neutral-400">{opt.desc}</p>
                       </div>
                     </label>
                   ))}
@@ -661,7 +661,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
                     placeholder="contact@example.com"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                 </div>
 
@@ -676,7 +676,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
                     placeholder="+1 (555) 123-4567"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                 </div>
               </div>
@@ -737,7 +737,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={instagramUrl}
                   onChange={(e) => setInstagramUrl(e.target.value)}
                   placeholder="https://instagram.com/yourprofile"
-                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -752,7 +752,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={facebookUrl}
                   onChange={(e) => setFacebookUrl(e.target.value)}
                   placeholder="https://facebook.com/yourpage"
-                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -767,7 +767,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   value={twitterUrl}
                   onChange={(e) => setTwitterUrl(e.target.value)}
                   placeholder="https://twitter.com/yourhandle"
-                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                  className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                 />
               </div>
 
@@ -810,14 +810,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaTitle}
                     onChange={(e) => setMetaTitle(e.target.value)}
                     placeholder={`${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)} - Your Source for Quality Content`}
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                   <div className="flex items-center justify-between mt-1.5">
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-neutral-400">
                       Appears in search results and browser tabs (50-60 characters recommended)
                     </p>
                     <span className={`text-xs  ${
-                      metaTitle.length > 60 ? 'text-red-600' : 'text-neutral-500'
+                      metaTitle.length > 60 ? 'text-red-600' : 'text-neutral-400'
                     }`}>
                       {metaTitle.length}/60
                     </span>
@@ -834,14 +834,14 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     onChange={(e) => setMetaDescription(e.target.value)}
                     placeholder="Discover amazing content. Your trusted source for news, insights, and updates."
                     rows={3}
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
                   <div className="flex items-center justify-between mt-1.5">
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-neutral-400">
                       Brief description shown in search results and social media
                     </p>
                     <span className={`text-xs  ${
-                      metaDescription.length > 160 ? 'text-red-600' : 'text-neutral-500'
+                      metaDescription.length > 160 ? 'text-red-600' : 'text-neutral-400'
                     }`}>
                       {metaDescription.length}/160
                     </span>
@@ -858,9 +858,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaImage}
                     onChange={(e) => setMetaImage(e.target.value)}
                     placeholder="https://example.com/image.jpg"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-neutral-500 mt-1.5">
+                  <p className="text-xs text-neutral-400 mt-1.5">
                     Image shown in social media previews (1200x630px recommended for best results)
                   </p>
                 </div>
@@ -875,9 +875,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaKeywords}
                     onChange={(e) => setMetaKeywords(e.target.value)}
                     placeholder="keyword1, keyword2, keyword3"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-neutral-500 mt-1.5">
+                  <p className="text-xs text-neutral-400 mt-1.5">
                     Comma-separated keywords that describe your website content (helps with SEO)
                   </p>
                 </div>
@@ -892,9 +892,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={metaAuthor}
                     onChange={(e) => setMetaAuthor(e.target.value)}
                     placeholder="Your Name or Company Name"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm"
                   />
-                  <p className="text-xs text-neutral-500 mt-1.5">
+                  <p className="text-xs text-neutral-400 mt-1.5">
                     Website owner or author name (appears in search results and metadata)
                   </p>
                 </div>
@@ -915,7 +915,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                         />
                       )}
                       <div className="p-4">
-                        <p className="text-xs text-neutral-500 mb-1">{domain.domainName}</p>
+                        <p className="text-xs text-neutral-400 mb-1">{domain.domainName}</p>
                         <h4 className="font-medium text-neutral-100 mb-1 line-clamp-2">
                           {metaTitle || `${domain.domainName.split('.')[0].charAt(0).toUpperCase() + domain.domainName.split('.')[0].slice(1)}`}
                         </h4>
@@ -1000,9 +1000,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     value={googleAnalyticsId}
                     onChange={(e) => setGoogleAnalyticsId(e.target.value)}
                     placeholder="G-XXXXXXXXXX"
-                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm font-mono"
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:border-transparent text-sm font-mono"
                   />
-                  <p className="text-xs text-neutral-500 mt-1.5">
+                  <p className="text-xs text-neutral-400 mt-1.5">
                     Enter your Google Analytics 4 (GA4) measurement ID (format: G-XXXXXXXXXX)
                   </p>
                 </div>

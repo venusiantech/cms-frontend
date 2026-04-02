@@ -152,11 +152,11 @@ function LiveCalendar({ form }: { form: FormState }) {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
-        <button onClick={prev} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/8 text-neutral-500 hover:text-white transition-colors">
+        <button onClick={prev} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/8 text-neutral-400 hover:text-white transition-colors">
           <ChevronLeft size={14} />
         </button>
         <span className="text-sm font-bold text-white">{MONTH_NAMES[mo]} {yr}</span>
-        <button onClick={next} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/8 text-neutral-500 hover:text-white transition-colors">
+        <button onClick={next} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/8 text-neutral-400 hover:text-white transition-colors">
           <ChevronRight size={14} />
         </button>
       </div>
@@ -181,7 +181,7 @@ function LiveCalendar({ form }: { form: FormState }) {
                 relative w-7 h-7 flex items-center justify-center rounded-full text-xs font-semibold transition-all
                 ${scheduled ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/60' : ''}
                 ${tod && !scheduled ? 'ring-2 ring-indigo-400/70 text-indigo-300' : ''}
-                ${!scheduled && !tod ? 'text-neutral-500 hover:text-neutral-300' : ''}
+                ${!scheduled && !tod ? 'text-neutral-400 hover:text-neutral-300' : ''}
               `}>
                 {day}
                 {scheduled && (
@@ -229,7 +229,7 @@ function CalendarPicker({ form, set }: { form: FormState; set: (p: Partial<FormS
             return (
               <button key={f} onClick={() => set({ frequency: f })}
                 className={`relative flex-1 py-2 rounded-lg text-xs font-semibold transition-all overflow-hidden ${
-                  active ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
+                  active ? 'text-white' : 'text-neutral-400 hover:text-neutral-300'
                 }`}
               >
                 {active && (
@@ -276,7 +276,7 @@ function CalendarPicker({ form, set }: { form: FormState; set: (p: Partial<FormS
                     className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all overflow-hidden ${
                       form.dayOfWeek === i
                         ? 'text-white'
-                        : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/4'
+                        : 'text-neutral-400 hover:text-neutral-300 hover:bg-white/4'
                     }`}
                   >
                     {form.dayOfWeek === i && (
@@ -286,7 +286,7 @@ function CalendarPicker({ form, set }: { form: FormState; set: (p: Partial<FormS
                       />
                     )}
                     <span className={`relative z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                      form.dayOfWeek === i ? 'bg-indigo-600 text-white' : 'bg-white/6 text-neutral-500'
+                      form.dayOfWeek === i ? 'bg-indigo-600 text-white' : 'bg-white/6 text-neutral-400'
                     }`}>
                       {d.charAt(0)}
                     </span>
@@ -320,7 +320,7 @@ function CalendarPicker({ form, set }: { form: FormState; set: (p: Partial<FormS
                     className={`h-8 flex items-center justify-center rounded-lg text-xs font-semibold transition-all ${
                       form.dayOfMonth === d
                         ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-900/50'
-                        : 'text-neutral-500 hover:bg-white/6 hover:text-neutral-200'
+                        : 'text-neutral-400 hover:bg-white/6 hover:text-neutral-200'
                     }`}>{d}</button>
                 ))}
               </div>
@@ -508,7 +508,7 @@ function ScheduleRow({
             <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-full bg-neutral-800 text-neutral-600 border border-neutral-700">Paused</span>
           )}
         </div>
-        <p className="text-xs text-neutral-500 truncate flex items-center gap-1.5">
+        <p className="text-xs text-neutral-400 truncate flex items-center gap-1.5">
           <CalendarDays size={10} className="flex-shrink-0" />
           {scheduleSubtitle(schedule)} · {schedule.quantity} blog{schedule.quantity !== 1 ? 's' : ''}
         </p>

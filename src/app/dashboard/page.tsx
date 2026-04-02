@@ -76,7 +76,7 @@ function SplitNumber({ value }: { value: number }) {
   return (
     <span className="inline-flex items-end leading-none">
       <motion.span>{intPart}</motion.span>
-      <motion.span className="text-2xl font-bold text-neutral-500 mb-0.5">{decPart}</motion.span>
+      <motion.span className="text-2xl font-bold text-neutral-400 mb-0.5">{decPart}</motion.span>
     </span>
   );
 }
@@ -162,7 +162,7 @@ function StatCard({
             </div>
             <p className="text-sm font-semibold text-white whitespace-nowrap">{label}</p>
             {sub && (
-              <span className="text-[9px] text-neutral-500 font-medium tracking-widest uppercase">{sub}</span>
+              <span className="text-[9px] text-neutral-400 font-medium tracking-widest uppercase">{sub}</span>
             )}
           </div>
 
@@ -196,7 +196,7 @@ function StatCard({
         <p className="text-[28px] font-bold text-white tabular-nums leading-none mb-1.5">
           <AnimatedNumber value={value} />
         </p>
-        <p className="text-xs text-neutral-500">{label}</p>
+        <p className="text-xs text-neutral-400">{label}</p>
       </GlowCard>
     </motion.div>
   );
@@ -402,7 +402,7 @@ export default function DashboardPage() {
       <div className="px-4 lg:px-6 flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-3">
           <AlertCircle size={24} className="text-neutral-700" />
-          <p className="text-sm text-neutral-500">Failed to load dashboard</p>
+          <p className="text-sm text-neutral-400">Failed to load dashboard</p>
         </div>
       </div>
     );
@@ -508,7 +508,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="mt-2 flex items-baseline gap-1.5">
                     <span className="text-2xl font-bold text-white tabular-nums">{subscription.creditsRemaining.toLocaleString()}</span>
-                    <span className="text-xs text-neutral-500">credits remaining</span>
+                    <span className="text-xs text-neutral-400">credits remaining</span>
                   </div>
                 </div>
 
@@ -534,7 +534,7 @@ export default function DashboardPage() {
                       <span className="text-2xl font-bold text-white tabular-nums">
                         {Math.max(0, subscription.maxWebsites - subscription.websitesUsed)}
                       </span>
-                      <span className="text-xs text-neutral-500">websites remaining</span>
+                      <span className="text-xs text-neutral-400">websites remaining</span>
                     </div>
                   </div>
                 ) : (
@@ -543,7 +543,7 @@ export default function DashboardPage() {
                       <Sparkles size={16} className="text-violet-400" />
                     </div>
                     <div>
-                      <p className="text-xs text-neutral-500 mb-0.5">Custom Plan</p>
+                      <p className="text-xs text-neutral-400 mb-0.5">Custom Plan</p>
                       <p className="text-sm font-semibold text-white">Unlimited websites</p>
                     </div>
                   </div>

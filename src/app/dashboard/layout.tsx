@@ -130,7 +130,7 @@ export default function DashboardLayout({
                 {pageTitle}
               </h1>
               {/* {pageSubtitle && (
-                <p className="text-xs text-neutral-500 mt-0.5 truncate">{pageSubtitle}</p>
+                <p className="text-xs text-neutral-400 mt-0.5 truncate">{pageSubtitle}</p>
               )} */}
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function DashboardLayout({
               href="/dashboard/settings/subscription"
               className="flex-shrink-0 inline-flex items-center rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1.5 text-xs text-neutral-400 hover:text-neutral-200 hover:border-neutral-600 hover:bg-neutral-800/80 transition-colors"
             >
-              <span className="text-neutral-500">Current plan:</span>
+              <span className="text-neutral-400">Current plan:</span>
               <span className="ml-1.5 font-medium text-neutral-300">{subscription.plan.name}</span>
             </Link>
           )}

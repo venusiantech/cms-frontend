@@ -80,7 +80,7 @@ export default function SettingsGeneralPage() {
           <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-700 bg-black">
             <div>
               <h2 className="text-sm font-semibold text-neutral-100">Account Information</h2>
-              <p className="text-xs text-neutral-500 mt-0.5">Update your account information</p>
+              <p className="text-xs text-neutral-400 mt-0.5">Update your account information</p>
             </div>
             {!isEditing ? (
               <button
@@ -122,7 +122,7 @@ export default function SettingsGeneralPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-neutral-500 mb-1.5">First Name</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">First Name</label>
                 <input
                   type="text"
                   value={firstName}
@@ -133,7 +133,7 @@ export default function SettingsGeneralPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1.5">Last Name</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">Last Name</label>
                 <input
                   type="text"
                   value={lastName}
@@ -144,7 +144,7 @@ export default function SettingsGeneralPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1.5">Date of Birth</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">Date of Birth</label>
                 <input
                   type="date"
                   value={dateOfBirth}
@@ -154,7 +154,7 @@ export default function SettingsGeneralPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1.5">Mobile Number</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">Mobile Number</label>
                 <input
                   type="tel"
                   value={mobileNumber}
@@ -165,7 +165,7 @@ export default function SettingsGeneralPage() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs text-neutral-500 mb-1.5">Email</label>
+                <label className="block text-xs text-neutral-400 mb-1.5">Email</label>
                 <input
                   type="email"
                   value={user?.email || ''}

@@ -582,7 +582,7 @@ function EnterpriseOctopus() {
                   </div>
                   <p className="text-xs font-semibold text-white leading-tight">{feature.title}</p>
                 </div>
-                <p className="text-[10px] text-neutral-500 leading-snug pl-9">{feature.desc}</p>
+                <p className="text-[10px] text-neutral-400 leading-snug pl-9">{feature.desc}</p>
               </motion.div>
             </div>
           );
@@ -595,7 +595,7 @@ function EnterpriseOctopus() {
           <img src="/logo/fastofy.png" alt="Fastofy" className="w-20 h-20" />
           <div>
             <h3 className="text-lg font-bold">Enterprise-Grade Infrastructure</h3>
-            <p className="text-sm text-neutral-500">Built for scale, security, and reliability</p>
+            <p className="text-sm text-neutral-400">Built for scale, security, and reliability</p>
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -603,7 +603,7 @@ function EnterpriseOctopus() {
             <div key={i} className="p-4 rounded-xl border border-neutral-800 bg-neutral-800/30 hover:border-violet-500/30 transition-colors">
               <feature.icon size={20} className="text-violet-400 mb-2" />
               <p className="text-sm font-semibold mb-1">{feature.title}</p>
-              <p className="text-xs text-neutral-500">{feature.desc}</p>
+              <p className="text-xs text-neutral-400">{feature.desc}</p>
             </div>
           ))}
         </div>
@@ -691,7 +691,7 @@ function RoadmapStepCard({ item, index }: { item: typeof ROADMAP_STEPS[0]; index
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 ${
               isInView ? "bg-[rgb(218,255,1)]/20" : "bg-neutral-800"
             }`}>
-              <item.icon size={20} className={isInView ? "text-[rgb(218,255,1)]" : "text-neutral-500"} />
+              <item.icon size={20} className={isInView ? "text-[rgb(218,255,1)]" : "text-neutral-400"} />
             </div>
             <h4 className={`text-lg font-semibold transition-colors duration-300 ${
               isInView ? "text-white" : "text-neutral-400"
@@ -943,9 +943,9 @@ export default function LandingPage() {
                   </div>
                   <div className="text-left">
                     <p className="text-xs font-medium text-white leading-none">{displayName}</p>
-                    <p className="text-[10px] text-neutral-500 mt-0.5 leading-none">{userProfile.email}</p>
+                    <p className="text-[10px] text-neutral-400 mt-0.5 leading-none">{userProfile.email}</p>
                   </div>
-                  <ChevronDown size={14} className={`text-neutral-500 transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`text-neutral-400 transition-transform ${profileMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
@@ -959,7 +959,7 @@ export default function LandingPage() {
                     >
                       <div className="px-4 py-3 border-b border-neutral-800">
                         <p className="text-xs font-semibold text-white truncate">{displayName}</p>
-                        <p className="text-xs text-neutral-500 truncate mt-0.5">{userProfile.email}</p>
+                        <p className="text-xs text-neutral-400 truncate mt-0.5">{userProfile.email}</p>
                         {userProfile.role === 'SUPER_ADMIN' && (
                           <span className="inline-block mt-1.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-400">Super Admin</span>
                         )}
@@ -1038,7 +1038,7 @@ export default function LandingPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-white">{displayName}</p>
-                        <p className="text-xs text-neutral-500">{userProfile.email}</p>
+                        <p className="text-xs text-neutral-400">{userProfile.email}</p>
                       </div>
                     </div>
                     <Link
@@ -1186,7 +1186,7 @@ export default function LandingPage() {
                   <div className="text-2xl sm:text-3xl font-bold text-[rgb(218,255,1)]">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="text-xs sm:text-sm text-neutral-500 mt-1">{stat.label}</div>
+                  <div className="text-xs sm:text-sm text-neutral-400 mt-1">{stat.label}</div>
                 </SpotlightCard>
               ))}
             </motion.div>
@@ -1199,7 +1199,7 @@ export default function LandingPage() {
               className="flex flex-wrap items-center justify-center gap-6"
             >
               {TRUST_BADGES.slice(0, 4).map((badge, i) => (
-                <div key={i} className="flex items-center gap-2 text-neutral-500">
+                <div key={i} className="flex items-center gap-2 text-neutral-400">
                   <badge.icon size={16} className="text-neutral-600" />
                   <span className="text-xs">{badge.label}</span>
                 </div>
@@ -1215,7 +1215,7 @@ export default function LandingPage() {
 
       <section className="py-12 border-y border-neutral-800/50 bg-neutral-900/30">
         <div className="max-w-7xl mx-auto px-6">
-          <p className="text-center text-sm text-neutral-500 mb-8">Trusted by industry leaders and featured in</p>
+          <p className="text-center text-sm text-neutral-400 mb-8">Trusted by industry leaders and featured in</p>
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-50">
             {COMPANY_LOGOS.map((name, i) => (
               <span key={i} className="text-lg md:text-xl font-bold text-neutral-400 tracking-wider">{name}</span>
@@ -1378,7 +1378,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center">
-                    <Settings size={14} className="text-neutral-500" />
+                    <Settings size={14} className="text-neutral-400" />
                   </div>
                 </div>
               </div>
@@ -1389,7 +1389,7 @@ export default function LandingPage() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="text-lg font-semibold text-white">Welcome back, John</h3>
-                    <p className="text-sm text-neutral-500">Here's what's happening with your websites</p>
+                    <p className="text-sm text-neutral-400">Here's what's happening with your websites</p>
                   </div>
                   <button className="flex items-center gap-2 px-4 py-2 bg-[rgb(218,255,1)] text-[#0a0a0a] rounded-lg text-sm font-medium">
                     <Zap size={14} />
@@ -1406,7 +1406,7 @@ export default function LandingPage() {
                     { label: "New Leads", value: "156", change: "+24", color: "text-violet-400" },
                   ].map((stat, i) => (
                     <div key={i} className="p-4 rounded-xl bg-neutral-800/30 border border-neutral-700/50">
-                      <p className="text-xs text-neutral-500 mb-1">{stat.label}</p>
+                      <p className="text-xs text-neutral-400 mb-1">{stat.label}</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-xl font-bold text-white">{stat.value}</span>
                         <span className={`text-xs ${stat.color}`}>{stat.change}</span>
@@ -1539,7 +1539,7 @@ export default function LandingPage() {
                     <item.icon size={24} className={`bg-gradient-to-r ${item.color} to-white bg-clip-text text-white`} />
                   </div>
                   <h3 className="font-semibold mb-1">{item.title}</h3>
-                  <p className="text-sm text-neutral-500">{item.desc}</p>
+                  <p className="text-sm text-neutral-400">{item.desc}</p>
                 </SpotlightCard>
               </motion.div>
             ))}
@@ -1617,7 +1617,7 @@ export default function LandingPage() {
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${
                         item.status === 'completed' ? 'bg-[rgb(218,255,1)]/20 text-[rgb(218,255,1)]' :
                         item.status === 'current' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-neutral-800 text-neutral-500'
+                        'bg-neutral-800 text-neutral-400'
                       }`}>
                         {item.phase}
                       </span>
@@ -1710,7 +1710,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <p className="font-medium text-sm">{testimonial.name}</p>
-                      <p className="text-xs text-neutral-500">{testimonial.role} at {testimonial.company}</p>
+                      <p className="text-xs text-neutral-400">{testimonial.role} at {testimonial.company}</p>
                     </div>
                   </div>
                 </SpotlightCard>
@@ -1733,7 +1733,7 @@ export default function LandingPage() {
                     <badge.icon size={24} className="text-[rgb(218,255,1)]" />
                   </div>
                   <p className="font-semibold text-sm">{badge.label}</p>
-                  <p className="text-xs text-neutral-500">{badge.sub}</p>
+                  <p className="text-xs text-neutral-400">{badge.sub}</p>
                 </div>
               ))}
             </div>
@@ -1824,7 +1824,7 @@ export default function LandingPage() {
                         plan?.name ?? ui.cta
                       )}
                     </h3>
-                    <p className="text-sm text-neutral-500 mb-4">{ui.description}</p>
+                    <p className="text-sm text-neutral-400 mb-4">{ui.description}</p>
 
                     {/* Price */}
                     <div className="mb-6">
@@ -1837,14 +1837,14 @@ export default function LandingPage() {
                           <span className="text-4xl font-bold text-[rgb(218,255,1)]">
                             ${plan?.price ?? '—'}
                           </span>
-                          <span className="text-neutral-500">/month</span>
+                          <span className="text-neutral-400">/month</span>
                         </div>
                       )}
                     </div>
 
                     {/* Credits + Sites info from API */}
                     {!isLoading && plan && (
-                      <div className="flex items-center gap-4 mb-4 text-xs text-neutral-500">
+                      <div className="flex items-center gap-4 mb-4 text-xs text-neutral-400">
                         <span className="flex items-center gap-1">
                           <Zap size={12} className="text-[rgb(218,255,1)]" />
                           {plan.creditsPerMonth} credits/mo
@@ -1959,7 +1959,7 @@ export default function LandingPage() {
                     <span className="font-medium pr-4">{item.question}</span>
                     <ChevronDown 
                       size={20} 
-                      className={`text-neutral-500 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`} 
+                      className={`text-neutral-400 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`} 
                     />
                   </div>
                   <AnimatePresence>
@@ -2045,7 +2045,7 @@ export default function LandingPage() {
               Start Your Free Trial
               <ArrowRight size={20} />
             </Link>
-            <p className="mt-6 text-sm text-neutral-500">
+            <p className="mt-6 text-sm text-neutral-400">
               No credit card required • Setup in under 10 minutes
             </p>
           </motion.div>
@@ -2065,13 +2065,13 @@ export default function LandingPage() {
                 <img src="/logo/fastofy.png" alt="Fastofy" className="w-10 h-10" />
                 <span className="text-lg font-semibold">FASTOFY</span>
               </Link>
-              <p className="text-sm text-neutral-500 leading-relaxed mb-4">
+              <p className="text-sm text-neutral-400 leading-relaxed mb-4">
                 Transform unused domains into professional websites with AI-powered content generation.
               </p>
               <div className="flex items-center gap-3">
                 {TRUST_BADGES.slice(0, 3).map((badge, i) => (
                   <div key={i} className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center" title={badge.label}>
-                    <badge.icon size={14} className="text-neutral-500" />
+                    <badge.icon size={14} className="text-neutral-400" />
                   </div>
                 ))}
               </div>
@@ -2080,7 +2080,7 @@ export default function LandingPage() {
             {/* Product */}
             <div>
               <h4 className="font-semibold mb-4 text-sm">Product</h4>
-              <ul className="space-y-3 text-sm text-neutral-500">
+              <ul className="space-y-3 text-sm text-neutral-400">
                 <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
                 <li><button onClick={() => scrollToSection('features')} className="hover:text-white transition-colors">Features</button></li>
                 <li><button onClick={() => scrollToSection('pricing')} className="hover:text-white transition-colors">Pricing</button></li>
@@ -2092,7 +2092,7 @@ export default function LandingPage() {
             {/* Legal */}
             <div>
               <h4 className="font-semibold mb-4 text-sm">Legal</h4>
-              <ul className="space-y-3 text-sm text-neutral-500">
+              <ul className="space-y-3 text-sm text-neutral-400">
                 <li><Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
                 <li><Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link></li>
                 <li><Link href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
@@ -2104,7 +2104,7 @@ export default function LandingPage() {
             {/* Support */}
             <div>
               <h4 className="font-semibold mb-4 text-sm">Support</h4>
-              <ul className="space-y-3 text-sm text-neutral-500">
+              <ul className="space-y-3 text-sm text-neutral-400">
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><a href="mailto:support@fastofy.com" className="hover:text-white transition-colors">support@fastofy.com</a></li>
               </ul>
@@ -2113,17 +2113,17 @@ export default function LandingPage() {
 
           {/* Bottom */}
           <div className="pt-8 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-neutral-400">
               © {new Date().getFullYear()} FASTOFY. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="Twitter">
+              <a href="#" className="text-neutral-400 hover:text-white transition-colors" aria-label="Twitter">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
               </a>
-              <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
+              <a href="#" className="text-neutral-400 hover:text-white transition-colors" aria-label="LinkedIn">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
               </a>
-              <a href="#" className="text-neutral-500 hover:text-white transition-colors" aria-label="GitHub">
+              <a href="#" className="text-neutral-400 hover:text-white transition-colors" aria-label="GitHub">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
               </a>
             </div>

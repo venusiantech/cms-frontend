@@ -43,7 +43,7 @@ export default function ScheduleModal({ isOpen, onClose, websiteId }: ScheduleMo
                   </div>
                   <div>
                     <h2 className="text-3xl font-bold text-neutral-100">Schedule Content</h2>
-                    {/* <p className="text-sm text-neutral-500 mt-0.5">Auto-generate blogs on a recurring schedule</p> */}
+                    {/* <p className="text-sm text-neutral-400 mt-0.5">Auto-generate blogs on a recurring schedule</p> */}
                   </div>
                 </div>
                 <button

@@ -272,7 +272,7 @@ export default function EditorPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <p className="text-neutral-500 mb-4">Invalid domain ID</p>
+          <p className="text-neutral-400 mb-4">Invalid domain ID</p>
           <button
             onClick={() => router.push('/dashboard/domains')}
             className="px-4 py-2 bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors"
@@ -289,7 +289,7 @@ export default function EditorPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
           <CustomLoader />
-          <p className="text-sm text-neutral-500">Loading website...</p>
+          <p className="text-sm text-neutral-400">Loading website...</p>
         </div>
       </div>
     );
@@ -298,7 +298,7 @@ export default function EditorPage() {
   if (!domain || !domain.website) {
     return (
       <div className="text-center py-20">
-        <p className="text-neutral-500 mb-4">Website not found</p>
+        <p className="text-neutral-400 mb-4">Website not found</p>
         <button onClick={() => router.push('/dashboard/domains')} className="text-neutral-300 hover:text-white hover:underline">
           ← Back to dashboard
         </button>
@@ -343,7 +343,7 @@ export default function EditorPage() {
             </button>
             <div>
               <h1 className="text-md sm:text-lg font-light text-neutral-100 truncate max-w-[200px] sm:max-w-none">{domain.domainName}</h1>
-              <p className="text-xs text-neutral-500 mt-0.5">{blogs.length} blogs • Active</p>
+              <p className="text-xs text-neutral-400 mt-0.5">{blogs.length} blogs • Active</p>
             </div>
           </div>
           <a
@@ -471,7 +471,7 @@ export default function EditorPage() {
             <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-700 flex-shrink-0">
               <div className="min-w-0 flex-1">
                 <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-neutral-100 truncate">Edit Blog</h3>
-                <p className="text-xs sm:text-sm text-neutral-500 mt-0.5">
+                <p className="text-xs sm:text-sm text-neutral-400 mt-0.5">
                   {editingBlog.isHero ? 'Hero Blog' : `Blog #${blogs.indexOf(editingBlog) + 1}`}
                 </p>
               </div>
@@ -495,7 +495,7 @@ export default function EditorPage() {
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 text-sm sm:text-base"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter blog title..."
                   />
                 </div>
@@ -509,10 +509,10 @@ export default function EditorPage() {
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                     rows={8}
-                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
+                    className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-[#262626] border border-neutral-600 rounded-lg text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-500 focus:border-neutral-500 transition-all duration-200 font-mono text-xs sm:text-sm resize-none"
                     placeholder="Enter blog content (supports Markdown)..."
                   />
-                  <p className="text-xs text-neutral-500 mt-1.5 sm:mt-2">
+                  <p className="text-xs text-neutral-400 mt-1.5 sm:mt-2">
                     💡 Tip: You can use Markdown formatting (e.g., # for headings, ** for bold)
                   </p>
                 </div>

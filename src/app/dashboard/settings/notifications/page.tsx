@@ -78,7 +78,7 @@ export default function SettingsNotificationsPage() {
             <Bell size={14} className="text-neutral-400" />
             <div>
               <h2 className="text-sm font-semibold text-neutral-100">Email Notifications</h2>
-              <p className="text-xs text-neutral-500 mt-0.5">Control when and where you receive email alerts</p>
+              <p className="text-xs text-neutral-400 mt-0.5">Control when and where you receive email alerts</p>
             </div>
           </div>
 
@@ -86,7 +86,7 @@ export default function SettingsNotificationsPage() {
             <label className="flex items-center justify-between cursor-pointer">
               <div>
                 <p className="text-sm text-neutral-200">Enable email notifications</p>
-                <p className="text-xs text-neutral-500 mt-0.5">
+                <p className="text-xs text-neutral-400 mt-0.5">
                   Receive emails for website generation, domain deletion, and account activity
                 </p>
               </div>
@@ -117,7 +117,7 @@ export default function SettingsNotificationsPage() {
               {notificationEmails.map((email, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div className="relative flex-1">
-                    <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
+                    <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                     <input
                       type="email"
                       value={email}
@@ -130,7 +130,7 @@ export default function SettingsNotificationsPage() {
                     <button
                       type="button"
                       onClick={() => setNotifEmail(i, '')}
-                      className="p-2 text-neutral-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                      className="p-2 text-neutral-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>

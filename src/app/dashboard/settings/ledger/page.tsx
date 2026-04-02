@@ -83,7 +83,7 @@ export default function LedgerPage() {
       <div className="px-4 lg:px-6 flex items-center justify-center min-h-[300px]">
         <div className="flex flex-col items-center gap-3">
           <AlertCircle size={22} className="text-neutral-700" />
-          <p className="text-sm text-neutral-500">Failed to load ledger</p>
+          <p className="text-sm text-neutral-400">Failed to load ledger</p>
         </div>
       </div>
     );
@@ -134,7 +134,7 @@ export default function LedgerPage() {
         {entries.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             <Zap size={24} className="text-neutral-700" />
-            <p className="text-sm text-neutral-500">No credit transactions yet</p>
+            <p className="text-sm text-neutral-400">No credit transactions yet</p>
           </div>
         ) : (
           <div className="divide-y divide-neutral-800/60">
@@ -169,7 +169,7 @@ export default function LedgerPage() {
                   </div>
 
                   {/* Date */}
-                  <span className="text-xs text-neutral-500 whitespace-nowrap text-right">
+                  <span className="text-xs text-neutral-400 whitespace-nowrap text-right">
                     {formatDate(entry.createdAt)}
                   </span>
 

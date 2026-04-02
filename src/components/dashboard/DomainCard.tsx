@@ -191,27 +191,27 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
   return (
     <>
       {viewMode === 'list' ? (
-        <div className="group bg-[#0a0a0a] hover:bg-[#101010] transition-colors px-4 py-3 sm:px-5">
-          <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex items-center gap-3 min-w-0 xl:flex-1">
+        <div className="group bg-[#0a0a0a] hover:bg-[#101010] transition-colors px-4 py-3.5 sm:px-6 sm:py-4">
+          <div className="flex flex-col gap-3.5 xl:grid xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto] xl:items-center xl:gap-4">
+            <div className="flex items-center gap-3.5 min-w-0">
               <div className="w-9 h-9 bg-[#262626] rounded-md flex items-center justify-center flex-shrink-0 border border-neutral-700">
                 <Globe size={18} className="text-neutral-400" />
               </div>
               <div className="min-w-0">
                 <h3 className="text-sm font-light text-neutral-100 truncate">{domain.domainName}</h3>
                 {domain.website?.subdomain && (
-                  <p className="text-xs font-light text-neutral-500 truncate mt-0.5">
+                  <p className="text-xs font-light text-neutral-400 truncate mt-0.5">
                     {getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 flex-wrap xl:justify-center">
+            <div className="flex items-center gap-2.5 flex-wrap xl:justify-center">
               {statusBadges}
             </div>
 
-            <div className="flex items-center gap-2 xl:justify-end">
+            <div className="flex items-center gap-2.5 xl:justify-end">
               {hasWebsite ? (
                 <>
                   <Link
@@ -273,7 +273,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
               <div className="min-w-0 flex-1">
                 <h3 className="text-sm font-light text-neutral-100 truncate">{domain.domainName}</h3>
                 {domain.website?.subdomain && (
-                  <p className="text-sm font-light text-neutral-500 truncate mt-0.5">{getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}</p>
+                  <p className="text-sm font-light text-neutral-400 truncate mt-0.5">{getSiteUrl(domain.website.subdomain).replace(/^https?:\/\//, '')}</p>
                 )}
               </div>
             </div>
@@ -353,7 +353,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-neutral-100">DNS Configuration</h3>
-                  <p className="text-sm text-neutral-500 mt-0.5">Configure your domain nameservers</p>
+                  <p className="text-sm text-neutral-400 mt-0.5">Configure your domain nameservers</p>
                 </div>
               </div>
               <button
@@ -371,7 +371,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
               </div>
 
               <div className="space-y-3">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nameservers</p>
+                <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Nameservers</p>
                 {domain.nameServers.map((ns: string, idx: number) => (
                   <div
                     key={idx}

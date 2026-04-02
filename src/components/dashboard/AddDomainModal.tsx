@@ -67,7 +67,7 @@ export function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
               if (e.key === 'Enter') handleSubmit();
             }}
             placeholder="example.com"
-            className={`w-full px-4 py-2.5 bg-[#262626] border rounded-md text-neutral-100 placeholder:text-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
+            className={`w-full px-4 py-2.5 bg-[#262626] border rounded-md text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-600 focus:border-neutral-600 transition-all ${validationError ? 'border-red-500/50' : 'border-neutral-700'
               }`}
             autoFocus
           />
@@ -77,7 +77,7 @@ export function AddDomainModal({ onClose, onSuccess, setGlobalLoading }: any) {
               {validationError}
             </p>
           )}
-          <p className="text-xs text-neutral-500 mt-2">Examples: chocolate.com, myblog.net, shop.io</p>
+          <p className="text-xs text-neutral-400 mt-2">Examples: chocolate.com, myblog.net, shop.io</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           <button
