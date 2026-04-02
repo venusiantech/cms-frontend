@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { domainsAPI } from '@/lib/dashboard';
-import { Globe, Search, Sparkles, ChevronDown, Upload, FileText } from 'lucide-react';
+import { Globe, Search, Sparkles, ChevronDown, Upload, FileText, LayoutGrid, List } from 'lucide-react';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
 import {
@@ -34,6 +34,7 @@ export default function DomainsPage() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCsvUpload, setShowCsvUpload] = useState(false);
   const [isFetchingInactive, setIsFetchingInactive] = useState(false);
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleOpenInactiveBulk = async () => {
@@ -162,6 +163,34 @@ export default function DomainsPage() {
               <FileText size={18} />
             )}
           </button>
+          <div className="h-12 bg-[#0a0a0a] border border-neutral-700 rounded-md p-1 flex items-center gap-1 flex-shrink-0">
+            <button
+              type="button"
+              onClick={() => setViewMode('card')}
+              className={`h-full px-3 rounded text-sm transition-colors flex items-center justify-center ${viewMode === 'card'
+                ? 'bg-[#262626] text-neutral-100'
+                : 'text-neutral-400 hover:text-neutral-200'
+                }`}
+              title="Card view"
+              aria-label="Switch to card view"
+              aria-pressed={viewMode === 'card'}
+            >
+              <LayoutGrid size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              className={`h-full px-3 rounded text-sm transition-colors flex items-center justify-center ${viewMode === 'list'
+                ? 'bg-[#262626] text-neutral-100'
+                : 'text-neutral-400 hover:text-neutral-200'
+                }`}
+              title="List view"
+              aria-label="Switch to list view"
+              aria-pressed={viewMode === 'list'}
+            >
+              <List size={16} />
+            </button>
+          </div>
           <div className="relative flex-shrink-0" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown((v) => !v)}
@@ -200,12 +229,16 @@ export default function DomainsPage() {
           </div>
         </div>
       ) : domains && domains.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className={viewMode === 'card'
+          ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6'
+          : 'rounded-lg border border-neutral-800 divide-y divide-neutral-800 overflow-hidden'
+        }>
           {domains.map((domain: any, index: number) => (
             <DomainCard
               key={domain.id}
               domain={domain}
               index={index}
+              viewMode={viewMode}
               onGenerateWebsite={(setJobId: any) => {
                 setShowGenerateWebsite({ domainId: domain.id, setJobId });
               }}
