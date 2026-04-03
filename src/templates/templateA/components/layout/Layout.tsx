@@ -18,10 +18,13 @@ interface LayoutProps {
   twitterUrl?: string | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
-  onContactClick?: () => void; // Optional contact click handler
+  onContactClick?: () => void;
+  navCategories?: { name: string; count: number }[];
+  selectedCategory?: string | null;
+  onCategoryChange?: (cat: string | null) => void;
 }
 
-export default function Layout({ classLisst, children, siteName = 'Site', logoUrl, logoDisplayMode, assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick }: LayoutProps) {
+export default function Layout({ classLisst, children, siteName = 'Site', logoUrl, logoDisplayMode, assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, contactEmail, contactPhone, onContactClick, navCategories, selectedCategory, onCategoryChange }: LayoutProps) {
   const [scroll, setScroll] = useState<boolean>(false);
   // Mobile Menu
   const [isMobileMenu, setMobileMenu] = useState<boolean>(false);
@@ -68,6 +71,9 @@ export default function Layout({ classLisst, children, siteName = 'Site', logoUr
             facebookUrl={facebookUrl}
             twitterUrl={twitterUrl}
             onContactClick={onContactClick}
+            navCategories={navCategories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={onCategoryChange}
           />
 
           <main id="content">

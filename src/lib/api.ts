@@ -186,6 +186,11 @@ export const schedulesAPI = {
   delete: (id: string) => api.delete(`/schedules/${id}`),
 };
 
+export const categoriesAPI = {
+  getByWebsite: (websiteId: string) =>
+    api.get(`/websites/${websiteId}/categories`),
+};
+
 export const bulkUploadAPI = {
   uploadCsv: (file: File) => {
     const formData = new FormData();

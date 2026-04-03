@@ -8,6 +8,7 @@ interface Section {
   type: string
   order: number
   createdAt?: string
+  category?: { id: string; name: string; slug: string } | null
   blocks: Array<{ id: string; type: string; content: any; createdAt?: string }>
 }
 
@@ -53,6 +54,7 @@ function blogsFromPage(
   dateIso: string
   readTimeMin: number
   domainName: string
+  category?: { id: string; name: string; slug: string } | null
 }> {
   const contentSections = page.sections.filter((s) => s.type === 'content')
   return contentSections.map((section) => {
@@ -101,6 +103,7 @@ function blogsFromPage(
       dateIso,
       readTimeMin,
       domainName,
+      category: section.category ?? null,
     }
   })
 }
@@ -147,12 +150,23 @@ export function toArclightPost(
     dateIso: string
     readTimeMin: number
     domainName: string
+    category?: { id: string; name: string; slug: string } | null
   },
   index: number,
   opts?: { content?: string }
 ): ArclightCmsPost {
   const avatarSrc = AVATAR_URLS[index % AVATAR_URLS.length]
   const author = defaultAuthor(b.domainName, avatarSrc)
+
+  const postCategory = b.category
+    ? {
+        id: b.category.id,
+        name: b.category.name,
+        handle: b.category.slug,
+        color: 'blue' as const,
+      }
+    : DEFAULT_CATEGORY
+
   return {
     id: b.slug,
     sectionId: b.sectionId,
@@ -176,7 +190,7 @@ export function toArclightPost(
     postType: 'standard',
     status: 'published',
     author,
-    categories: [DEFAULT_CATEGORY],
+    categories: [postCategory],
     ...(opts?.content !== undefined && { content: opts.content }),
   }
 }

@@ -12,10 +12,13 @@ interface HeaderProps {
   instagramUrl?: string | null;
   facebookUrl?: string | null;
   twitterUrl?: string | null;
-  onContactClick?: () => void; // Optional contact click handler
+  onContactClick?: () => void;
+  navCategories?: { name: string; count: number }[];
+  selectedCategory?: string | null;
+  onCategoryChange?: (cat: string | null) => void;
 }
 
-export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplayMode = 'logo_only', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick }: HeaderProps) {
+export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplayMode = 'logo_only', assetsPath = '/templateA/assets', instagramUrl, facebookUrl, twitterUrl, onContactClick, navCategories = [], selectedCategory, onCategoryChange }: HeaderProps) {
   const [isSearch, setIsSearch] = useState<number | null>(null);
 
   const handleSearch = (key: number) => {
@@ -105,58 +108,52 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
           <div className="container">
             <div className="menu-primary">
               <ul className="d-flex justify-content-center mr-auto" style={{ gap: '2rem' }}>
-                <li className="current-menu-item">
-                  <Link href="/">Home</Link>
+                {/* Home — clicking when a category is active resets to "All" */}
+                <li className={!selectedCategory ? 'current-menu-item' : ''}>
+                  <Link
+                    href="/"
+                    onClick={(e) => {
+                      if (onCategoryChange) {
+                        e.preventDefault();
+                        onCategoryChange(null);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                  >
+                    Latest
+                  </Link>
                 </li>
-                {/* <li className="menu-item-has-children">
-                  <Link href="/categories">Categories</Link>
-                  <ul className="sub-menu">
-                    <li>
-                      <Link href="/categories">Politics</Link>
-                    </li>
-                    <li>
-                      <Link href="/archive">Health</Link>
-                    </li>
-                    <li>
-                      <Link href="/categories">Design</Link>
-                    </li>
-                  </ul>
-                </li> */}
-                <li>
-                  <Link href="/categories">Categories</Link>
-                </li>
-                {/* <li>
-                  <Link href="/categories">Politics</Link>
-                </li>
-                <li>
-                  <Link href="/categories">Health</Link>
-                </li>
-                <li>
-                  <Link href="/categories">Design</Link>
-                </li>
-                <li>
-                  <Link href="/categories">Startups</Link>
-                </li>
-                <li>
-                  <Link href="/categories">Culture</Link>
-                </li>
-                <li>
-                  <Link href="/contact">Contact</Link>
-                </li> */}
-                {/* <li className="menu-item-has-children">
-                  <Link href="#">More...</Link>
-                  <ul className="sub-menu">
-                    <li>
-                      <Link href="/search">Search</Link>
-                    </li>
-                    <li>
-                      <Link href="/author">Author</Link>
-                    </li>
-                    <li>
-                      <Link href="/404">404</Link>
-                    </li>
-                  </ul>
-                </li> */}
+
+                {/* Up to 4 real category links */}
+                {navCategories.slice(0, 4).map((cat) => (
+                  <li key={cat.name} className={selectedCategory === cat.name ? 'current-menu-item' : ''}>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onCategoryChange) onCategoryChange(cat.name);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {cat.name}
+                    </a>
+                  </li>
+                ))}
+
+                {/* "More" link to full categories page when there are >4 categories */}
+                {navCategories.length > 4 && (
+                  <li>
+                    <Link href="/categories">More…</Link>
+                  </li>
+                )}
+
+                {/* Fallback "Categories" link when no CMS categories exist yet */}
+                {navCategories.length === 0 && (
+                  <li>
+                    <Link href="/categories">Categories</Link>
+                  </li>
+                )}
               </ul>
               <span />
             </div>

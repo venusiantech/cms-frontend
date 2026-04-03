@@ -17,6 +17,7 @@ import type { ArclightCmsPost } from '@/templates/Arclight/cms/types'
 import { asTPost } from '@/templates/Arclight/cms/types'
 import Card9 from '@/templates/Arclight/components/PostCards/Card9'
 import { Divider } from '@/templates/Arclight/components/shared/divider'
+import ArclightCategoriesView from '@/templates/Arclight/components/ArclightCategoriesView'
 
 import '@/templates/Arclight/styles/tailwind.css'
 
@@ -25,6 +26,7 @@ interface Section {
   type: string
   order: number
   createdAt?: string
+  category?: { id: string; name: string; slug: string } | null
   blocks: Array<{ id: string; type: string; content: any; createdAt?: string }>
 }
 
@@ -118,18 +120,11 @@ export default function ArclightTemplate({
   const renderContent = () => {
     if (pageType === 'categories') {
       return (
-        <div className="relative container space-y-10 pb-20">
-          <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100">All Articles</h1>
-          {posts.length === 0 ? (
-            <p className="py-12 text-neutral-500">No articles yet.</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
-                <Card9 key={post.id} post={asTPost(post)} ratio="aspect-4/3" />
-              ))}
-            </div>
-          )}
-        </div>
+        <ArclightCategoriesView
+          posts={postsWithContent}
+          onArticleClick={onArticleClick}
+          getPostUrl={getPostUrl}
+        />
       )
     }
 
@@ -164,7 +159,7 @@ export default function ArclightTemplate({
         <SectionMagazine2
           heading="Latest articles"
           subHeading="Explore the newest articles"
-          posts={posts.slice(0, 7).map(asTPost)}
+          posts={posts.map(asTPost)}
         />
         <SectionMagazine9
           heading="Latest articles"

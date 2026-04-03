@@ -11,6 +11,7 @@ interface Section {
   id: string;
   type: string;
   order: number;
+  category?: { id: string; name: string; slug: string } | null;
   blocks: Array<{
     id: string;
     type: string;
@@ -57,6 +58,7 @@ interface Blog {
   slug: string; // SEO-friendly URL slug
   image: string;
   sectionId: string;
+  category?: { id: string; name: string; slug: string } | null;
 }
 
 /**
@@ -138,6 +140,7 @@ export default function ModernNews({ page, website, domain, articleId, pageType 
       image: imageBlock?.content?.url || 'https://placehold.co/800x400/6366f1/white?text=Article',
       sectionId: section.id,
       slug: createUniqueSlug(title, section.id), // Generate SEO-friendly slug
+      category: section.category ?? null,
     };
   }), [page.sections]); // Only recalculate when sections change
 
@@ -511,8 +514,8 @@ function FullArticleView({ blog, domain, website }: { blog: Blog; domain: { name
         {/* Article Header */}
         <header className="mb-6">
           <div className="flex items-center text-xs text-gray-500 mb-3">
-            <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold mr-2">
-              ARTICLE
+            <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold mr-2 uppercase">
+              {blog.category?.name ?? 'Article'}
             </span>
             <time>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             <span className="mx-2">•</span>
@@ -800,7 +803,9 @@ function BlogsGrid({ blogs, onBlogClick }: { blogs: Blog[]; onBlogClick: (blog: 
             </div>
             <div className="p-4">
               <div className="flex items-center space-x-1 mb-2">
-                <span className="text-xs font-semibold text-blue-600 uppercase">Article</span>
+                <span className="text-xs font-semibold text-blue-600 uppercase">
+                  {blog.category?.name ?? 'Article'}
+                </span>
                 <span className="text-xs text-gray-400">•</span>
                 <span className="text-xs text-gray-500">{new Date().toLocaleDateString()}</span>
               </div>

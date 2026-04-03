@@ -13,6 +13,7 @@ import SingleSection1 from '@/templates/templateA/components/sections/single/Sec
 import ContactSection from '@/templates/templateA/components/sections/contact/ContactSection';
 import CategoriesSection1 from '@/templates/templateA/components/sections/categories/section1';
 import { createUniqueSlug } from '@/lib/slugify';
+import { signalNavigationStart } from '@/components/NavigationProgress';
 
 // TemplateA styles will be loaded dynamically to avoid affecting other templates
 
@@ -21,6 +22,7 @@ interface Section {
   type: string;
   order: number;
   createdAt?: string;
+  category?: { id: string; name: string; slug: string } | null;
   blocks: Array<{ id: string; type: string; content: any; createdAt?: string }>;
 }
 
@@ -80,7 +82,7 @@ function stripMarkdown(text: string, maxLen = 220): string {
 function blogsFromPage(
   page: PageData,
   domainName: string
-): Array<{ sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string }> {
+): Array<{ sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string; category: { id: string; name: string; slug: string } | null }> {
   const contentSections = page.sections.filter((s) => s.type === 'content');
   return contentSections.map((section) => {
     const sectionDate = section.createdAt ? new Date(section.createdAt) : new Date();
@@ -113,12 +115,13 @@ function blogsFromPage(
     const image = imageBlock?.content?.url || PLACEHOLDER_IMAGE;
     const readTime = `${Math.max(1, Math.ceil(content.length / 1000))} min read`;
     const slug = createUniqueSlug(title, section.id); // Generate SEO-friendly slug
-    return { sectionId: section.id, slug, title, content, preview, image, dateStr, readTime, domainName };
+    const category = section.category ?? null;
+    return { sectionId: section.id, slug, title, content, preview, image, dateStr, readTime, domainName, category };
   });
 }
 
 function toTemplateAArticle(
-  b: { sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string },
+  b: { sectionId: string; slug: string; title: string; content: string; preview: string; image: string; dateStr: string; readTime: string; domainName: string; category?: { id: string; name: string; slug: string } | null },
   index: number,
   opts?: { tag?: string; number?: string }
 ): TemplateAArticle {
@@ -128,7 +131,7 @@ function toTemplateAArticle(
     title: b.title,
     excerpt: b.preview,
     author: b.domainName,
-    category: 'Article',
+    category: b.category?.name ?? 'Article',
     date: b.dateStr,
     readTime: b.readTime,
     image: b.image,
@@ -194,7 +197,34 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
   }, [page, domain.name]);
 
   const [selectedId, setSelectedId] = useState<string | null>(articleId || null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [cssLoaded, setCssLoaded] = useState(false);
+
+  // Unique categories derived from page sections (up to 4 shown in nav)
+  const navCategories = useMemo(() => {
+    const map = new Map<string, number>();
+    page.sections.filter((s) => s.type === 'content').forEach((s) => {
+      const cat = s.category;
+      if (cat?.name) map.set(cat.name, (map.get(cat.name) ?? 0) + 1);
+    });
+    return Array.from(map.entries()).map(([name, count]) => ({ name, count }));
+  }, [page.sections]);
+
+  // Filtered featured section based on selected category
+  const filteredFeatured = useMemo(() => {
+    if (!selectedCategory) return blogData.featured;
+    const dName = domain.name.split('.')[0];
+    const dDisplay = dName.charAt(0).toUpperCase() + dName.slice(1);
+    const raw = blogsFromPage(page, dDisplay);
+    const filtered = raw.filter((b) => b.category?.name === selectedCategory);
+    if (filtered.length === 0) return { ...blogData.featured, title: selectedCategory };
+    const articles = filtered.map((b, i) => toTemplateAArticle(b, i));
+    return {
+      title: selectedCategory,
+      mainArticle: articles[0],
+      sideArticles: articles.slice(1, 4),
+    };
+  }, [selectedCategory, blogData.featured, page, domain.name]);
   const [loaderFadingOut, setLoaderFadingOut] = useState(false);
   const [showContactForm, setShowContactForm] = useState(pageType === 'contact');
 
@@ -316,11 +346,12 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   // Handle article click - Navigate to article page (SEO-friendly)
   const onArticleClick = (id: string) => {
+    signalNavigationStart();
     router.push(`/blog/${id}`);
   };
   
   const onBack = () => {
-    // Navigate back to home page
+    signalNavigationStart();
     if (typeof window !== 'undefined') {
       window.location.href = '/';
     } else {
@@ -330,8 +361,8 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
 
   // Handle contact form toggle - only if contactFormEnabled is true
   const handleContactClick = website.contactFormEnabled ? () => {
+    signalNavigationStart();
     setShowContactForm(true);
-    // Navigate to contact page
     router.push('/contact');
   } : undefined;
 
@@ -355,6 +386,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           contactEmail={website.contactEmail}
           contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
+          navCategories={navCategories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
         >
           <CategoriesSection1
             articles={blogsWithContent}
@@ -380,6 +414,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           contactEmail={website.contactEmail}
           contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
+          navCategories={navCategories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
         >
           <div className="template-a-contact-page">
             <ContactSection
@@ -408,6 +445,9 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
           contactEmail={website.contactEmail}
           contactPhone={website.contactPhone}
           onContactClick={handleContactClick}
+          navCategories={navCategories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
         >
           <SingleSection1
             article={selectedArticle}
@@ -426,7 +466,7 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
         classLisst="home" 
         siteName={siteDisplay}
         logoUrl={website.websiteLogo}
-          logoDisplayMode={website.logoDisplayMode}
+        logoDisplayMode={website.logoDisplayMode}
         assetsPath={ASSETS}
         instagramUrl={website.instagramUrl}
         facebookUrl={website.facebookUrl}
@@ -434,11 +474,15 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
         contactEmail={website.contactEmail}
         contactPhone={website.contactPhone}
         onContactClick={handleContactClick}
+        navCategories={navCategories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
       >
         <HomeSection1
-          featured={blogData.featured}
+          featured={filteredFeatured}
           trending={blogData.trending}
           onArticleClick={onArticleClick}
+          selectedCategory={selectedCategory}
         />
         <HomeSection2 featuredSlider={blogData.featuredSlider} onArticleClick={onArticleClick} />
         {/* <HomeSection3 todayHighlights={blogData.todayHighlights} onArticleClick={onArticleClick} /> */}
