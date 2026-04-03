@@ -13,6 +13,7 @@ import SingleRelatedPosts from './SingleRelatedPosts'
 export interface PostPageViewProps {
   post: ArclightCmsPost
   relatedPosts: ArclightCmsPost[]
+  actualCategories?: TCategory[]
   onBack: () => void
   getPostUrl: (handle: string) => string
 }
@@ -81,19 +82,25 @@ const dummyWidgetCategories: TCategory[] = [
 ]
 
 /** Single post view for CMS: used by ArclightTemplate when rendering an article. */
-export default function PostPageView({ post, relatedPosts, onBack, getPostUrl }: PostPageViewProps) {
+export default function PostPageView({ post, relatedPosts, actualCategories, onBack, getPostUrl }: PostPageViewProps) {
   const popularPosts = relatedPosts.map(asTPost)
+  const categoriesToDisplay = actualCategories?.length ? actualCategories : dummyWidgetCategories
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={(e) => { e.preventDefault(); onBack() }}
-        className="container mb-6 flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
-      >
-        <HiArrowLeft className="size-4" aria-hidden />
-        Back
-      </button>
+    <div className="relative pt-4 lg:pt-8">
+      <div className="container mb-4 lg:mb-0">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            onBack()
+          }}
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+        >
+          <HiArrowLeft className="size-4" aria-hidden />
+          Back
+        </button>
+      </div>
 
       <SingleHeaderContainer post={post} headerStyle="style1" />
 
@@ -105,7 +112,7 @@ export default function PostPageView({ post, relatedPosts, onBack, getPostUrl }:
           <aside className="w-full lg:w-2/5 xl:w-1/3">
             <div className="space-y-7 lg:sticky lg:top-24">
               {popularPosts.length > 0 && <WidgetPosts posts={popularPosts} />}
-              <WidgetCategories categories={dummyWidgetCategories} />
+              {categoriesToDisplay.length > 0 && <WidgetCategories categories={categoriesToDisplay} />}
             </div>
           </aside>
         </div>

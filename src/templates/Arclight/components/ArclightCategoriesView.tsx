@@ -10,6 +10,8 @@ interface Props {
   posts: ArclightCmsPost[]
   onArticleClick: (id: string) => void
   getPostUrl: (handle: string) => string
+  /** Pre-select a category (used when navigating from /category/[slug]) */
+  initialCategory?: string | null
 }
 
 interface Category {
@@ -82,9 +84,9 @@ const GRADIENTS = [
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl }) => {
+const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl, initialCategory }) => {
   const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory ?? null)
 
   const allCategories = useMemo(() => buildCategories(posts), [posts])
 
@@ -92,8 +94,8 @@ const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl }
     () =>
       search.trim()
         ? allCategories.filter((c) =>
-            c.name.toLowerCase().includes(search.toLowerCase()),
-          )
+          c.name.toLowerCase().includes(search.toLowerCase()),
+        )
         : allCategories,
     [allCategories, search],
   )
@@ -102,8 +104,8 @@ const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl }
     () =>
       selectedCategory
         ? posts.filter((p) =>
-            p.categories?.some((c) => c.name === selectedCategory),
-          )
+          p.categories?.some((c) => c.name === selectedCategory),
+        )
         : [],
     [posts, selectedCategory],
   )
@@ -122,7 +124,13 @@ const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl }
             className="mb-8 flex items-center gap-4"
           >
             <button
-              onClick={() => setSelectedCategory(null)}
+              onClick={() => {
+                if (initialCategory) {
+                  window.location.href = '/categories'
+                } else {
+                  setSelectedCategory(null)
+                }
+              }}
               className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -145,9 +153,9 @@ const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl }
           >
             {/* Title */}
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+              {/* <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
                 <Layers className="h-5 w-5" />
-              </div>
+              </div> */}
               <div>
                 <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
                   All Categories

@@ -44,24 +44,22 @@ interface SiteData {
 
 interface TemplateRendererProps {
   siteData: SiteData;
-  articleId?: string; // Optional article ID for individual article pages
-  pageType?: 'home' | 'contact' | 'article' | 'categories'; // Type of page to render
+  /** Optional article ID for individual article pages */
+  articleId?: string;
+  /** Type of page to render */
+  pageType?: 'home' | 'contact' | 'article' | 'categories' | 'category';
+  /** Category slug for /category/[slug] pages */
+  categorySlug?: string;
 }
 
-/**
- * Template Renderer - Routes to correct template based on templateKey
- * 
- * This component:
- * 1. Receives site data
- * 2. Selects appropriate template
- * 3. Passes structured data to template
- * 4. Optionally shows specific article if articleId provided
- * 5. Can show contact page if pageType is 'contact'
- */
-export default function TemplateRenderer({ siteData, articleId, pageType = 'home' }: TemplateRendererProps) {
+export default function TemplateRenderer({
+  siteData,
+  articleId,
+  pageType = 'home',
+  categorySlug,
+}: TemplateRendererProps) {
   const { website, pages } = siteData;
 
-  // Find home page
   const homePage = pages.find((p) => p.slug === '/') || pages[0];
 
   if (!homePage) {
@@ -72,16 +70,42 @@ export default function TemplateRenderer({ siteData, articleId, pageType = 'home
     );
   }
 
-  const templateProps = { page: homePage, website, domain: siteData.domain, articleId, pageType };
-
   if (website.templateKey === 'modernNews') {
-    return <ModernNews {...templateProps} />;
+    // ModernNews only supports subset of pageTypes — map 'category' → 'categories'
+    const mnPageType = pageType === 'category' ? 'categories' : pageType;
+    return (
+      <ModernNews
+        page={homePage}
+        website={website}
+        domain={siteData.domain}
+        articleId={articleId}
+        pageType={mnPageType as any}
+      />
+    );
   }
 
   if (website.templateKey === 'arclight') {
-    return <ArclightTemplate {...templateProps} />;
+    return (
+      <ArclightTemplate
+        page={homePage}
+        website={website}
+        domain={siteData.domain}
+        articleId={articleId}
+        pageType={pageType === 'category' ? 'category' : (pageType as any)}
+        categorySlug={categorySlug}
+      />
+    );
   }
 
-  return <TemplateA {...templateProps} />;
+  // TemplateA — map 'category' → 'categories'
+  const taPageType = pageType === 'category' ? 'categories' : pageType;
+  return (
+    <TemplateA
+      page={homePage}
+      website={website}
+      domain={siteData.domain}
+      articleId={articleId}
+      pageType={taPageType as any}
+    />
+  );
 }
-

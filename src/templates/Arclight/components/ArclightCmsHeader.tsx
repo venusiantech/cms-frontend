@@ -83,7 +83,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
         {/* Center: Nav (desktop / tablet) */}
         <div className="hidden flex-1 justify-center md:flex">
           <nav className="flex items-center gap-x-6">
-            {menuItems.map((item, i) =>
+            {/* {menuItems.map((item, i) =>
               item.asButton ? (
                 <button
                   key={item.label}
@@ -102,7 +102,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
                   {item.label}
                 </Link>
               )
-            )}
+            )} */}
           </nav>
         </div>
 

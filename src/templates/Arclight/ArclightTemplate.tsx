@@ -18,6 +18,7 @@ import { asTPost } from '@/templates/Arclight/cms/types'
 import Card9 from '@/templates/Arclight/components/PostCards/Card9'
 import { Divider } from '@/templates/Arclight/components/shared/divider'
 import ArclightCategoriesView from '@/templates/Arclight/components/ArclightCategoriesView'
+import NavigationProgress, { signalNavigationStart } from '@/components/NavigationProgress'
 
 import '@/templates/Arclight/styles/tailwind.css'
 
@@ -56,7 +57,9 @@ interface ArclightTemplateProps {
   }
   domain: { name: string }
   articleId?: string
-  pageType?: 'home' | 'contact' | 'article' | 'categories' | 'latest-articles'
+  pageType?: 'home' | 'contact' | 'article' | 'categories' | 'latest-articles' | 'category'
+  /** Category slug for /category/[slug] pages */
+  categorySlug?: string
 }
 
 export default function ArclightTemplate({
@@ -65,6 +68,7 @@ export default function ArclightTemplate({
   domain,
   articleId,
   pageType = 'home',
+  categorySlug,
 }: ArclightTemplateProps) {
   const router = useRouter()
   const posts = useMemo(() => mapPageToArclightPosts(page, domain), [page, domain])
@@ -96,11 +100,33 @@ export default function ArclightTemplate({
     : null
   const relatedPosts = postsWithContent.filter((a) => a.sectionId !== selectedId).slice(0, 6)
 
+  const computedCategories = useMemo(() => {
+    const map = new Map<string, any>()
+    postsWithContent.forEach((post) => {
+      const cats = post.categories ?? []
+      cats.forEach((c) => {
+        const existing = map.get(c.name)
+        map.set(c.name, {
+          id: c.id,
+          name: c.name,
+          handle: c.handle,
+          count: (existing?.count ?? 0) + 1,
+          thumbnail: existing?.thumbnail ?? post.featuredImage,
+          color: c.color,
+          date: post.date,
+        })
+      })
+    })
+    return Array.from(map.values()).sort((a, b) => b.count - a.count)
+  }, [postsWithContent])
+
   const onArticleClick = (id: string) => {
+    signalNavigationStart()
     router.push(`/blog/${id}`)
   }
 
   const onBack = () => {
+    signalNavigationStart()
     if (typeof window !== 'undefined') {
       window.location.href = '/'
     } else {
@@ -110,6 +136,7 @@ export default function ArclightTemplate({
 
   const handleContactClick = website.contactFormEnabled
     ? () => {
+        signalNavigationStart()
         setShowContactForm(true)
         router.push('/contact')
       }
@@ -118,6 +145,32 @@ export default function ArclightTemplate({
   const getPostUrl = (handle: string) => `/blog/${handle}`
 
   const renderContent = () => {
+    if (pageType === 'category') {
+      // Resolve category name from slug by matching against posts
+      const matchedCategory = (() => {
+        if (!categorySlug) return null
+        // Try exact handle match first
+        for (const post of postsWithContent) {
+          const cat = post.categories?.find(
+            (c) => c.handle === categorySlug ||
+            c.name.toLowerCase().replace(/\s+/g, '-') === categorySlug
+          )
+          if (cat) return cat.name
+        }
+        // Fallback: humanise the slug
+        return categorySlug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+      })()
+
+      return (
+        <ArclightCategoriesView
+          posts={postsWithContent}
+          onArticleClick={onArticleClick}
+          getPostUrl={getPostUrl}
+          initialCategory={matchedCategory}
+        />
+      )
+    }
+
     if (pageType === 'categories') {
       return (
         <ArclightCategoriesView
@@ -146,6 +199,7 @@ export default function ArclightTemplate({
         <PostPageView
           post={selectedArticle}
           relatedPosts={relatedPosts}
+          actualCategories={computedCategories}
           onBack={onBack}
           getPostUrl={getPostUrl}
         />
@@ -181,6 +235,7 @@ export default function ArclightTemplate({
   return (
     <ThemeProvider>
       <AsideProvider>
+        <NavigationProgress />
         <ArclightCmsHeader
           siteName={siteDisplay}
           logoUrl={website.websiteLogo}

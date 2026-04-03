@@ -42,7 +42,7 @@ const HeaderStyle1 = ({ className, post }: { className?: string; post: SinglePos
   const imgSrc = typeof post.featuredImage === 'object' && post.featuredImage?.src ? post.featuredImage.src : ''
   return (
     <>
-      <header className={clsx('single-header-style-1 container mt-8 lg:mt-16', className)}>
+      <header className={clsx('single-header-style-1 container mt-4 lg:mt-8', className)}>
         <div className="mx-auto max-w-4xl">
           <TitleAndMeta post={post} />
         </div>

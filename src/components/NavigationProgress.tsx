@@ -40,6 +40,28 @@ export default function NavigationProgress() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Global click listener — catches all Next.js <Link> navigations (e.g. Arclight card components)
+  // so we don't need to manually call signalNavigationStart() in every component.
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('a');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href) return;
+      // Only fire for same-origin internal navigation (starts with /, not //external or mailto:)
+      if (href.startsWith('/') && !href.startsWith('//')) {
+        // Don't trigger if it's opening in a new tab
+        if (target.target === '_blank') return;
+        // Don't trigger if modifier keys are held (open in new tab shortcuts)
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        signalNavigationStart();
+      }
+    };
+    document.addEventListener('click', handleClick, true);
+    return () => document.removeEventListener('click', handleClick, true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Path changed → route finished loading → complete the bar and fade out
   useEffect(() => {
     if (pathname === prevPath.current) return;
@@ -64,14 +86,14 @@ export default function NavigationProgress() {
         style={{
           height: '100%',
           width: `${width}%`,
-          background: 'linear-gradient(90deg, #4cae4c 0%, #5cb85c 60%, #7dcc7d 100%)',
+          background: 'linear-gradient(90deg, #111 0%, #222 60%, #444 100%)',
           opacity: fading ? 0 : 1,
           transition: fading
             ? 'opacity 0.38s ease'
             : width <= 72
               ? 'width 0.65s cubic-bezier(0.08, 0.05, 0, 1)'
               : 'width 0.18s ease-out',
-          boxShadow: '0 0 10px rgba(92,184,92,0.65), 0 0 4px rgba(92,184,92,0.4)',
+          boxShadow: '0 0 10px rgba(0,0,0,0.45), 0 0 4px rgba(0,0,0,0.3)',
           borderRadius: '0 3px 3px 0',
         }}
       />
@@ -83,7 +105,7 @@ export default function NavigationProgress() {
           right: `${100 - width}%`,
           width: 80,
           height: 5,
-          background: 'radial-gradient(ellipse at center, rgba(92,184,92,0.6) 0%, transparent 80%)',
+          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, transparent 80%)',
           opacity: fading ? 0 : 1,
           transition: fading ? 'opacity 0.38s ease' : 'right 0.65s cubic-bezier(0.08, 0.05, 0, 1)',
           pointerEvents: 'none',

@@ -33,9 +33,9 @@ const Card4: FC<Props> = ({ className, post }) => {
 
         <div>
           <div className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-x-2 gap-y-1 p-3">
-            <PostCardLikeBtn likeCount={likeCount} liked={liked} />
-            <PostCardCommentBtn commentCount={commentCount} handle={handle} />
-            <PostCardSaveBtn className="ms-auto" bookmarked={bookmarked} />
+            {/* <PostCardLikeBtn likeCount={likeCount} liked={liked} /> */}
+            {/* <PostCardCommentBtn commentCount={commentCount} handle={handle} /> */}
+            {/* <PostCardSaveBtn className="ms-auto" bookmarked={bookmarked} /> */}
           </div>
         </div>
       </div>
