@@ -261,13 +261,12 @@ export default function Section1({
         {article.image && (
           <figure className="image zoom mb-5 featured-image">
             <Image
-              className="lazy img-fluid responsive-image"
+              className="lazy img-fluid responsive-image object-cover w-full"
               src={article.image}
               alt={article.title}
               width={1240}
               height={700}
               unoptimized={article.image.startsWith('http')}
-              className="object-cover w-full"
             />
           </figure>
         )}
@@ -350,13 +349,12 @@ export default function Section1({
                         <figure className="col-md-5">
                           <a href="#" onClick={(e) => handleClick(e, post.id)}>
                             <Image
-                              className="lazy"
+                              className="lazy object-cover h-[120px]"
                               src={post.image || ''}
                               alt={post.title}
                               width={180}
                               height={180}
                               unoptimized={post.image?.startsWith('http')}
-                              className="object-cover h-[120px]"
                             />
                           </a>
                         </figure>
