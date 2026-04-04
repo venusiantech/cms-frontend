@@ -91,11 +91,11 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="w-full max-w-full divide-y divide-neutral-800">
         {/* Subdomain */}
-        <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Subdomain</p>
-          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
+        <div className="pb-8">
+          <p className="text-[10px] font-semibold text-neutral-600 uppercase tracking-widest mb-3">Subdomain</p>
+          <div className="py-1">
             <p className="font-mono text-sm text-neutral-100 mb-2 break-all">{getDisplaySubdomain(domain.website.subdomain)}</p>
             <a
               href={getSiteUrl(domain.website.subdomain)}
@@ -109,9 +109,9 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
         </div>
 
         {/* Custom Domain */}
-        <div>
-          <p className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Custom Domain</p>
-          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-lg p-4">
+        <div className="pt-8">
+          <p className="text-[10px] font-semibold text-neutral-600 uppercase tracking-widest mb-3">Custom Domain</p>
+          <div className="py-1">
             <p className="font-mono text-sm text-neutral-100 mb-3 break-all">{domain.domainName}</p>
             
             {/* DNS Configuration - Show if nameservers exist */}
@@ -219,9 +219,9 @@ export default function DeploymentTab({ domain }: DeploymentTabProps) {
               </div>
             ) : (
               <div className="mt-4">
-                <div className="bg-orange-900/30 border-2 border-orange-600/50 rounded-lg p-4">
+                <div className="bg-orange-950/40 rounded-lg p-4 border-l-2 border-orange-500/60">
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 bg-orange-800/50 rounded-lg flex items-center justify-center flex-shrink-0 border border-orange-600/50">
+                    <div className="w-10 h-10 bg-orange-900/40 rounded-lg flex items-center justify-center flex-shrink-0">
                       <AlertCircle size={20} className="text-orange-400" />
                     </div>
                     <div>

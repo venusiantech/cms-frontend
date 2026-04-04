@@ -571,7 +571,7 @@ export default function SchedulePage() {
     <div className="px-4 sm:px-6 max-w-7xl mx-auto space-y-6 pb-12">
 
       {/* ── Calendar card ── */}
-      <div className="bg-[#0d1117] border border-neutral-800 rounded-2xl overflow-visible">
+      <div className="bg-[#0a0a0a] border border-neutral-800 rounded-2xl overflow-visible">
 
         {/* Toolbar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
@@ -646,7 +646,7 @@ export default function SchedulePage() {
       </div>
 
       {/* ── All Schedules list ── */}
-      <div className="bg-[#0d1117] border border-neutral-800 rounded-2xl overflow-hidden">
+      <div className="bg-[#0a0a0a] border border-neutral-800 rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
           <div>
             <h2 className="text-base font-bold text-white">All Schedules</h2>

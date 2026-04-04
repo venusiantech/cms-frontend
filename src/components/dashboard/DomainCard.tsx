@@ -21,6 +21,42 @@ import { domainsAPI, getSiteUrl } from '@/lib/dashboard';
 import { useJobStatus } from '@/hooks/useJobStatus';
 import { GeneratingWebsiteAnimation } from './GeneratingWebsiteAnimation';
 
+function DomainAvatar({
+  logoUrl,
+  size = 'card',
+}: {
+  logoUrl?: string | null;
+  size?: 'card' | 'list';
+}) {
+  const [failed, setFailed] = useState(false);
+  const url = (logoUrl ?? '').trim();
+  useEffect(() => {
+    setFailed(false);
+  }, [url]);
+
+  const showImg = Boolean(url) && !failed;
+  const boxClass =
+    size === 'list' ? 'w-9 h-9 rounded-md' : 'w-10 h-10 rounded-lg';
+  const iconSize = size === 'list' ? 18 : 20;
+
+  return (
+    <div
+      className={`${boxClass} bg-[#262626] flex items-center justify-center flex-shrink-0 border border-neutral-700 overflow-hidden`}
+    >
+      {showImg ? (
+        <img
+          src={url}
+          alt=""
+          className="w-full h-full object-contain object-center p-0.5"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <Globe size={iconSize} className="text-neutral-400" />
+      )}
+    </div>
+  );
+}
+
 export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading, viewMode = 'card' }: any) {
   const queryClient = useQueryClient();
   const [generationJobId, setGenerationJobId] = useState<string | null>(null);
@@ -137,6 +173,9 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
   }, [domain.nameServersStatus]);
 
   const hasWebsite = !!(domain.website && domain.website.pages && domain.website.pages.length > 0);
+  const siteVisitUrl = domain.website?.subdomain?.trim()
+    ? getSiteUrl(domain.website.subdomain)
+    : null;
 
   const statusBadges = isGenerating ? (
     <span className="inline-flex items-center gap-1.5 text-xs font-light text-neutral-400">
@@ -194,9 +233,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
         <div className="group bg-[#0a0a0a] hover:bg-[#101010] transition-colors px-4 py-3.5 sm:px-6 sm:py-4">
           <div className="flex flex-col gap-3.5 xl:grid xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto] xl:items-center xl:gap-4">
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-9 h-9 bg-[#262626] rounded-md flex items-center justify-center flex-shrink-0 border border-neutral-700">
-                <Globe size={18} className="text-neutral-400" />
-              </div>
+              <DomainAvatar logoUrl={domain.website?.websiteLogo} size="list" />
               <div className="min-w-0">
                 <h3 className="text-sm font-light text-neutral-100 truncate">{domain.domainName}</h3>
                 {domain.website?.subdomain && (
@@ -207,7 +244,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap xl:justify-center">
+            <div className="flex flex-col gap-2 items-start">
               {statusBadges}
             </div>
 
@@ -221,25 +258,42 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
                     <span>Manage</span>
                     <ArrowRight size={14} className="group-hover/btn:translate-x-0.5 transition-transform duration-200" />
                   </Link>
-                  <a
-                    href={getSiteUrl(domain.website.subdomain)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-2.5 py-2 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
-                    title="View site"
-                  >
-                    <ExternalLink size={16} />
-                  </a>
+                  {siteVisitUrl && (
+                    <a
+                      href={siteVisitUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-2 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
+                      title="View site"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
                 </>
-              ) : !isGenerating ? (
-                <button
-                  onClick={() => onGenerateWebsite(setGenerationJobId)}
-                  className="px-3 py-1.5 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-1.5"
-                >
-                  <Sparkles size={14} />
-                  Generate
-                </button>
-              ) : null}
+              ) : (
+                <>
+                  {!isGenerating && (
+                    <button
+                      onClick={() => onGenerateWebsite(setGenerationJobId)}
+                      className="px-3 py-1.5 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-1.5"
+                    >
+                      <Sparkles size={14} />
+                      Generate
+                    </button>
+                  )}
+                  {siteVisitUrl && (
+                    <a
+                      href={siteVisitUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-2 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
+                      title="View site"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </>
+              )}
               <button
                 onClick={(e) => {
                   e.preventDefault();
@@ -267,9 +321,7 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
         >
           <div className="flex items-start justify-between gap-3 mb-4">
             <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className="w-10 h-10 bg-[#262626] rounded-lg flex items-center justify-center flex-shrink-0 border border-neutral-700">
-                <Globe size={20} className="text-neutral-400" />
-              </div>
+              <DomainAvatar logoUrl={domain.website?.websiteLogo} size="card" />
               <div className="min-w-0 flex-1">
                 <h3 className="text-sm font-light text-neutral-100 truncate">{domain.domainName}</h3>
                 {domain.website?.subdomain && (
@@ -307,31 +359,48 @@ export function DomainCard({ domain, index, onGenerateWebsite, setGlobalLoading,
                   <span>Manage</span>
                   <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform duration-200" />
                 </Link>
+                {siteVisitUrl && (
+                  <a
+                    href={siteVisitUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700 flex-shrink-0"
+                    title="View site"
+                  >
+                    <ExternalLink size={18} />
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-3 items-stretch">
+              <div className="flex-1 min-w-0">
+                {isGenerating ? (
+                  <GeneratingWebsiteAnimation
+                    progress={progress}
+                    isCompleted={isCompleted}
+                  />
+                ) : (
+                  <button
+                    onClick={() => onGenerateWebsite(setGenerationJobId)}
+                    className="w-full px-3 py-2 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-2"
+                  >
+                    <Sparkles size={14} />
+                    Generate Website
+                  </button>
+                )}
+              </div>
+              {siteVisitUrl && (
                 <a
-                  href={getSiteUrl(domain.website.subdomain)}
+                  href={siteVisitUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700"
+                  className="px-4 py-2.5 bg-[#262626] hover:bg-[#404040] text-neutral-200 rounded-md transition-colors flex items-center justify-center border border-neutral-700 flex-shrink-0 self-stretch"
                   title="View site"
                 >
                   <ExternalLink size={18} />
                 </a>
-              </div>
-            </div>
-          ) : isGenerating ? (
-            <GeneratingWebsiteAnimation
-              progress={progress}
-              isCompleted={isCompleted}
-            />
-          ) : (
-            <div className="space-y-4">
-              <button
-                onClick={() => onGenerateWebsite(setGenerationJobId)}
-                className="w-full px-3 py-2 bg-white hover:bg-neutral-200 text-black rounded-md text-sm flex items-center justify-center gap-2"
-              >
-                <Sparkles size={14} />
-                Generate Website
-              </button>
+              )}
             </div>
           )}
         </div>

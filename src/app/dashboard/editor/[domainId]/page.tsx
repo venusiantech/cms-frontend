@@ -439,7 +439,7 @@ export default function EditorPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 bg-black">
+          <div className="flex-1 overflow-auto p-3 sm:p-4 lg:p-5 bg-black">
             {activeTab === 'blogs' && (
               <BlogsTab
                 blogs={blogs}

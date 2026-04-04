@@ -2,7 +2,8 @@
 
 import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save, BarChart3, ImageIcon, Trash2, Upload } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, X, Instagram, Facebook, Twitter, Layout, Megaphone, MessageSquare, Share2, ArrowLeft, Globe, Mail, Phone, Loader2, Save, BarChart3, ImageIcon, Trash2, Upload, ChevronRight } from 'lucide-react';
 import { websitesAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import CustomLoader from '@/components/CustomLoader';
@@ -91,49 +92,42 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
       name: 'Logo',
       description: 'Upload your website logo',
       icon: ImageIcon,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'templates' as SettingCategory,
       name: 'Templates',
       description: 'Choose website design',
       icon: Layout,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'metadata' as SettingCategory,
       name: 'Metadata',
       description: 'SEO & social sharing',
       icon: Globe,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'ads' as SettingCategory,
       name: 'Ads Settings',
       description: 'Manage advertisements',
       icon: Megaphone,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'contact' as SettingCategory,
       name: 'Contact Form',
       description: 'Toggle contact form',
       icon: MessageSquare,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'social' as SettingCategory,
       name: 'Social Media',
       description: 'Add social links',
       icon: Share2,
-      color: 'bg-[#262626] text-neutral-100',
     },
     {
       id: 'analytics' as SettingCategory,
       name: 'Analytics',
       description: 'Google Analytics tracking',
       icon: BarChart3,
-      color: 'bg-[#262626] text-neutral-100',
     },
   ];
 
@@ -207,58 +201,81 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
     }
   };
 
-  // If no category selected, show grid
-  if (!selectedCategory) {
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {settingCategories.map((category) => {
-            const Icon = category.icon;
-            return (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className="bg-[#0a0a0a] border-1 border-neutral-700 rounded-xl p-6 hover:shadow-lg hover:border-neutral-600 transition-all duration-200 text-center group"
-              >
-                <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
-                  <Icon size={32} />
-                </div>
-                <h3 className="font-medium text-neutral-100 text-lg mb-2">{category.name}</h3>
-                <p className="text-sm text-neutral-400">{category.description}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  // Category-specific content
   return (
-    <div className="space-y-6">
-      {/* Back Button */}
-      <button
-        onClick={() => setSelectedCategory(null)}
-        className="flex items-center gap-2 text-neutral-400 hover:text-neutral-100 transition-colors"
-      >
-        <ArrowLeft size={20} />
-        <span className="">Back to Settings</span>
-      </button>
+    <div className="relative min-h-[120px]">
+      <AnimatePresence mode="wait" initial={false}>
+        {!selectedCategory ? (
+          <motion.div
+            key="settings-list"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="space-y-0.5"
+          >
+            <p className="px-3 mb-2 text-[10px] font-semibold text-neutral-600 uppercase tracking-widest">
+              Menu
+            </p>
+            <div className="divide-y divide-neutral-800">
+              {settingCategories.map((category) => {
+                const Icon = category.icon;
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(category.id)}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-left transition-colors group text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/60"
+                  >
+                    <Icon
+                      size={16}
+                      className="flex-shrink-0 text-neutral-600 group-hover:text-neutral-400 transition-colors"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-neutral-100">{category.name}</span>
+                      <p className="text-xs text-neutral-500 mt-0.5 leading-snug">{category.description}</p>
+                    </div>
+                    <ChevronRight
+                      size={14}
+                      className="flex-shrink-0 text-neutral-600 group-hover:text-neutral-400 transition-colors"
+                      aria-hidden
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={selectedCategory}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="space-y-6 w-full max-w-full"
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedCategory(null)}
+              className="flex items-center gap-2 px-3 py-2 mb-1 rounded-lg text-xs text-neutral-400 hover:text-neutral-300 hover:bg-neutral-800/60 transition-colors group"
+            >
+              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+              Back to Settings
+            </button>
 
-      <div className="">
+            <div className="w-full max-w-full">
         {/* Logo Upload */}
         {selectedCategory === 'logo' && (
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <div>
               <h3 className="text-lg text-neutral-100 mb-1">Website Logo</h3>
               <p className="text-sm text-neutral-400">Upload a logo to display in the header of your website. Replaces the domain name text.</p>
             </div>
 
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5 space-y-5">
+            <div className="w-full space-y-5">
               {/* Current logo preview */}
               {logoPreview ? (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="border border-neutral-700 rounded-lg p-4 bg-[#262626] w-full flex items-center justify-center" style={{ minHeight: '120px' }}>
+                  <div className="rounded-lg p-4 bg-[#262626] w-full flex items-center justify-center" style={{ minHeight: '120px' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={logoPreview}
@@ -325,9 +342,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               />
 
               {/* Display mode radio buttons */}
-              <div className="border-t border-neutral-700 pt-4">
-                <p className="text-sm font-medium text-neutral-100 mb-3">Header Display</p>
-                <div className="space-y-2">
+              <div className="border-t border-neutral-800 pt-5">
+                <p className="text-sm font-medium text-neutral-100 mb-0">Header Display</p>
+                <div className="divide-y divide-neutral-800 mt-3">
                   {([
                     { value: 'logo_only', label: 'Logo only', desc: 'Show only the logo image' },
                     { value: 'text_only', label: 'Text only', desc: 'Show only the site name text' },
@@ -335,10 +352,10 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                   ] as const).map((opt) => (
                     <label
                       key={opt.value}
-                      className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                      className={`flex items-start gap-3 py-3 cursor-pointer transition-colors ${
                         logoDisplayMode === opt.value
-                          ? 'border-neutral-400 bg-[#262626]'
-                          : 'border-neutral-700 hover:border-neutral-500'
+                          ? 'bg-neutral-800/50 -mx-1 px-1 rounded-md'
+                          : 'hover:bg-neutral-800/25 -mx-1 px-1 rounded-md'
                       }`}
                     >
                       <input
@@ -377,7 +394,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </button>
               </div>
 
-              <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3">
+              <div className="bg-blue-900/20 rounded-lg p-3 border-l-2 border-blue-500/60">
                 <p className="text-xs font-light text-blue-200">
                   💡 <strong>Tip:</strong> Use a transparent PNG or SVG for the best results. Recommended dimensions: at least 200px wide, up to 400px.
                 </p>
@@ -389,8 +406,8 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
         {/* Template Selection */}
         {selectedCategory === 'templates' && (
           <>
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-4 sm:p-5">
-              <div className="mb-4">
+            <div className="w-full space-y-4">
+              <div>
                 <p className="font-medium text-neutral-100 mb-1">Website Template</p>
               </div>
 
@@ -399,15 +416,16 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 <CustomLoader />
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                 {templates?.map((template: any) => (
                   <button
                     key={template.key}
                     onClick={() => handleTemplateClick(template)}
-                    className={`group relative border-2 rounded-lg overflow-hidden transition-all duration-200 ${
+                    type="button"
+                    className={`group relative rounded-lg overflow-hidden transition-all duration-200 bg-[#262626] ${
                       selectedTemplate === template.key
-                        ? 'border-neutral-400 ring-2 ring-neutral-400'
-                        : 'border-neutral-700 hover:border-neutral-500'
+                        ? 'ring-2 ring-neutral-400'
+                        : 'ring-1 ring-neutral-800 hover:ring-neutral-600'
                     }`}
                   >
                     {/* Preview Image */}
@@ -469,7 +487,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
               {/* Modal Content - Side by Side Layout on desktop, stacked on mobile */}
               <div className="flex flex-col lg:flex-row overflow-auto" style={{ minHeight: '400px', maxHeight: '650px' }}>
                 {/* Left: Preview Image + Other Templates */}
-                <div className="flex-1 bg-[#262626] p-4 sm:p-6 flex flex-col gap-3">
+                <div className="flex-1 bg-[#262626] p-2 sm:p-3 flex flex-col gap-3">
                   {/* Main Preview - Takes most space */}
                   <div className="rounded-lg overflow-hidden bg-[#262626] shadow-sm" style={{ minHeight: '300px', height: 'calc(100% - 100px)' }}>
                     <img
@@ -574,7 +592,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Ads Setting */}
         {selectedCategory === 'ads' && (
-          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
+          <div className="w-full py-1">
             <div className="flex items-start justify-between">
               <label className="flex items-start gap-3 cursor-pointer flex-1">
               <input
@@ -614,9 +632,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Contact Form Setting */}
         {selectedCategory === 'contact' && (
-          <div className="space-y-6">
+          <div className="w-full space-y-0 divide-y divide-neutral-800">
             {/* Toggle Contact Form */}
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
+            <div className="py-4 first:pt-0">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -643,7 +661,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
             </div>
 
             {/* Contact Information */}
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
+            <div className="py-5">
               <div className="mb-4">
                 <p className="font-medium text-neutral-100 mb-1">Contact Information</p>
                 <p className="text-sm text-neutral-400">Add your contact details to display on your website</p>
@@ -719,7 +737,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Social Media Links */}
         {selectedCategory === 'social' && (
-          <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
+          <div className="w-full space-y-4 py-1">
             <div className="mb-4">
               <p className="font-medium text-neutral-100 mb-1">Social Media Links</p>
               <p className="text-sm text-neutral-400">Add your social media profiles to appear in your website footer</p>
@@ -792,16 +810,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Metadata Settings */}
         {selectedCategory === 'metadata' && (
-          <div className="space-y-6">
+          <div className="space-y-6 w-full">
             <div>
               <h3 className="text-lg font-medium text-neutral-100 mb-1">SEO & Social Sharing Settings</h3>
               <p className="text-sm text-neutral-400">Optimize your website for search engines and social media platforms</p>
             </div>
 
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
-              <div className="space-y-5">
+            <div className="w-full divide-y divide-neutral-800">
                 {/* Meta Title */}
-                <div>
+                <div className="py-4 first:pt-0">
                   <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Title *
                   </label>
@@ -825,7 +842,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Meta Description */}
-                <div>
+                <div className="py-4">
                   <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Description *
                   </label>
@@ -849,7 +866,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Meta Image */}
-                <div>
+                <div className="py-4">
                   <label className="block text-sm  text-neutral-300 mb-2">
                     Preview Image URL *
                   </label>
@@ -866,7 +883,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Meta Keywords */}
-                <div>
+                <div className="py-4">
                   <label className="block text-sm  text-neutral-300 mb-2">
                     SEO Keywords
                   </label>
@@ -883,7 +900,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 </div>
 
                 {/* Meta Author */}
-                <div>
+                <div className="py-4">
                   <label className="block text-sm  text-neutral-300 mb-2">
                     Author / Owner Name
                   </label>
@@ -901,9 +918,9 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Social Media Preview Card */}
                 {(metaTitle || metaDescription || metaImage) && (
-                  <div className="pt-4 border-t border-neutral-700">
+                  <div className="py-4">
                     <p className="text-xs  text-neutral-300 mb-3">How it will look when shared:</p>
-                    <div className="border border-neutral-700 rounded-lg overflow-hidden bg-[#262626] shadow-sm">
+                    <div className="rounded-lg overflow-hidden bg-[#262626]">
                       {metaImage && (
                         <img
                           src={metaImage}
@@ -928,7 +945,7 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                 )}
 
                 {/* Save Button */}
-                <div className="pt-2">
+                <div className="py-4">
                   <button
                     onClick={handleMetadataUpdate}
                     disabled={isUpdatingMetadata}
@@ -944,11 +961,10 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     )}
                   </button>
                 </div>
-              </div>
             </div>
 
             {/* SEO Tips */}
-            <div className="bg-blue-900/20 border border-blue-700/50 rounded-xl p-5">
+            <div className="bg-blue-900/15 rounded-lg p-4 border-l-2 border-blue-500/50">
               <h4 className="text-sm font-medium text-blue-200 mb-3 flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 SEO Best Practices
@@ -981,16 +997,15 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
         {/* Google Analytics Settings */}
         {selectedCategory === 'analytics' && (
-          <div className="space-y-6">
+          <div className="space-y-6 w-full">
             <div>
               <h3 className="text-lg font-medium text-neutral-100 mb-1">Google Analytics Tracking</h3>
               <p className="text-sm text-neutral-400">Add Google Analytics to track your website visitors and behavior</p>
             </div>
 
-            <div className="bg-[#0a0a0a] border border-neutral-700 rounded-xl p-5">
-              <div className="space-y-5">
+            <div className="w-full divide-y divide-neutral-800">
                 {/* Google Analytics ID */}
-                <div>
+                <div className="py-4 first:pt-0">
                   <label className="flex items-center gap-2 text-sm  text-neutral-300 mb-2">
                     <BarChart3 size={18} className="text-orange-500" />
                     Google Analytics Measurement ID
@@ -1009,20 +1024,23 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
 
                 {/* Current Status */}
                 {googleAnalyticsId && (
-                  <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle2 size={20} className="text-green-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-medium text-green-200">Google Analytics Enabled</p>
-                        <p className="text-xs text-green-300/90 mt-1">
-                          Tracking ID: <code className="bg-[#262626] px-2 py-0.5 rounded font-mono text-neutral-200">{googleAnalyticsId}</code>
-                        </p>
+                  <div className="py-4">
+                    <div className="bg-green-900/25 rounded-lg p-4 border-l-2 border-green-500/50">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 size={20} className="text-green-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium text-green-200">Google Analytics Enabled</p>
+                          <p className="text-xs text-green-300/90 mt-1">
+                            Tracking ID: <code className="bg-[#262626] px-2 py-0.5 rounded font-mono text-neutral-200">{googleAnalyticsId}</code>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {/* Save Button */}
+                <div className="py-4">
                 <button
                   onClick={async () => {
                     setIsUpdatingAnalytics(true);
@@ -1053,32 +1071,35 @@ export default function SettingsTab({ domain, domainId, queryClient }: SettingsT
                     </>
                   )}
                 </button>
-              </div>
+                </div>
             </div>
 
             {/* Setup Instructions */}
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
-              <h4 className="text-sm font-medium text-orange-900 mb-3 flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
+            <div className="bg-orange-950/40 rounded-lg p-4 border-l-2 border-orange-500/50">
+              <h4 className="text-sm font-medium text-orange-200 mb-3 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-orange-400" />
                 How to Get Your Google Analytics ID
               </h4>
-              <ol className="space-y-2 text-sm text-orange-800 list-decimal list-inside">
-                <li>Visit <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline ">Google Analytics</a></li>
+              <ol className="space-y-2 text-sm text-orange-200/90 list-decimal list-inside">
+                <li>Visit <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="underline text-orange-300 hover:text-orange-200">Google Analytics</a></li>
                 <li>Sign in with your Google account</li>
                 <li>Create a new property (or use existing)</li>
                 <li>Select <strong>Web</strong> as the platform</li>
                 <li>Copy the <strong>Measurement ID</strong> (starts with G-)</li>
                 <li>Paste it above and click Save</li>
               </ol>
-              <div className="mt-4 pt-4 border-t border-orange-300">
-                <p className="text-xs text-orange-700">
+              <div className="mt-4 pt-4 border-t border-orange-800/50">
+                <p className="text-xs text-orange-300/90">
                   <strong>Note:</strong> It may take 24-48 hours for data to start appearing in Google Analytics after setup.
                 </p>
               </div>
             </div>
           </div>
         )}
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
