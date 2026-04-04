@@ -32,8 +32,7 @@ const Card9: FC<Props> = ({ className, ratio = 'aspect-3/4', post }) => {
           </Link>
         </h2>
         <div className="relative mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
-          <Link href={`/author/${author.handle}`} className="absolute inset-0" />
-          <span className="font-medium text-neutral-200 hover:text-white">{author.name}</span>
+          <span className="font-medium text-neutral-200">{author.name}</span>
           <span className="font-medium">·</span>
           <LocalDate date={date} />
           <span>/</span>

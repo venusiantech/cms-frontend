@@ -32,7 +32,6 @@ const Footer: React.FC<FooterProps> = ({
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/contact', label: 'Contact' },
-    { href: '/privacy-policy', label: 'Privacy Policy' },
   ]
 
   const hasSocials = !!(facebookUrl || instagramUrl || twitterUrl)
