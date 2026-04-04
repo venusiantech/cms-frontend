@@ -13,18 +13,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = headersList.get('host') || '';
   const domain = host.split(':')[0];
 
-  // Determine if this is the main platform domain (not a user subdomain)
   const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
-  const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
-
+  const platformDomains = platformDomainsEnv.split(',').map((d) => d.trim());
   const isPlatformDomain =
     domain === 'localhost' ||
     domain.startsWith('127.0.0.1') ||
-    platformDomains.includes(domain) || // Exact match only
+    platformDomains.includes(domain) ||
+    platformDomains.some((pd) => domain === `www.${pd}`) ||
     domain === 'cms.local';
-
   const isSubdomainOfPlatform = platformDomains.some(
-    (pd) => domain !== pd && domain.endsWith('.' + pd)
+    (pd) => domain !== pd && domain !== `www.${pd}` && domain.endsWith('.' + pd)
   );
 
   try {
@@ -120,21 +118,16 @@ export default async function PublicSitePage() {
 
   console.log('🌐 Rendering site for domain:', domain);
 
-  // Platform domains (main dashboard URLs) - supports comma-separated list
   const platformDomainsEnv = process.env.NEXT_PUBLIC_PLATFORM_DOMAIN || 'cms.local';
-  const platformDomains = platformDomainsEnv.split(',').map(d => d.trim());
-
-  // Check if this is the main platform domain (not a subdomain)
-  // Example: fastofy.com is platform, but music-byi6.fastofy.com is a user site
-  const isPlatformDomain = 
-    domain === 'localhost' || 
+  const platformDomains = platformDomainsEnv.split(',').map((d) => d.trim());
+  const isPlatformDomain =
+    domain === 'localhost' ||
     domain.startsWith('127.0.0.1') ||
-    platformDomains.includes(domain) || // Exact match only
+    platformDomains.includes(domain) ||
+    platformDomains.some((pd) => domain === `www.${pd}`) ||
     domain === 'cms.local';
-
-  // Special check: if domain is a subdomain of platform domain, it's a user site
-  const isSubdomainOfPlatform = platformDomains.some(pd => 
-    domain !== pd && domain.endsWith('.' + pd)
+  const isSubdomainOfPlatform = platformDomains.some(
+    (pd) => domain !== pd && domain !== `www.${pd}` && domain.endsWith('.' + pd)
   );
 
   if (isPlatformDomain && !isSubdomainOfPlatform) {
