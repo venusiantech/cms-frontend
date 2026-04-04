@@ -43,7 +43,7 @@ const Card3Small: FC<Props> = ({ className, post }) => {
         />
       </div>
 
-      <Link href={`/post/${handle}`} className="absolute inset-0" title={title}></Link>
+      <Link href={`/blog/${handle}`} className="absolute inset-0" title={title}></Link>
     </div>
   )
 }

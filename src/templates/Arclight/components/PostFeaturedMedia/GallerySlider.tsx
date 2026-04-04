@@ -77,7 +77,7 @@ const GallerySlider: FC<Props> = ({ className, galleryImgs, handle, navigation =
               />
             </motion.div>
           </AnimatePresence>
-          <Link href={`/post/${handle}`} className="absolute inset-0"></Link>
+          <Link href={`/blog/${handle}`} className="absolute inset-0"></Link>
         </div>
 
         <>

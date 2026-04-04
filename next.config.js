@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
-      { source: '/post/:path*', destination: '/blog/:path*', permanent: false },
+      { source: '/post/:path*', destination: '/blog/:path*', permanent: true },
     ]
   },
   images: {

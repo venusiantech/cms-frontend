@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
         : siteData.website.websiteLogo;
 
     return {
-      title,
+      title: { absolute: title },
       description,
       keywords: keywords.split(',').map((k: string) => k.trim()),
       authors: [{ name: author }],

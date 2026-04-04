@@ -43,7 +43,7 @@ const Card4: FC<Props> = ({ className, post }) => {
       <div className="flex grow flex-col gap-y-2.5 p-4">
         <CategoryBadgeList categories={categories} />
         <h2 className="block font-semibold text-neutral-900 dark:text-neutral-100">
-          <Link href={`/post/${handle}`} className="line-clamp-2" title={title}>
+          <Link href={`/blog/${handle}`} className="line-clamp-2" title={title}>
             {title}
           </Link>
         </h2>

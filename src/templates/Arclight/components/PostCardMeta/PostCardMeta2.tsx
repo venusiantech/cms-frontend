@@ -18,7 +18,7 @@ const PostCardMeta2: FC<Props> = ({ meta, className, avatarSize }) => {
       <Avatar className={clsx(avatarSize, 'mt-1 size-9 shrink-0')} src={author.avatar.src} />
       <div>
         <h2 className={clsx('block text-base font-semibold')}>
-          <Link href={`/post/${handle}`} className="line-clamp-2">
+          <Link href={`/blog/${handle}`} className="line-clamp-2">
             {title}
           </Link>
         </h2>

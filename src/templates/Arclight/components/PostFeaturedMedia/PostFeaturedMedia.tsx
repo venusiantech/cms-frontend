@@ -67,7 +67,7 @@ const PostFeaturedMedia: FC<Props> = ({ className, post, isHover = false }) => {
 
   const renderImage = () => {
     return (
-      <Link href={`/post/${handle}`}>
+      <Link href={`/blog/${handle}`}>
         <Image alt={title} fill className="object-cover" src={featuredImage} sizes="(max-width: 600px) 100vw, 50vw" />
         <div className="absolute inset-0 bg-black/25 opacity-0 transition-opacity group-hover:opacity-100" />
       </Link>

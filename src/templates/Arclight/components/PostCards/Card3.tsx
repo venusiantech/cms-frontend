@@ -36,7 +36,7 @@ const Card3: FC<Props> = ({ className, post }) => {
         <div className="space-y-3.5">
           <CategoryBadgeList categories={categories} />
           <h2 className="nc-card-title block text-base font-medium sm:font-semibold xl:text-lg">
-            <Link href={`/post/${handle}`} className="line-clamp-2" title={title}>
+            <Link href={`/blog/${handle}`} className="line-clamp-2" title={title}>
               {title}
             </Link>
           </h2>
@@ -64,7 +64,7 @@ const Card3: FC<Props> = ({ className, post }) => {
           wrapSize="size-8"
           iconSize="size-4"
         />
-        <Link href={`/post/${handle}`} className="absolute inset-0"></Link>
+        <Link href={`/blog/${handle}`} className="absolute inset-0"></Link>
       </div>
     </div>
   )

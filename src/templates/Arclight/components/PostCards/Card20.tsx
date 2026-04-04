@@ -17,7 +17,7 @@ const Card20 = ({ post, className }: { post: TPost; className?: string }) => {
             className="aspect-square w-full rounded-2xl object-cover brightness-100 transition-[filter] duration-300 group-hover:brightness-90 sm:aspect-3/2"
           />
         )}
-        <Link href={`/post/${handle}`} className="absolute inset-0" />
+        <Link href={`/blog/${handle}`} className="absolute inset-0" />
       </div>
       <div className="max-w-xl">
         <div className="mt-3.5 flex items-center gap-x-4 text-xs">
@@ -26,7 +26,7 @@ const Card20 = ({ post, className }: { post: TPost; className?: string }) => {
         </div>
         <div className="group relative">
           <h3 className="mt-2 text-sm/normal font-semibold">
-            <Link href={`/post/${handle}`}>
+            <Link href={`/blog/${handle}`}>
               <span className="absolute inset-0" />
               {title}
             </Link>

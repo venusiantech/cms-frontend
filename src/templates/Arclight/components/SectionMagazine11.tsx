@@ -40,7 +40,7 @@ const SectionMagazine11: FC<Props> = ({ className, categories, subHeading, dimHe
                   </Badge>
 
                   <h2 className="nc-card-title font-medium">
-                    <Link href={`/post/${post.handle}`} title={post.title}>
+                    <Link href={`/blog/${post.handle}`} title={post.title}>
                       {post.title}
                     </Link>
                   </h2>

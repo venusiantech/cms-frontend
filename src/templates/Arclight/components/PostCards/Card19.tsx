@@ -46,13 +46,13 @@ const Card19: FC<Props> = ({
               wrapSize="size-7"
               iconSize="size-4"
             />
-            <Link href={`/post/${handle}`} className="absolute inset-0"></Link>
+            <Link href={`/blog/${handle}`} className="absolute inset-0"></Link>
           </>
         )}
       </div>
 
       <Link
-        href={`/post/${handle}`}
+        href={`/blog/${handle}`}
         className="absolute inset-x-0 bottom-0 block h-1/2 bg-linear-to-t from-black opacity-80"
       />
 
@@ -63,7 +63,7 @@ const Card19: FC<Props> = ({
       </div>
 
       <div className="absolute inset-x-0 bottom-0 flex grow flex-col p-5 sm:p-8">
-        <Link href={`/post/${handle}`} className="absolute inset-0" />
+        <Link href={`/blog/${handle}`} className="absolute inset-0" />
         <CategoryBadgeList categories={categories} />
         <h2 className={clsx('mt-3 block font-semibold text-white', titleClass)}>{title}</h2>
       </div>

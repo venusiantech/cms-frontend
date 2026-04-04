@@ -43,7 +43,7 @@ const Card7: FC<Props> = ({ className, ratio = 'aspect-3/4', post, hoverClass })
         <PostCardSaveBtn className="ms-auto" bookmarked={bookmarked} />
       </div>
       <div className={clsx('relative w-full', ratio)}>
-        <Link href={`/post/${handle}`} className="absolute inset-0" />
+        <Link href={`/blog/${handle}`} className="absolute inset-0" />
         <Image
           fill
           alt={title}
@@ -61,11 +61,11 @@ const Card7: FC<Props> = ({ className, ratio = 'aspect-3/4', post, hoverClass })
       </div>
 
       <div className="absolute inset-x-3 bottom-3 flex grow flex-col rounded-3xl bg-white p-4 transition-shadow group-hover:shadow-2xl dark:bg-[#0a0a0a]">
-        <Link href={`/post/${handle}`} className="absolute inset-0"></Link>
+        <Link href={`/blog/${handle}`} className="absolute inset-0"></Link>
         <div className="mb-3 space-y-2.5">
           <CategoryBadgeList categories={categories} />
           <h2 className="block text-base font-semibold text-neutral-900 dark:text-neutral-100">
-            <Link href={`/post/${handle}`} title={title} className="line-clamp-2">
+            <Link href={`/blog/${handle}`} title={title} className="line-clamp-2">
               {title}
             </Link>
           </h2>

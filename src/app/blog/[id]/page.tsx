@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const favicon = siteData.website.websiteLogo;
 
     return {
-      title: `${article.title} - ${siteName}`,
+      title: { absolute: `${article.title} - ${siteName}` },
       description: article.preview || article.content?.substring(0, 160),
       ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
