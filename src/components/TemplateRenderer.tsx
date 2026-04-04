@@ -64,8 +64,53 @@ export default function TemplateRenderer({
 
   if (!homePage) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>No content available</p>
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-10 px-6 text-center select-none">
+        {/* Fastofy logo */}
+        <div className="flex flex-col items-center gap-3">
+          <img
+            src="/logo/fastofy.png"
+            alt="Fastofy"
+            className="w-16 h-16 opacity-90"
+          />
+          <span className="text-xl font-semibold tracking-tight text-white">
+            FASTOFY
+          </span>
+        </div>
+
+        {/* Animated pulsing dots */}
+        <div className="flex items-center gap-2.5">
+          {[0, 0.2, 0.4].map((delay, i) => (
+            <span
+              key={i}
+              className="w-2 h-2 rounded-full bg-neutral-500"
+              style={{
+                animation: `pulse 1.4s ease-in-out ${delay}s infinite`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Domain name + status */}
+        <div className="space-y-2">
+          <p className="text-lg font-medium text-neutral-200 tracking-wide">
+            {siteData.domain.name}
+          </p>
+          <p className="text-sm text-neutral-500 leading-relaxed max-w-xs">
+            Your website is being set up and will be ready soon.
+          </p>
+        </div>
+
+        {/* Footer badge */}
+        <p className="text-xs text-neutral-700 tracking-wider uppercase">
+          Powered by Fastofy
+        </p>
+
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: scale(0.85); }
+            50%       { opacity: 1;   transform: scale(1); }
+          }
+        `}</style>
       </div>
     );
   }
