@@ -67,14 +67,15 @@ export default function CategoriesSection1({
                       width={736}
                       height={380}
                       unoptimized={mainArticle.image?.startsWith('http')}
-                      style={{ objectFit: 'cover', width: '100%', height: '380px' }}
+                      className="object-cover w-full h-[380px]"
                     />
                   </a>
                 </figure>
-                <h1 className="entry-title mb-3" style={{ fontSize: '1.871em', lineHeight: '1.2em' }}>
-                  <a href="#" onClick={(e) => handleClick(e, mainArticle.id)}>
-                    {mainArticle.title}
-                  </a>
+                <h1
+                  className="entry-title mb-3 cursor-pointer text-[1.871em] leading-[1.2em]"
+                  onClick={(e) => handleClick(e, mainArticle.id)}
+                >
+                  {mainArticle.title}
                 </h1>
                 {mainArticle.excerpt && (
                   <div className="entry-excerpt">
@@ -103,10 +104,11 @@ export default function CategoriesSection1({
                       {article.tag && (
                         <div className="capsSubtle mb-2">{article.tag}</div>
                       )}
-                      <h3 className="entry-title mb-3" style={{ fontSize: '1.4rem' }}>
-                        <a href="#" onClick={(e) => handleClick(e, article.id)}>
-                          {article.title}
-                        </a>
+                      <h3
+                        className="entry-title mb-3 cursor-pointer text-[1.4rem]"
+                        onClick={(e) => handleClick(e, article.id)}
+                      >
+                        {article.title}
                       </h3>
                       {article.excerpt && (
                         <div className="entry-excerpt">
@@ -126,13 +128,8 @@ export default function CategoriesSection1({
                     </div>
                   </div>
                   <div
-                    className="col-md-3 bgcover"
-                    style={{
-                      backgroundImage: `url(${article.image || PLACEHOLDER_IMAGE})`,
-                      minHeight: '200px',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
+                    className="col-md-3 bgcover min-h-[200px] bg-cover bg-center"
+                    style={{ backgroundImage: `url(${article.image || PLACEHOLDER_IMAGE})` }}
                   />
                 </article>
               ))}
@@ -143,22 +140,22 @@ export default function CategoriesSection1({
             {/* ── Sidebar ──────────────────────────────────── */}
             <div className="col-md-4 pl-md-5 sticky-sidebar">
               <div className="sidebar-widget latest-tpl-4">
-                <h5 className="spanborder widget-title" style={{ fontSize: '1.118em', lineHeight: 1, marginBottom: '1.8rem' }}>
-                  <span style={{ paddingBottom: '0.5rem' }}>Popular Articles</span>
+                <h5 className="spanborder widget-title text-[1.118em] leading-none mb-[1.8rem]">
+                  <span className="pb-2">Popular Articles</span>
                 </h5>
                 <ol>
                   {popularArticles.map((article, i) => (
-                    <li key={article.id} className="d-flex" style={{ marginBottom: '1.2em' }}>
-                      <div className="post-count" style={{ fontSize: '1.7em', lineHeight: 1 }}>
+                    <li key={article.id} className="d-flex mb-[1.2em]">
+                      <div className="post-count text-[1.7em] leading-none">
                         {String(i + 1).padStart(2, '0')}
                       </div>
                       <div className="post-content">
-                        <h5 className="entry-title mb-1" style={{ fontSize: '1.118em', lineHeight: '1.35em' }}>
+                        <h5 className="entry-title mb-1 text-[1.118em] leading-[1.35em]">
                           <a href="#" onClick={(e) => handleClick(e, article.id)}>
                             {article.title}
                           </a>
                         </h5>
-                        <div className="entry-meta align-items-center" style={{ fontSize: '0.75rem' }}>
+                        <div className="entry-meta align-items-center text-xs">
                           <span>{article.author}</span> in <span>{article.category}</span>
                           <br />
                           <span>{article.date}</span>

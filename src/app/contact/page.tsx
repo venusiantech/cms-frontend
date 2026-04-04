@@ -20,14 +20,20 @@ export async function generateMetadata(): Promise<Metadata> {
     const siteName = domainName.charAt(0).toUpperCase() + domainName.slice(1);
     
     const favicon = siteData.website.websiteLogo;
+    const canonicalUrl = `https://${domain}/contact`;
 
     return {
+      metadataBase: new URL(`https://${domain}`),
       title: `Contact Us - ${siteName}`,
       description: `Get in touch with ${siteName}. We'd love to hear from you.`,
+      alternates: {
+        canonical: canonicalUrl,
+      },
       ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
         title: `Contact Us - ${siteName}`,
         description: `Get in touch with ${siteName}. We'd love to hear from you.`,
+        url: canonicalUrl,
         type: 'website',
         siteName,
       },

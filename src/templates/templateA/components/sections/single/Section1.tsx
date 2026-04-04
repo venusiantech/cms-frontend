@@ -110,7 +110,7 @@ function renderMarkdownContent(content: string, articleTitle: string, onSubscrib
 
     if (line.trim() === '```' || line.trim() === '```markdown') continue;
     if (line.trim() === '') {
-      result.push(<div key={keyIdx++} style={{ height: '0.75rem' }} />);
+      result.push(<div key={keyIdx++} className="h-3" />);
       continue;
     }
 
@@ -128,11 +128,11 @@ function renderMarkdownContent(content: string, articleTitle: string, onSubscrib
         const bodyRows = isSep ? tableRows.slice(2) : tableRows.slice(1);
         result.push(
           <div key={keyIdx++} className="mt-4 mb-2 overflow-x-auto">
-            <table className="table table-bordered" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table className="table table-bordered w-full border-collapse">
               <thead>
-                <tr style={{ backgroundColor: '#f8f9fa' }}>
+                <tr className="bg-[#f8f9fa]">
                   {headerRow.map((cell, c) => (
-                    <th key={c} style={{ border: '1px solid #dee2e6', padding: '0.5rem 0.75rem', textAlign: 'left' }}>
+                    <th key={c} className="border border-[#dee2e6] px-3 py-2 text-left">
                       {formatCellContent(cell, `th-${keyIdx}-${c}`)}
                     </th>
                   ))}
@@ -140,9 +140,9 @@ function renderMarkdownContent(content: string, articleTitle: string, onSubscrib
               </thead>
               <tbody>
                 {bodyRows.map((row, r) => (
-                  <tr key={r} style={{ backgroundColor: r % 2 === 0 ? '#fff' : '#f8f9fa' }}>
+                  <tr key={r} className={r % 2 === 0 ? 'bg-white' : 'bg-[#f8f9fa]'}>
                     {row.map((cell, c) => (
-                      <td key={c} style={{ border: '1px solid #dee2e6', padding: '0.5rem 0.75rem' }}>
+                      <td key={c} className="border border-[#dee2e6] px-3 py-2">
                         {formatCellContent(cell, `td-${keyIdx}-${r}-${c}`)}
                       </td>
                     ))}
@@ -177,7 +177,7 @@ function renderMarkdownContent(content: string, articleTitle: string, onSubscrib
 
     // Unordered list
     if (line.startsWith('- ') || line.startsWith('* ')) {
-      result.push(<li key={keyIdx++} className="ml-4 mb-2 text-justify" style={{ listStyle: 'disc' }}>{formatInline(line.substring(2), `ul-${keyIdx}`)}</li>);
+      result.push(<li key={keyIdx++} className="ml-4 mb-2 text-justify list-disc">{formatInline(line.substring(2), `ul-${keyIdx}`)}</li>);
       continue;
     }
 
@@ -220,13 +220,12 @@ export default function Section1({
         {/* ── Back button ────────────────────────────────── */}
         <a
           href="/"
-          className=" mb-4"
-          style={{ display: 'inline-block', textDecoration: 'none' }}
+          className="inline-block no-underline mb-4"
           onClick={(e) => { e.preventDefault(); onBack(); }}
         >
           <div className="flex items-center">
-            <HiArrowLeft style={{ marginRight: '0.4rem', verticalAlign: 'middle' }} /> 
-            <span >Back</span>
+            <HiArrowLeft className="mr-1.5 align-middle" />
+            <span>Back</span>
           </div>
         </a>
 
@@ -268,7 +267,7 @@ export default function Section1({
               width={1240}
               height={700}
               unoptimized={article.image.startsWith('http')}
-              style={{ objectFit: 'cover', width: '100%' }}
+              className="object-cover w-full"
             />
           </figure>
         )}
@@ -357,7 +356,7 @@ export default function Section1({
                               width={180}
                               height={180}
                               unoptimized={post.image?.startsWith('http')}
-                              style={{ objectFit: 'cover', height: 120 }}
+                              className="object-cover h-[120px]"
                             />
                           </a>
                         </figure>

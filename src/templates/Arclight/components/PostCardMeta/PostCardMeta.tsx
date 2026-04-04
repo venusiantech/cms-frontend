@@ -27,6 +27,8 @@ const PostCardMeta: FC<Props> = ({ className, meta, hiddenAvatar = false, avatar
       <div className="relative flex items-center gap-x-2.5">
         {!hiddenAvatar && (
           <img
+            width={28}
+            height={28}
             className={clsx('rounded-full object-cover', avatarSize)}
             src={avatarUrl}
             alt={author?.avatar && typeof author.avatar === 'object' ? author.avatar.alt : 'Avatar'}

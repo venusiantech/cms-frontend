@@ -228,6 +228,8 @@ const ArclightCategoriesView: FC<Props> = ({ posts, onArticleClick, getPostUrl, 
                         <img
                           src={cat.coverImage}
                           alt=""
+                          width={400}
+                          height={300}
                           className="h-full w-full object-cover"
                         />
                       </div>

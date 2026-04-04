@@ -49,12 +49,16 @@ export async function generateMetadata(): Promise<Metadata> {
         : siteData.website.websiteLogo;
 
     return {
+      metadataBase: new URL(`https://${domain}`),
       title: { absolute: title },
       description,
       keywords: keywords.split(',').map((k: string) => k.trim()),
       authors: [{ name: author }],
       creator: author,
       publisher: author,
+      alternates: {
+        canonical: `https://${domain}/`,
+      },
       ...(favicon && {
         icons: {
           icon: favicon,
@@ -64,6 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: {
         title,
         description,
+        url: `https://${domain}/`,
         images: [image],
         type: 'website',
         siteName,

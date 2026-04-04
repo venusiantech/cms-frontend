@@ -42,11 +42,11 @@ export default function MobileMenu({ isMobileMenu, handleMobileMenu, siteName = 
       <div className="sticky-header fixed d-lg-none d-md-block">
         <div className="text-end">
           <div className="container mobile-menu-fixed pe-5">
-            <h1 className="logo-small navbar-brand">
+            <p className="logo-small navbar-brand">
               <Link href="/" className="logo">
                 {siteName.charAt(0)}
               </Link>
-            </h1>
+            </p>
             <Link href="#" className="dark-light-toggle mt-05" onClick={handleDark}>
               <i className="icon-adjust" />
             </Link>
@@ -82,11 +82,11 @@ export default function MobileMenu({ isMobileMenu, handleMobileMenu, siteName = 
         </div>
         <div className={`mobi-menu ${isMobileMenu ? "act" : ""}`}>
           <div className="mobi-menu__logo">
-            <h1 className="logo navbar-brand">
+            <p className="logo navbar-brand">
               <Link href="/" className="logo">
                 {siteName}
               </Link>
-            </h1>
+            </p>
           </div>
           <form action="#" method="get" className="menu-search-form d-lg-flex">
             <input type="text" className="search_field" placeholder="Search..." defaultValue="" name="s" />

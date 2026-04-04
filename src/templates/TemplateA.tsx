@@ -516,48 +516,21 @@ export default function TemplateA({ page, website, domain, articleId, pageType =
       {(!cssLoaded || loaderFadingOut) && (
         <div
           aria-hidden="true"
+          className="fixed inset-0 z-[2147483647] flex items-center justify-center bg-white transition-opacity duration-[400ms] ease-out"
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 2147483647,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#fff',
             opacity: loaderFadingOut ? 0 : 1,
-            transition: 'opacity 0.4s ease-out',
             pointerEvents: loaderFadingOut ? 'none' : 'auto',
           }}
         >
-          <div style={{ textAlign: 'center' }}>
-            <h1
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: '2.5rem',
-                fontWeight: 700,
-                color: '#333',
-                margin: '0 0 1.5rem',
-                letterSpacing: '1px',
-              }}
+          <div className="text-center">
+            <p
+              className="font-bold text-[2.5rem] text-[#333] mb-6 tracking-[1px]"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               {siteDisplay}
-            </h1>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                border: '3px solid #f3f3f3',
-                borderTopColor: '#333',
-                borderRadius: '50%',
-                animation: 'templateA-loader-spin 0.8s linear infinite',
-                margin: '0 auto',
-              }}
-            />
+            </p>
+            <div className="w-10 h-10 border-[3px] border-[#f3f3f3] border-t-[#333] rounded-full animate-spin mx-auto" />
           </div>
-          <style dangerouslySetInnerHTML={{ __html: '@keyframes templateA-loader-spin { to { transform: rotate(360deg); } }' }} />
         </div>
       )}
       <style jsx>{`

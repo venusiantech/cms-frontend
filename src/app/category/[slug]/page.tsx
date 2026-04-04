@@ -28,14 +28,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .join(' ');
 
     const favicon = siteData.website.websiteLogo;
+    const canonicalUrl = `https://${domain}/category/${params.slug}`;
 
     return {
+      metadataBase: new URL(`https://${domain}`),
       title: `${categoryName} - ${siteName}`,
       description: `Browse all ${categoryName} articles on ${siteName}.`,
+      alternates: {
+        canonical: canonicalUrl,
+      },
       ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
         title: `${categoryName} - ${siteName}`,
         description: `Browse all ${categoryName} articles on ${siteName}.`,
+        url: canonicalUrl,
         type: 'website',
         siteName,
       },

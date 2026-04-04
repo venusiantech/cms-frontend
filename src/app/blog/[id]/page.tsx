@@ -54,13 +54,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const siteName = domainName.charAt(0).toUpperCase() + domainName.slice(1);
     const favicon = siteData.website.websiteLogo;
 
+    const rawTitle = `${article.title} - ${siteName}`;
+    const metaTitle = rawTitle.length > 60 ? rawTitle.substring(0, 57) + '...' : rawTitle;
+    const rawDesc = article.preview || article.content || '';
+    const metaDesc = rawDesc.substring(0, 155);
+    const canonicalUrl = `https://${domain}/blog/${params.id}`;
+
     return {
-      title: { absolute: `${article.title} - ${siteName}` },
-      description: article.preview || article.content?.substring(0, 160),
+      metadataBase: new URL(`https://${domain}`),
+      title: { absolute: metaTitle },
+      description: metaDesc,
+      alternates: {
+        canonical: canonicalUrl,
+      },
       ...(favicon && { icons: { icon: favicon, apple: favicon } }),
       openGraph: {
         title: article.title,
-        description: article.preview || article.content?.substring(0, 160),
+        description: metaDesc,
+        url: canonicalUrl,
         images: article.image ? [article.image] : [],
         type: 'article',
         siteName: siteName,
@@ -68,7 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       twitter: {
         card: 'summary_large_image',
         title: article.title,
-        description: article.preview || article.content?.substring(0, 160),
+        description: metaDesc,
         images: article.image ? [article.image] : [],
       },
     };

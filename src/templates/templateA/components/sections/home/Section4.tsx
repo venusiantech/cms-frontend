@@ -29,16 +29,17 @@ export default function Section4({ mostRecent, onArticleClick }: Section4Props) 
         <div className="container">
           <div className="row">
             <div className="col-md-8">
-              <h2 className="spanborder h4">
-                <span>{mostRecent.title}</span>
-              </h2>
+              <h2 className="spanborder h4">{mostRecent.title}</h2>
               {mostRecent.mainArticles.map((article) => (
                 <article key={article.id} className="row justify-content-between mb-5 mr-0">
                   <div className="col-md-9">
                     <div className="align-self-center">
                       {article.tag && <div className="capsSubtle mb-2">{article.tag}</div>}
-                      <h3 className="entry-title mb-3">
-                        <a href="#" onClick={(e) => handleClick(e, article.id)}>{article.title}</a>
+                      <h3
+                        className="entry-title mb-3 cursor-pointer"
+                        onClick={(e) => handleClick(e, article.id)}
+                      >
+                        {article.title}
                       </h3>
                       <div className="entry-excerpt">
                         <p className="text-justify">{article.excerpt}</p>

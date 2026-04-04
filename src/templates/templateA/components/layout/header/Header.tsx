@@ -36,8 +36,8 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
       <header id="header" className="d-lg-block d-none">
         <div className="container">
           <div className="align-items-center w-100">
-            <h1 className="logo float-start navbar-brand">
-              <Link href="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <p className="logo float-start navbar-brand">
+              <Link href="/" className="logo flex items-center gap-[0.6rem]">
                 {logoUrl && logoDisplayMode !== 'text_only' && (
                   <Image
                     src={logoUrl}
@@ -45,14 +45,14 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
                     width={160}
                     height={50}
                     unoptimized
-                    style={{ objectFit: 'contain', maxHeight: '50px', width: 'auto' }}
+                    className="object-contain max-h-[50px] w-auto"
                   />
                 )}
                 {(logoDisplayMode === 'text_only' || logoDisplayMode === 'both' || !logoUrl) && (
                   <span>{siteName}</span>
                 )}
               </Link>
-            </h1>
+            </p>
             <div className="header-right float-end w-50">
               <div className="d-inline-flex float-end text-end align-items-center">
                 <Link href="#" className="dark-light-toggle" onClick={handleDark}>
@@ -86,7 +86,7 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
                 {onContactClick && (
                   <ul className="top-menu heading navbar-nav w-100 d-lg-flex align-items-center">
                     <li>
-                      <a onClick={onContactClick} className="btn" style={{ background: 'none', border: 'none', padding: 0 }}>
+                      <a onClick={onContactClick} className="btn bg-transparent border-0 p-0">
                         Contact
                       </a>
                     </li>
@@ -107,7 +107,7 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
         <nav id="main-menu" className={`stick d-lg-block d-none ${scroll ? "scroll-to-fixed-fixed top-0 position-fixed w-100" : ""}`}>
           <div className="container">
             <div className="menu-primary">
-              <ul className="d-flex justify-content-center mr-auto" style={{ gap: '2rem' }}>
+              <ul className="d-flex justify-content-center mr-auto gap-8">
                 {/* Home — clicking when a category is active resets to "All" */}
                 <li className={!selectedCategory ? 'current-menu-item' : ''}>
                   <Link
@@ -134,7 +134,7 @@ export default function Header({ scroll, siteName = 'Site', logoUrl, logoDisplay
                         if (onCategoryChange) onCategoryChange(cat.name);
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      style={{ cursor: 'pointer' }}
+                      className="cursor-pointer"
                     >
                       {cat.name}
                     </a>

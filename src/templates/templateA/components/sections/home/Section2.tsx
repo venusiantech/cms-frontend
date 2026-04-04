@@ -46,8 +46,11 @@ export default function Section2({ featuredSlider, onArticleClick }: Section2Pro
                     <div className="col-lg-6 col-md-8">
                       <div className="pt-5 pb-5 ps-md-5 pe-5 align-self-center">
                         <div className="capsSubtle mb-2">{featuredSlider.title}</div>
-                        <h2 className="entry-title mb-3">
-                          <a href="#" onClick={(e) => handleClick(e, article.id)}>{article.title}</a>
+                        <h2
+                          className="entry-title mb-3 cursor-pointer"
+                          onClick={(e) => handleClick(e, article.id)}
+                        >
+                          {article.title}
                         </h2>
                         <div className="entry-excerpt">
                           <p className="text-justify">{article.excerpt}</p>

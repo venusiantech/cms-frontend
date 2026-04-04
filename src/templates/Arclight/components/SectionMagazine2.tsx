@@ -129,6 +129,7 @@ const SectionMagazine2: FC<Props> = ({ posts, className }) => {
           {tabs.length > 0 && (
             <a
               href="/categories"
+              aria-label="Browse all article categories"
               className="flex items-center gap-1 rounded-full border border-dashed border-neutral-400 px-3 py-1.5 text-xs font-medium text-neutral-500 transition-colors hover:border-neutral-600 hover:text-neutral-700 sm:px-4 sm:py-2 sm:text-sm dark:border-neutral-600 dark:text-neutral-400 dark:hover:border-neutral-400 dark:hover:text-neutral-200"
             >
               {/* mobile: show count of all categories (All tab visible, 0 category tabs) */}

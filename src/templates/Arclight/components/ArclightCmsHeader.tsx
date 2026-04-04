@@ -157,8 +157,7 @@ const ArclightCmsHeader: FC<ArclightCmsHeaderProps> = ({
             <button
               type="button"
               onClick={onContactClick}
-              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
-              style={{ minWidth: 0 }}
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100 min-w-0"
             >
               Contact
             </button>

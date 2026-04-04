@@ -77,8 +77,11 @@ export default function Section1({ featured, trending, onArticleClick, selectedC
                           />
                         </a>
                       </figure>
-                      <h3 className="entry-title mb-3">
-                        <a href="#" onClick={(e) => handleClick(e, featured.mainArticle.id)}>{featured.mainArticle.title}</a>
+                      <h3
+                        className="entry-title mb-3 cursor-pointer"
+                        onClick={(e) => handleClick(e, featured.mainArticle.id)}
+                      >
+                        {featured.mainArticle.title}
                       </h3>
                       <div className="entry-excerpt">
                         <p className="text-justify">{featured.mainArticle.excerpt}</p>

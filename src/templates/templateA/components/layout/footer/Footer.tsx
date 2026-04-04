@@ -41,21 +41,21 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
         <div className={`row g-4 mb-4`}>
           {/* Brand/Logo Section */}
           <div className={`${colClass} col-md-6`}>
-            <h1 className="logo navbar-brand mb-3" style={{ fontSize: '1.8rem' }}>
+            <p className="logo navbar-brand mb-3 text-[1.8rem]">
               <Link href="/" className="logo text-decoration-none">
                 {siteName}
               </Link>
-            </h1>
+            </p>
           </div>
 
           {/* Quick Links */}
           <div className={`${colClass} col-md-6`}>
-            <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+            <h5 className="footer-heading mb-3 font-bold text-[1.1rem]">
               Quick Links
             </h5>
-            <ul className="list-unstyled footer-links" style={{ fontSize: '0.9rem' }}>
+            <ul className="list-unstyled footer-links text-sm">
               <li className="mb-2">
-                <a href="/" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
+                <a href="/" className="text-muted text-decoration-none transition-colors duration-200">
                   Home
                 </a>
               </li>
@@ -63,22 +63,14 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                 <li className="mb-2">
                   <a 
                     onClick={onContactClick} 
-                    className="text-muted text-decoration-none" 
-                    style={{ 
-                      transition: 'color 0.2s',
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      cursor: 'pointer',
-                      font: 'inherit'
-                    }}
+                    className="text-muted text-decoration-none transition-colors duration-200 bg-transparent border-0 p-0 cursor-pointer"
                   >
                     Contact Us
                   </a>
                 </li>
               )}
               <li className="mb-2">
-                <a href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
+                <a href="#" className="text-muted text-decoration-none transition-colors duration-200">
                   Privacy Policy
                 </a>
               </li>
@@ -87,22 +79,22 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
 
           {/* Categories */}
           <div className={`${colClass} col-md-6`}>
-            <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+            <h5 className="footer-heading mb-3 font-bold text-[1.1rem]">
               Categories
             </h5>
-            <ul className="list-unstyled footer-links" style={{ fontSize: '0.9rem' }}>
+            <ul className="list-unstyled footer-links text-sm">
               <li className="mb-2">
-                <a href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
+                <a href="#" className="text-muted text-decoration-none transition-colors duration-200">
                   Articles
                 </a>
               </li>
               <li className="mb-2">
-                <a href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
+                <a href="#" className="text-muted text-decoration-none transition-colors duration-200">
                   News
                 </a>
               </li>
               <li className="mb-2">
-                <a href="#" className="text-muted text-decoration-none" style={{ transition: 'color 0.2s' }}>
+                <a href="#" className="text-muted text-decoration-none transition-colors duration-200">
                   Insights
                 </a>
               </li>
@@ -112,18 +104,17 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
           {/* Contact Information - Only show if exists */}
           {hasContact && (
             <div className={`${colClass} col-md-6`}>
-              <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+              <h5 className="footer-heading mb-3 font-bold text-[1.1rem]">
                 Contact
               </h5>
-              <ul className="list-unstyled footer-links footer-contact-links" style={{ fontSize: '0.9rem' }}>
+              <ul className="list-unstyled footer-links footer-contact-links text-sm">
                 {contactEmail && (
                   <li className="mb-2">
                     <a 
                       href={`mailto:${contactEmail}`}
-                      className="text-muted text-decoration-none d-flex align-items-center contact-link" 
-                      style={{ transition: 'color 0.2s' }}
+                      className="text-muted text-decoration-none d-flex align-items-center contact-link transition-colors duration-200" 
                     >
-                      <FaEnvelope className="me-2 contact-icon" style={{ fontSize: '1rem' }} />
+                      <FaEnvelope className="me-2 contact-icon text-base" />
                       <span className="contact-text">{contactEmail}</span>
                     </a>
                   </li>
@@ -132,10 +123,9 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                   <li className="mb-2">
                     <a 
                       href={`tel:${contactPhone}`}
-                      className="text-muted text-decoration-none d-flex align-items-center contact-link" 
-                      style={{ transition: 'color 0.2s' }}
+                      className="text-muted text-decoration-none d-flex align-items-center contact-link transition-colors duration-200" 
                     >
-                      <FaPhoneAlt className="me-2 contact-icon" style={{ fontSize: '1rem' }} />
+                      <FaPhoneAlt className="me-2 contact-icon text-base" />
                       <span className="contact-text">{contactPhone}</span>
                     </a>
                   </li>
@@ -147,10 +137,10 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
           {/* Follow Us / Social Media - Only show if at least one social link exists */}
           {hasSocial && (
             <div className={`${colClass} col-md-6`}>
-              <h5 className="footer-heading mb-3" style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+              <h5 className="footer-heading mb-3 font-bold text-[1.1rem]">
                 Follow Us
               </h5>
-              <p className="text-muted footer-description mb-3" style={{ fontSize: '0.9rem' }}>
+              <p className="text-muted footer-description mb-3 text-sm">
                 Stay connected with our latest updates
               </p>
               <ul className="social-network list-inline mb-0">
@@ -160,15 +150,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                       href={facebookUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="d-inline-flex align-items-center justify-content-center"
-                      style={{ 
-                        width: '40px', 
-                        height: '40px',
-                        borderRadius: '50%',
-                        backgroundColor: '#e9ecef',
-                        transition: 'all 0.3s',
-                        textDecoration: 'none'
-                      }}
+                      className="d-inline-flex align-items-center justify-content-center w-10 h-10 rounded-full bg-[#e9ecef] transition-all duration-300 no-underline"
                       onMouseOver={(e) => {
                         e.currentTarget.style.backgroundColor = '#3b5998';
                         e.currentTarget.querySelector('i')!.style.color = '#fff';
@@ -178,7 +160,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                         e.currentTarget.querySelector('i')!.style.color = '#6c757d';
                       }}
                     >
-                      <i className="icon-facebook" style={{ fontSize: '1.2rem', color: '#6c757d', transition: 'color 0.3s' }} />
+                      <i className="icon-facebook text-[1.2rem] text-[#6c757d] transition-colors duration-300" />
                     </a>
                   </li>
                 )}
@@ -188,15 +170,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                       href={twitterUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="d-inline-flex align-items-center justify-content-center"
-                      style={{ 
-                        width: '40px', 
-                        height: '40px',
-                        borderRadius: '50%',
-                        backgroundColor: '#e9ecef',
-                        transition: 'all 0.3s',
-                        textDecoration: 'none'
-                      }}
+                      className="d-inline-flex align-items-center justify-content-center w-10 h-10 rounded-full bg-[#e9ecef] transition-all duration-300 no-underline"
                       onMouseOver={(e) => {
                         e.currentTarget.style.backgroundColor = '#1da1f2';
                         e.currentTarget.querySelector('i')!.style.color = '#fff';
@@ -206,7 +180,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                         e.currentTarget.querySelector('i')!.style.color = '#6c757d';
                       }}
                     >
-                      <i className="icon-twitter" style={{ fontSize: '1.2rem', color: '#6c757d', transition: 'color 0.3s' }} />
+                      <i className="icon-twitter text-[1.2rem] text-[#6c757d] transition-colors duration-300" />
                     </a>
                   </li>
                 )}
@@ -216,15 +190,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                       href={instagramUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="d-inline-flex align-items-center justify-content-center"
-                      style={{ 
-                        width: '40px', 
-                        height: '40px',
-                        borderRadius: '50%',
-                        backgroundColor: '#e9ecef',
-                        transition: 'all 0.3s',
-                        textDecoration: 'none'
-                      }}
+                      className="d-inline-flex align-items-center justify-content-center w-10 h-10 rounded-full bg-[#e9ecef] transition-all duration-300 no-underline"
                       onMouseOver={(e) => {
                         e.currentTarget.style.backgroundColor = '#e4405f';
                         e.currentTarget.querySelector('i')!.style.color = '#fff';
@@ -234,7 +200,7 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
                         e.currentTarget.querySelector('i')!.style.color = '#6c757d';
                       }}
                     >
-                      <i className="icon-instagram" style={{ fontSize: '1.2rem', color: '#6c757d', transition: 'color 0.3s' }} />
+                      <i className="icon-instagram text-[1.2rem] text-[#6c757d] transition-colors duration-300" />
                     </a>
                   </li>
                 )}
@@ -247,13 +213,12 @@ export default function Footer({ siteName = 'Site', instagramUrl, facebookUrl, t
         <div className=" mb-3" />
         <div className="row">
           <div className="col-12 text-center">
-            <p className="mb-0 text-muted copyright-text" style={{ fontSize: '0.85rem' }}>
+            <p className="mb-0 text-muted copyright-text text-[0.85rem]">
               © {new Date().getFullYear()} {siteName}. Designed by{' '}
               {domain ? (
                 <a 
                   href={typeof window !== 'undefined' ? window.location.origin : '#'}
-                  className="text-decoration-none copyright-link"
-                  style={{ color: '#6c757d', transition: 'color 0.2s' }}
+                  className="text-decoration-none copyright-link text-[#6c757d] transition-colors duration-200"
                 >
                   {domain}
                 </a>
